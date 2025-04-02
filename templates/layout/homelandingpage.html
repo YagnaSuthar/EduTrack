@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edutrack - Education Tracking Platform</title>
+    <link rel="stylesheet" href="{% static "css/landingpage.css" %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="body-landing">
+        <div class="particles" id="particles"></div>
+        
+        <div class="container">
+            <div class="front">
+                <h1 class="logo">Edutrack</h1>
+                <div class="buttons">
+                <a href="login/Index.html"><button class="btn">Let's start now...</button></a>
+                </div>
+            </div>
+            
+            <div class="cards">
+                <div class="sub-cards">AI-Powered Chatbot</div>
+                <div class="sub-cards">Demo or Video Section</div>
+                <div class="sub-cards">Key Features</div>
+                <div class="sub-cards">Learing More</div>
+                <div class="sub-cards">What's new</div>
+                <div class="sub-cards">about us</div>
+            </div>
+        </div>
+        
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-section about">
+                    <h2>About Edutrack</h2>
+                    <p>Edutrack is an education tracking platform designed to help students and educators track performance and improve learning outcomes.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section links">
+                    <h2>Quick Links</h2>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Services</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section contact">
+                    <h2>Contact Us</h2>
+                    <div class="contact-info">
+                        <div><i class="fas fa-phone"></i> +91 64539 11111</div>
+                        <div><i class="fas fa-envelope"></i>edutrack@edu.com</div>
+                    </div>
+                    <form class="contact-form">
+                        <input type="email" placeholder="Your email">
+                        <textarea placeholder="Your message"></textarea>
+                        <button type="submit" class="send-btn">Send</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Edutrack | All Rights Reserved</p>
+            </div>
+        </footer>
+    </div>
+    <script src="{% static 'js/landingpage.js' %}"></script>
+</body>
+</html>

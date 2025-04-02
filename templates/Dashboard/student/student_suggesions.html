@@ -1,0 +1,100 @@
+{% extends "Dashboard/index.html" %}
+
+{% block title %}Suggestions{% endblock title %}
+
+{% block style %}
+<style>
+/* Main container styling */
+.suggesions-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* Align to the top */
+    min-height: 100vh;
+    width: 100%;
+    padding: 40px 20px; /* Increased padding */
+    background-color: #f8f8f8;
+}
+
+/* Suggestion message box */
+.suggestion-message {
+    background-color: #ffffff;
+    padding: 40px; /* Increased padding */
+    border-radius: 15px; /* Increased border-radius */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Larger shadow */
+    margin-top: 30px;
+    width: 100%;
+    max-width: 1000px; /* Increased max-width */
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Added smooth hover transition */
+}
+
+/* Hover effect for the suggestion box */
+.suggestion-message:hover {
+    transform: scale(1.05); /* Slightly enlarge the box */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Stronger shadow */
+}
+
+/* Suggestion text styles */
+.suggestion-message p {
+    font-size: 22px; /* Slightly larger font size */
+    font-weight: bold;
+    color: #333;
+}
+
+.suggestion-message ul {
+    list-style-type: disc;
+    margin-left: 20px;
+    color: #555;
+}
+
+.suggestion-message ul li {
+    font-size: 18px; /* Larger font size */
+    margin-bottom: 12px;
+}
+
+/* Responsiveness */
+@media (max-width: 1024px) {
+    .suggesions-container {
+        padding: 35px 15px; /* Adjust padding for medium screens */
+    }
+
+    .suggestion-message {
+        max-width: 90%; /* Slightly smaller max-width */
+    }
+}
+
+@media (max-width: 768px) {
+    .suggesions-container {
+        padding: 20px 10px;
+    }
+
+    .suggestion-message {
+        max-width: 95%; /* Full width on smaller screens */
+    }
+}
+
+#getnew {
+    margin: 30px auto;
+    font-size: 16px;
+    font-weight: normal;
+    color: #555;
+}
+</style>
+{% endblock style %}
+
+{% block content %}
+<div class="suggesions-container">
+    <p id="getnew">To get new Suggestions, Refresh The Page</p>
+
+    <div class="suggestion-message">
+        <p>Suggestions for your {{performance_level}} Performance:</p>
+        <ul>
+            <li>{{suggestions}}</li>
+        </ul>
+    </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+{% endblock script %}

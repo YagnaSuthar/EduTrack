@@ -1,0 +1,800 @@
+{% extends "account/base_entrance.html" %}
+{% load i18n %}
+{% load allauth account %}
+
+{% block head_title %}
+    {% trans "Sign In" %}
+{% endblock head_title %}
+
+{% block style %}
+<style>
+    @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+
+    * {
+        box-sizing: border-box;
+    }
+    
+    body {
+        background: #f6f5f7;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        font-family: 'Montserrat', sans-serif;
+        height: 100vh;
+        margin: 0;
+    }
+    
+    h1 {
+        font-weight: bold;
+        margin: 0;
+    }
+    
+    .signin_h1 {
+        text-align: center;
+        margin-bottom: 3vh;
+    }
+
+    h2 {
+        text-align: center;
+    }
+    
+    p {
+        font-size: 14px;
+        font-weight: 100;
+        line-height: 20px;
+        letter-spacing: 0.5px;
+        margin: 20px 0 30px;
+    }
+    
+    span {
+        font-size: 12px;
+    }
+    
+    a {
+        color: #333;
+        font-size: 14px;
+        text-decoration: none;
+        margin: 15px 0;
+    }
+    
+    button {
+        border-radius: 20px;
+        border: 1px solid #363eab;
+        background-color: #363eab;
+        color: #FFFFFF;
+        font-size: 12px;
+        font-weight: bold;
+        padding: 12px 45px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        transition: transform 80ms ease-in;
+        cursor: pointer;
+    }
+    
+    button:active {
+        transform: scale(0.95);
+    }
+    
+    button:focus {
+        outline: none;
+    }
+    
+    button.ghost {
+        background-color: transparent;
+        border-color: #FFFFFF;
+    }
+    
+    form {
+        background-color: #FFFFFF;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 0 50px;
+        height: 100%;
+        text-align: center;
+    }
+    
+    input {
+        background-color: #eee;
+        border: none;
+        padding: 12px 15px;
+        margin: 8px 0;
+        width: 100%;
+    }
+    
+    .container {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+        position: relative;
+        overflow: hidden;
+        width: 768px;
+        max-width: 100%;
+        min-height: 480px;
+        margin: 0 16px;
+        z-index: 2; /* Increased z-index to ensure it's above particles */
+    }
+    
+    .form-container {
+        position: absolute;
+        top: 0;
+        height: 100%;
+        transition: all 0.6s ease-in-out;
+    }
+    
+    .sign-in-container {
+        left: 0;
+        width: 50%;
+        z-index: 2;
+    }
+    
+    .container.right-panel-active .sign-in-container {
+        transform: translateX(100%);
+    }
+    
+    .sign-up-container {
+        left: 0;
+        width: 50%;
+        opacity: 0;
+        z-index: 1;
+    }
+    
+    .container.right-panel-active .sign-up-container {
+        transform: translateX(100%);
+        opacity: 1;
+        z-index: 5;
+        animation: show 0.6s;
+    }
+    
+    @keyframes show {
+        0%, 49.99% {
+            opacity: 0;
+            z-index: 1;
+        }
+        
+        50%, 100% {
+            opacity: 1;
+            z-index: 5;
+        }
+    }
+    
+    .overlay-container {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 50%;
+        height: 100%;
+        overflow: hidden;
+        transition: transform 0.6s ease-in-out;
+        z-index: 100;
+    }
+    
+    .container.right-panel-active .overlay-container{
+        transform: translateX(-100%);
+    }
+    
+    .overlay {
+        background: linear-gradient(to right, #5c29f5, #051269);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: 0 0;
+        color: #FFFFFF;
+        position: relative;
+        left: -100%;
+        height: 100%;
+        width: 200%;
+        transform: translateX(0);
+        transition: transform 0.6s ease-in-out;
+    }
+    
+    .container.right-panel-active .overlay {
+        transform: translateX(50%);
+    }
+    
+    .overlay-panel {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 0 40px;
+        text-align: center;
+        top: 0;
+        height: 100%;
+        width: 50%;
+        transform: translateX(0);
+        transition: transform 0.6s ease-in-out;
+    }
+    
+    .overlay-left {
+        transform: translateX(-20%);
+    }
+    
+    .container.right-panel-active .overlay-left {
+        transform: translateX(0);
+    }
+    
+    .overlay-right {
+        right: 0;
+        transform: translateX(0);
+    }
+    
+    .container.right-panel-active .overlay-right {
+        transform: translateX(20%);
+    }
+    
+    .social-container {
+        margin: 20px 0;
+    }
+    
+    .custom-logo {
+        width: 24px;
+        height: auto;
+        vertical-align: middle;
+    }
+    
+    .social-container a {
+        border: 1px solid #DDDDDD;
+        border-radius: 50%;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 5px;
+        height: 40px;
+        width: 40px;
+    }
+    
+    /* Mobile toggle button - only visible on mobile */
+    .mobile-toggle {
+        display: none;
+        margin: 10px auto;
+        width: 80%;
+        max-width: 280px;
+        position: relative;
+        z-index: 2; /* Added z-index to appear above particles */
+    }
+    
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+        .container {
+            min-height: 580px;
+        }
+        
+        .form-container {
+            width: 100%;
+        }
+        
+        .sign-in-container, .sign-up-container {
+            width: 100%;
+        }
+        
+        .overlay-container {
+            display: none;
+        }
+        
+        .mobile-toggle {
+            display: block;
+        }
+        
+        /* Show sign-up form in mobile when active */
+        .container.mobile-right-panel-active .sign-in-container {
+            transform: translateX(-100%);
+            opacity: 0;
+            z-index: 1;
+        }
+        
+        .container.mobile-right-panel-active .sign-up-container {
+            transform: translateX(0);
+            opacity: 1;
+            z-index: 5;
+        }
+        
+        form {
+            padding: 0 30px;
+        }
+    }
+
+    /* Improved background styles */
+    .body-landing {
+        background: linear-gradient(135deg, #382e2e, #1a2a6e, #156499);
+        background-size: 400% 400%;
+        animation: gradient 15s ease infinite;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        position: relative;
+    }
+
+    @keyframes gradient {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    /* Enhanced floating particles throughout the entire background */
+    #particles {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1; /* Set to 1 so content with z-index 2+ will appear above */
+        overflow: hidden;
+        pointer-events: none; /* Ensures clicks pass through to elements below */
+    }
+
+    .particle {
+        position: absolute;
+        background-color: rgba(255, 255, 255, 0.384); /* More transparent particles */
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    /* Multiple particle animation types for a more dynamic effect */
+    .particle-up {
+        animation: floatUp var(--duration) linear infinite;
+        animation-delay: var(--delay);
+    }
+
+    .particle-down {
+        animation: floatDown var(--duration) linear infinite;
+        animation-delay: var(--delay);
+    }
+
+    .particle-left {
+        animation: floatLeft var(--duration) linear infinite;
+        animation-delay: var(--delay);
+    }
+
+    .particle-right {
+        animation: floatRight var(--duration) linear infinite;
+        animation-delay: var(--delay);
+    }
+
+    .particle-diagonal-1 {
+        animation: floatDiagonal1 var(--duration) linear infinite;
+        animation-delay: var(--delay);
+    }
+
+    .particle-diagonal-2 {
+        animation: floatDiagonal2 var(--duration) linear infinite;
+        animation-delay: var(--delay);
+    }
+
+    .particle-zigzag {
+        animation: floatZigzag var(--duration) linear infinite;
+        animation-delay: var(--delay);
+    }
+
+    .particle-curve {
+        animation: floatCurve var(--duration) linear infinite;
+        animation-delay: var(--delay);
+    }
+
+    /* Animation definitions for different particle movements */
+    @keyframes floatUp {
+        0% {
+            transform: translateY(100vh);
+            opacity: 0;
+        }
+        10% {
+            opacity: var(--opacity);
+        }
+        90% {
+            opacity: var(--opacity);
+        }
+        100% {
+            transform: translateY(-20vh);
+            opacity: 0;
+        }
+    }
+
+    @keyframes floatDown {
+        0% {
+            transform: translateY(-20vh);
+            opacity: 0;
+        }
+        10% {
+            opacity: var(--opacity);
+        }
+        90% {
+            opacity: var(--opacity);
+        }
+        100% {
+            transform: translateY(100vh);
+            opacity: 0;
+        }
+    }
+
+    @keyframes floatLeft {
+        0% {
+            transform: translateX(100vw);
+            opacity: 0;
+        }
+        10% {
+            opacity: var(--opacity);
+        }
+        90% {
+            opacity: var(--opacity);
+        }
+        100% {
+            transform: translateX(-20vw);
+            opacity: 0;
+        }
+    }
+
+    @keyframes floatRight {
+        0% {
+            transform: translateX(-20vw);
+            opacity: 0;
+        }
+        10% {
+            opacity: var(--opacity);
+        }
+        90% {
+            opacity: var(--opacity);
+        }
+        100% {
+            transform: translateX(100vw);
+            opacity: 0;
+        }
+    }
+
+    @keyframes floatDiagonal1 {
+        0% {
+            transform: translate(-20vw, 100vh);
+            opacity: 0;
+        }
+        10% {
+            opacity: var(--opacity);
+        }
+        90% {
+            opacity: var(--opacity);
+        }
+        100% {
+            transform: translate(100vw, -20vh);
+            opacity: 0;
+        }
+    }
+
+    @keyframes floatDiagonal2 {
+        0% {
+            transform: translate(100vw, 100vh);
+            opacity: 0;
+        }
+        10% {
+            opacity: var(--opacity);
+        }
+        90% {
+            opacity: var(--opacity);
+        }
+        100% {
+            transform: translate(-20vw, -20vh);
+            opacity: 0;
+        }
+    }
+
+    @keyframes floatZigzag {
+        0% {
+            transform: translate(0, 100vh);
+            opacity: 0;
+        }
+        20% {
+            transform: translate(20vw, 70vh);
+            opacity: var(--opacity);
+        }
+        40% {
+            transform: translate(-20vw, 40vh);
+        }
+        60% {
+            transform: translate(20vw, 10vh);
+        }
+        80% {
+            transform: translate(-20vw, -20vh);
+            opacity: var(--opacity);
+        }
+        100% {
+            transform: translate(0, -40vh);
+            opacity: 0;
+        }
+    }
+
+    @keyframes floatCurve {
+        0% {
+            transform: translate(0, 100vh) rotate(0deg);
+            opacity: 0;
+        }
+        10% {
+            opacity: var(--opacity);
+        }
+        50% {
+            transform: translate(40vw, 40vh) rotate(180deg);
+        }
+        90% {
+            opacity: var(--opacity);
+        }
+        100% {
+            transform: translate(0, -20vh) rotate(360deg);
+            opacity: 0;
+        }
+    }
+</style>
+{% endblock style %}
+
+{% block content %}
+<div class="body-landing">
+    <div id="particles"></div>
+    
+    <button class="mobile-toggle" id="mobileToggle">
+        {% trans "Switch to Sign Up" %}
+    </button>
+    
+    <div class="container" id="container">
+        <!-- Sign Up Container -->
+        <div class="form-container sign-up-container">
+            <form method="post" action="{% url 'account_signup' %}">
+                <h1>{% trans "Create Account" %}</h1>
+                <span>{% trans "or use your email for registration" %}</span>
+                <input type="text" name="username" placeholder="{% trans 'Name' %}" />
+                <input type="email" name="email" placeholder="{% trans 'Email' %}" />
+                <input type="password" name="password1" placeholder="{% trans 'Password' %}" />
+                <input type="password" name="password2" placeholder="{% trans 'Confirm Password' %}" />
+                {% csrf_token %}
+                <button type="submit">{% trans 'Sign Up' %}</button>
+            </form>
+        </div>
+
+        <!-- Sign In Container -->
+        <div class="form-container sign-in-container">
+            <div class="social-container">
+                <!-- Social media login buttons would go here if needed -->
+            </div>
+            
+            <!-- Sign In Form -->
+            {% url 'account_login' as login_url %}
+            <form method="post" action="{% url 'account_login' %}">
+                {% csrf_token %}
+                
+                <h1 class="signin_h1">{% trans "Sign In" %}</h1>
+                <!-- Email Field -->
+                <input type="text" placeholder="Email" name="login" value="{{ request.POST.login }}" />
+        
+                <!-- Password Field -->
+                <input type="password" placeholder="Password" name="password" />
+        
+                <!-- Handle redirection after login -->
+                {{ redirect_field }}
+        
+                <button type="submit">{% trans "Sign In" %}</button>
+            </form>
+        </div>
+
+        <!-- Overlay Container -->
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>{% trans "Welcome Back!" %}</h1>
+                    <p>{% trans "To keep connected with us please login with your personal info" %}</p>
+                    <button class="ghost" id="signIn">{% trans "Sign In" %}</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>{% trans "Hello, Friend!" %}</h1>
+                    <p>{% trans "Enter your personal details and start journey with us" %}</p>
+                    <button class="ghost" id="signUp">{% trans "Sign Up" %}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extra_body %}
+    {{ block.super }}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Enhanced particles animation that fills the entire background
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 150; // Increased number of particles
+            
+            // Animation types for varied movement
+            const animationTypes = [
+                'particle-up',
+                'particle-down',
+                'particle-left',
+                'particle-right',
+                'particle-diagonal-1',
+                'particle-diagonal-2',
+                'particle-zigzag',
+                'particle-curve'
+            ];
+            
+            // Create particles with various animations across the entire background
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random size with wider range
+                const size = Math.random() * 15 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Random position throughout viewport
+                const xPos = Math.random() * 100;
+                const yPos = Math.random() * 100;
+                particle.style.left = `${xPos}%`;
+                particle.style.top = `${yPos}%`;
+                
+                // Random animation type
+                const animType = animationTypes[Math.floor(Math.random() * animationTypes.length)];
+                particle.classList.add(animType);
+                
+                // Custom properties for animation
+                const duration = Math.random() * 25 + 15;
+                const delay = Math.random() * 0;
+                const opacity = Math.random() * 0.2 + 0.1; // Reduced opacity for more transparency
+                
+                // Set CSS variables for the animations
+                particle.style.setProperty('--duration', `${duration}s`);
+                particle.style.setProperty('--delay', `${delay}s`);
+                particle.style.setProperty('--opacity', opacity);
+                
+                // Add varying visual effects to particles
+                if (Math.random() > 0.7) {
+                    particle.style.filter = `blur(${Math.random() * 3}px)`;
+                }
+                
+                // Create glow effect for some particles with reduced opacity
+                if (Math.random() > 0.8) {
+                    const hue = Math.floor(Math.random() * 60) + 180; // Blues and purples
+                    particle.style.boxShadow = `0 0 ${Math.random() * 8 + 2}px hsla(${hue}, 100%, 70%, 0.5)`;
+                    particle.style.backgroundColor = `hsla(${hue}, 100%, 70%, ${opacity})`;
+                }
+                
+                particlesContainer.appendChild(particle);
+            }
+
+            // Continuously add new particles to maintain the effect
+            setInterval(() => {
+                // Remove oldest particles if there are too many (performance optimization)
+                if (particlesContainer.children.length > 200) {
+                    for (let i = 0; i < 10; i++) {
+                        if (particlesContainer.firstChild) {
+                            particlesContainer.removeChild(particlesContainer.firstChild);
+                        }
+                    }
+                }
+                
+                // Add a few new particles
+                for (let i = 0; i < 5; i++) {
+                    const particle = document.createElement('div');
+                    particle.classList.add('particle');
+                    
+                    const size = Math.random() * 15 + 2;
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    
+                    // Position new particles at edges for inward flow
+                    let xPos, yPos;
+                    const edge = Math.floor(Math.random() * 4); // 0: top, 1: right, 2: bottom, 3: left
+                    
+                    switch (edge) {
+                        case 0: // top
+                            xPos = Math.random() * 100;
+                            yPos = -5;
+                            break;
+                        case 1: // right
+                            xPos = 105;
+                            yPos = Math.random() * 100;
+                            break;
+                        case 2: // bottom
+                            xPos = Math.random() * 100;
+                            yPos = 105;
+                            break;
+                        case 3: // left
+                            xPos = -5;
+                            yPos = Math.random() * 100;
+                            break;
+                    }
+                    
+                    particle.style.left = `${xPos}%`;
+                    particle.style.top = `${yPos}%`;
+                    
+                    // Choose animation based on entry point
+                    let animType;
+                    switch (edge) {
+                        case 0: // top
+                            animType = 'particle-down';
+                            break;
+                        case 1: // right
+                            animType = 'particle-left';
+                            break;
+                        case 2: // bottom
+                            animType = 'particle-up';
+                            break;
+                        case 3: // left
+                            animType = 'particle-right';
+                            break;
+                    }
+                    
+                    particle.classList.add(animType);
+                    
+                    const duration = Math.random() * 25 + 15;
+                    const delay = 0; // No delay for new particles
+                    const opacity = Math.random() * 0.2 + 0.1; // Reduced opacity for new particles
+                    
+                    particle.style.setProperty('--duration', `${duration}s`);
+                    particle.style.setProperty('--delay', `${delay}s`);
+                    particle.style.setProperty('--opacity', opacity);
+                    
+                    if (Math.random() > 0.7) {
+                        particle.style.filter = `blur(${Math.random() * 3}px)`;
+                    }
+                    
+                    particlesContainer.appendChild(particle);
+                }
+            }, 2000); // Add new particles every 2 seconds
+
+            // Form switching logic
+            const signUpButton = document.getElementById('signUp');
+            const signInButton = document.getElementById('signIn');
+            const mobileToggleButton = document.getElementById('mobileToggle');
+            const container = document.getElementById('container');
+            
+            // Check if we're on mobile
+            function isMobile() {
+                return window.innerWidth <= 768;
+            }
+            
+            // Toggle function for both desktop and mobile
+            function togglePanel(event) {
+                if (isMobile()) {
+                    container.classList.toggle("mobile-right-panel-active");
+                    if (container.classList.contains("mobile-right-panel-active")) {
+                        mobileToggleButton.textContent = "{% trans 'Switch to Sign In' %}";
+                    } else {
+                        mobileToggleButton.textContent = "{% trans 'Switch to Sign Up' %}";
+                    }
+                } else {
+                    if (event.currentTarget.id === 'signUp') {
+                        container.classList.add("right-panel-active");
+                    } else {
+                        container.classList.remove("right-panel-active");
+                    }
+                }
+            }
+            
+            // Event listeners
+            signUpButton.addEventListener('click', togglePanel);
+            signInButton.addEventListener('click', togglePanel);
+            mobileToggleButton.addEventListener('click', togglePanel);
+            
+            // Update UI based on screen size when resizing
+            window.addEventListener('resize', function() {
+                // Remove mobile classes if switching to desktop
+                if (!isMobile()) {
+                    container.classList.remove("mobile-right-panel-active");
+                    mobileToggleButton.style.display = "none";
+                } else {
+                    mobileToggleButton.style.display = "block";
+                }
+            });
+            
+            // Initial setup
+            if (isMobile()) {
+                mobileToggleButton.style.display = "block";
+            } else {
+                mobileToggleButton.style.display = "none";
+            }
+        });
+    </script>
+{% endblock %}

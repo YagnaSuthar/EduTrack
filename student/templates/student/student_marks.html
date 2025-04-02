@@ -1,0 +1,108 @@
+{% extends "Dashboard/index.html" %}
+
+{% block title %}
+Student Marks - {{student.first_name}}
+{% endblock title %}
+
+{% block style %}
+<style>
+/* Styles for the marks container */
+.marks-container {
+    margin-left: 200px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+/* Styling for individual data points */
+.marks-container p {
+    font-size: 16px;
+    color: #495057;
+    margin-bottom: 12px;
+}
+
+/* Title of the section */
+.marks-container h3 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #343a40;
+    margin-bottom: 20px;
+}
+
+/* Highlight the student name for emphasis */
+.marks-container .student-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #007bff;
+}
+
+/* Styling for labels to indicate data fields */
+.marks-container .label {
+    font-weight: bold;
+    color: #6c757d;
+    margin-right: 10px;
+}
+
+/* Adding some spacing between elements for better readability */
+.marks-container .student-info {
+    display: flex;
+    margin-bottom: 12px;
+}
+.marks-container .student-info p {
+    margin-right: 15px;
+}
+</style>
+{% endblock style %}
+
+{% block content %}
+<div class="marks-container">
+    <h3>Student Information</h3>
+
+    <div class="student-info">
+        <p class="label">Student ID:</p>
+        <p>{{student.student_id}}</p>
+    </div>
+
+    <div class="student-info">
+        <p class="label">Name:</p>
+        <p class="student-name">{{student.name}}</p>
+    </div>
+
+    <div class="student-info">
+        <p class="label">SAT Score:</p>
+        <p>{{student.sat_score}}</p>
+    </div>
+
+    <div class="student-info">
+        <p class="label">PAT Score:</p>
+        <p>{{student.pat_score}}</p>
+    </div>
+
+    <div class="student-info">
+        <p class="label">Attendance:</p>
+        <p>{{student.attendance}}</p>
+    </div>
+
+    <div class="student-info">
+        <p class="label">Performance Summary:</p>
+        <p>{{student.performance_summary}}</p>
+    </div>
+
+    <div class="student-info">
+        <p class="label">Teacher:</p>
+        <p>{{student.teacher}}</p>
+    </div>
+
+    <div class="student-info">
+        <p class="label">Email:</p>
+        <p>{{student.email}}</p>
+    </div>
+
+    <div class="student-info">
+        <p class="label">Gender:</p>
+        <p>{{student.gender}}</p>
+    </div>
+</div>
+{% endblock content %}

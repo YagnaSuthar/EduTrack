@@ -1,0 +1,391 @@
+{% extends "Dashboard/index.html" %}
+
+{% block title %}AI Assistant{% endblock title %}
+
+{% block style %}
+<style>
+.chat-container {
+    height: 100vh;
+    margin-left: 200px;
+    display: flex;
+    flex-direction: column;
+    background-color: #f0f2f5;
+}
+
+.chat-header {
+    background: linear-gradient(90deg,#0047B2,#286bcf,#5e8acc);
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-size: 1.2em;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.message {
+    max-width: 70%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    margin: 5px 0;
+    word-wrap: break-word;
+    position: relative;
+    animation: fadeIn 0.3s ease-in-out;
+    font-size: 15px;
+    line-height: 1.4;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.user-message {
+    background-color:rgb(105, 127, 233);
+    color: #ffffff;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+}
+
+.bot-message {
+    background-color:rgb(122, 150, 242);
+    color: #ffffff;
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.chat-input-container {
+    background-color: white;
+    padding: 15px;
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.chat-input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.chat-input:focus {
+    border-color: #0047B2;
+}
+
+.send-button {
+    background-color: #0047B2;
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.send-button:hover {
+    background-color:#0052cc;
+}
+
+.send-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.send-button i {
+    font-size: 20px;
+}
+
+.typing-indicator {
+    display: none;
+    align-self: flex-start;
+    background-color: #ffffff;
+    padding: 12px 16px;
+    border-radius: 12px;
+    margin: 5px 0;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.typing-indicator span {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: #5e8acc;
+    border-radius: 50%;
+    margin: 0 2px;
+    animation: typing 1s infinite;
+}
+
+.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typing {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+.error-message {
+    background-color: #ffebee;
+    color: #c62828;
+    padding: 10px;
+    border-radius: 8px;
+    margin: 10px 0;
+    text-align: center;
+    display: none;
+}
+
+/* Time stamp style */
+.message-time {
+    font-size: 11px;
+    color: #ffffff;
+    margin-top: 4px;
+    display: block;
+}
+
+/* Message status indicators */
+.message-status {
+    display: inline-block;
+    margin-left: 4px;
+    font-size: 12px;
+    color: #4CAF50;
+}
+</style>
+{% endblock style %}
+
+{% block content %}
+<div class="chat-container">
+    <div class="chat-header">
+        <h2>AI Assistant</h2>
+    </div>
+    <div class="chat-messages" id="chat-messages">
+        {% if teacher_response and chatbot_response %}
+            <div class="message user-message">
+                {{ teacher_response }}
+                <span class="message-time">{% now "H:i" %}</span>
+                <span class="message-status">✓✓</span>
+            </div>
+            <div class="message bot-message">
+                {{ chatbot_response }}
+                <span class="message-time">{% now "H:i" %}</span>
+            </div>
+        {% else %}
+            <div class="message bot-message">
+                Hello! I'm your AI assistant. How can I help you today?
+                <span class="message-time">{% now "H:i" %}</span>
+            </div>
+        {% endif %}
+        <div class="typing-indicator" id="typing-indicator">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    <div class="error-message" id="error-message">
+        {% if error %}{{ error }}{% endif %}
+    </div>
+    <form id="chat-form" method="POST">
+        {% csrf_token %}
+        <div class="chat-input-container">
+            <input type="text" 
+                   class="chat-input" 
+                   id="user-input" 
+                   name="teacher_response"
+                   placeholder="Type a message..." 
+                   autocomplete="off">
+            <button type="submit" class="send-button" id="send-button">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock content %}
+
+{% block script %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const chatMessages = document.getElementById('chat-messages');
+    const userInput = document.getElementById('user-input');
+    const sendButton = document.getElementById('send-button');
+    const typingIndicator = document.getElementById('typing-indicator');
+    const errorMessage = document.getElementById('error-message');
+    const chatForm = document.getElementById('chat-form');
+
+    // Function to get current time
+    function getCurrentTime() {
+        const now = new Date();
+        return now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+    }
+
+    // Function to add a message to the chat
+    function addMessage(content, isUser = false) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+        
+        // Add message content
+        messageDiv.textContent = content;
+        
+        // Add timestamp
+        const timeSpan = document.createElement('span');
+        timeSpan.className = 'message-time';
+        timeSpan.textContent = getCurrentTime();
+        messageDiv.appendChild(timeSpan);
+
+        // Add status indicator for user messages
+        if (isUser) {
+            const statusSpan = document.createElement('span');
+            statusSpan.className = 'message-status';
+            statusSpan.innerHTML = '✓';
+            messageDiv.appendChild(statusSpan);
+        }
+
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Function to show typing indicator
+    function showTypingIndicator() {
+        typingIndicator.style.display = 'block';
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Function to hide typing indicator
+    function hideTypingIndicator() {
+        typingIndicator.style.display = 'none';
+    }
+
+    // Function to show error message
+    function showError(message) {
+        errorMessage.textContent = message;
+        errorMessage.style.display = 'block';
+        setTimeout(() => {
+            errorMessage.style.display = 'none';
+        }, 5000);
+    }
+
+    // Function to handle message sending
+    async function handleSubmit(e) {
+        e.preventDefault(); // Prevent form submission
+        
+        const message = userInput.value.trim();
+        if (!message) return;
+
+        // Disable input and button while processing
+        userInput.disabled = true;
+        sendButton.disabled = true;
+
+        // Add user message to chat
+        addMessage(message, true);
+        userInput.value = '';
+
+        // Show typing indicator
+        showTypingIndicator();
+
+        try {
+            const formData = new FormData(chatForm);
+            
+            // Extract the form data to standard URLEncoded format
+            const params = new URLSearchParams();
+            for (const pair of formData) {
+                params.append(pair[0], pair[1]);
+            }
+            
+            // Make the fetch request
+            const response = await fetch(window.location.href, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: params
+            });
+
+            // Check response
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            // Parse the response text to handle both HTML and JSON
+            const responseText = await response.text();
+            let botResponse = '';
+            
+            try {
+                // Try to parse as JSON
+                const data = JSON.parse(responseText);
+                botResponse = data.chatbot_response || 'Sorry, I could not generate a response.';
+            } catch (e) {
+                // If not JSON, it might be direct HTML or text
+                console.log("Response is not JSON:", responseText);
+                
+                // Check if it's a JSON string inside a regular string (common issue)
+                const jsonMatch = responseText.match(/{.*}/);
+                if (jsonMatch) {
+                    try {
+                        const extractedJson = JSON.parse(jsonMatch[0]);
+                        botResponse = extractedJson.chatbot_response || 'Sorry, I could not generate a response.';
+                    } catch (e2) {
+                        // If all fails, just display the text as is
+                        botResponse = 'Sorry, I could not process the response correctly.';
+                    }
+                } else {
+                    botResponse = 'Sorry, I could not process the response correctly.';
+                }
+            }
+            
+            // Hide typing indicator
+            hideTypingIndicator();
+
+            // Add bot message to chat
+            setTimeout(() => {
+                addMessage(botResponse);
+                // Update the status of the user's message to "read"
+                const userMessages = document.querySelectorAll('.user-message .message-status');
+                const lastUserMessage = userMessages[userMessages.length - 1];
+                if (lastUserMessage) {
+                    lastUserMessage.innerHTML = '✓✓';
+                }
+            }, 500);
+            
+        } catch (error) {
+            console.error('Error:', error);
+            hideTypingIndicator();
+            showError('Sorry, there was an error processing your message. Please try again.');
+        } finally {
+            // Re-enable input and button
+            userInput.disabled = false;
+            sendButton.disabled = false;
+            userInput.focus();
+        }
+    }
+
+    // Event listeners
+    chatForm.addEventListener('submit', handleSubmit);
+
+    // Handle Enter key
+    userInput.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            chatForm.dispatchEvent(new Event('submit'));
+        }
+    });
+
+    // Focus input on page load
+    userInput.focus();
+});
+</script>
+{% endblock script %}

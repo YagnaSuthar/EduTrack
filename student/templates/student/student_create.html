@@ -1,0 +1,129 @@
+{% extends "Dashboard/index.html" %}
+
+{% block title %}
+Student-creation Form
+{% endblock title %}
+
+{% block style %}
+<style>
+.student_create_form {
+    margin-left: 10%;
+    align-items: center;
+    min-height: 100vh;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.student_center {
+    align-items: center;
+    align-content: center;
+    width: 40%; /* Set a fixed width */
+    max-width: 600px; /* Prevents excessive width */
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    margin-left: auto; /* Center horizontally */
+    margin-right: auto; /* Center horizontally */
+}
+
+.student_create_form form {
+    display: flex;
+    flex-direction: column;
+}
+
+.student_create_form label {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.student_create_form input, 
+.student_create_form select {
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    background-color: #f8f8f8;
+    transition: all 0.3s ease;
+}
+
+.student_create_form input:focus, 
+.student_create_form select:focus {
+    border-color: #4CAF50;
+    background-color: #fff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+.student_create_form hr {
+    border: 0;
+    border-top: 1px solid #eee;
+    margin: 10px 0;
+}
+
+.student_create_form button {
+    padding: 12px 0;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.student_create_form button:hover {
+    background-color: #45a049;
+    transform: scale(1.03);
+}
+
+.student_create_form button:active {
+    transform: scale(0.98);
+}
+
+
+</style>
+{% endblock style %}
+
+
+{% block content %}
+<div class="student_create_form">
+    <div class="student_center">
+        <form method="POST" action="">
+        {% csrf_token %}
+        <label>Student Name</label>
+        {{form.name}}
+        <hr>
+        <label>Student Gender</label>
+        {{form.gender}}
+        <hr>
+        <label>Student's SAT Score</label>
+        {{form.sat_score}}
+        <hr>
+        <label>Student's PAT Score</label>
+        {{form.pat_score}}
+        <hr>
+        <label>Student's Attendance </label>
+        {{form.attendance}}
+        <hr>
+        <label>Student's Email</label>
+        {{form.email}}
+        <hr>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+    
+</div>
+
+{% endblock content %}
+
+{% block script %}
+
+{% endblock script %}
+

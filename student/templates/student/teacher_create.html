@@ -1,0 +1,102 @@
+{% extends "Dashboard/index.html" %}
+
+{% block title %}
+Teacher Creation Form
+{% endblock title %}
+
+{% block style %}
+<style>
+.teacher_create_form {
+    margin: 25vh 43vw;
+}
+
+.teacher_create_form {
+    height: fit-content;
+    width: 50%;
+    margin: 20vh auto;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.teacher_create_form form {
+    display: flex;
+    flex-direction: column;
+}
+
+.teacher_create_form label {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 3px;
+    color: #333;
+}
+
+.teacher_create_form input, 
+.teacher_create_form select, 
+.teacher_create_form textarea {
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+.teacher_create_form hr {
+    border: 0;
+    border-top: 1px solid #eee;
+    margin: 8px 0;
+}
+
+.teacher_create_form button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.teacher_create_form button:hover {
+    background-color: #45a049;
+}
+</style>
+{% endblock style %}
+
+{% block content %}
+<div class="teacher_create_form">
+    <form method="POST" action="">
+        {% csrf_token %}
+        <label>Name</label>
+        {{form.name}}
+        <hr>
+        <label for="first_name">First Name</label>
+        {{ form.first_name }}
+        <hr>
+
+        <label for="last_name">Last Name</label>
+        {{ form.last_name }}
+        <hr>
+        
+        <label for="last_name">gender</label>
+        {{ form.gender}}
+        <hr>
+
+        <label for="email">Email</label>
+        {{ form.email }}
+        <hr>
+
+        <label for="subjects">Subjects</label>
+        {{ form.subject }}
+        <hr>
+
+        <button type="submit">Submit</button>
+    </form>
+</div>
+{% endblock content %}
+
+{% block script %}
+{% endblock script %}

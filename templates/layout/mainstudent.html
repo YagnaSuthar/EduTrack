@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>studentPerformanceAI</title>
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/headers/">
+    <link href="/docs/5.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        .dashboard-container {
+            display: flex;
+            height: 100vh;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+        }
+        .sidebar a {
+            display: block;
+            color: white;
+            padding: 10px;
+            text-decoration: none;
+            margin-bottom: 10px;
+        }
+        .sidebar a:hover {
+            background-color: #34495e;
+        }
+        .content {
+            margin-left: 270px;
+            padding: 20px;
+            flex-grow: 1;
+            width: calc(100% - 270px);
+        }
+        .chart-container {
+            width: 100%;
+            height: 400px;
+        }
+        {% block style %}
+        
+        
+        {% endblock style %}
+    </style>
+
+</head>
+<body>
+    {% comment %} {% include "layout/navbar.html" %} {% endcomment %}
+
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <h2>Student Dashboard</h2>
+            <a href="{% url 'studentProfile' %}">Profile</a>
+            <a href="{% url 'studentAttendance' %}">Attendance</a>
+            <a href="{% url 'studentPerformance' %}">Performance</a>
+        </div>
+        <div class="content">
+            {% block page_content %}{% endblock page_content %}
+        </div>
+    </div>
+    {% block content %}
+    
+    {% endblock content %}
+
+    <script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            var ctx = document.getElementById('performanceChart')?.getContext('2d');
+            if (ctx) {
+                var performanceChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                        datasets: [{
+                            label: 'Performance Score',
+                            data: [85, 88, 75, 90, 80, 95],
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
+        </script>
+        {% block script %}
+        
+        {% endblock script %}
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+{% extends "Dashboard/index.html" %}
+
+{% block title %}Suggestions{% endblock title %}
+
+{% block style %}
+<style>
+.nav-suggestion
+{
+    margin-left: 200px;
+}    
+
+.chat-header {
+    background: linear-gradient(90deg,#0047B2,#286bcf,#5e8acc);
+    color: white;
+    padding: 15px;
+    text-align: center;
+    /* box-shadow: 0 2px 5px rgba(0,0,0,0.1); */
+    font-weight: bold;
+    font-size: 1.2em;
+}
+/* Main container styling */
+.suggesions-container {
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    height: 100vh;
+    font-weight: bold;
+    padding: 20px;
+    background-color: #f8f8f8;
+}
+
+/* Links to filter students */
+.suggesions-container a {
+    margin: 10px;
+    padding: 12px 20px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.suggesions-container a:hover {
+    background-color: #5e8acc;
+    color: white;
+}
+
+/* Suggestion message box */
+.suggestion-message {
+    background-color: #f1f1f1;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    width: 80%;
+    max-width: 800px;
+}
+
+.suggestion-message p {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.suggestion-message ul {
+    list-style-type: disc;
+    margin-left: 20px;
+    color: #555;
+}
+
+.suggestion-message ul li {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+/* Table styling */
+table {
+    width: 100%;
+    margin-top: 30px;
+    border-collapse: collapse;
+    text-align: left;
+    background-color: #f8f8f8;
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+    border-radius: 8px;
+    overflow: hidden;
+    font-weight: normal;
+}
+
+table th, table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+table th {
+/* background: linear-gradient(90deg,#0047B2,#286bcf,#5e8acc); */
+color: #ffffff;
+}
+
+tr1
+{
+
+}
+
+table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.filter-links
+{
+    width: 60%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.filter-links a
+{
+    background-color: #ddd;
+    color: #333;
+    border-radius: 40px;
+    box-shadow: 1px 4px 3px rgba(0, 0, 0, 0.2);
+
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    .suggesions-container {
+        width: 90%;
+        margin-left: 0;
+    }
+
+    table {
+        width: 100%;
+    }
+}
+
+</style>
+{% endblock style %}
+
+{% block content %}
+<div class="nav-suggestion">
+    <div class="chat-header">
+        <h2>Suggestions</h2>
+    </div>
+    <div class="suggesions-container">
+    <div class="filter-links">
+        <a href="?performance=Low">Low Performers</a>
+        <a href="?performance=Medium">Medium Performers</a>
+        <a href="?performance=High">High Performers</a>
+        <a href="{% url 'student_list' %}">All Students</a>
+    </div>
+
+    <!-- Suggestion for low performers -->
+    {% if show_suggestion %}
+    <div class="suggestion-message">
+        <p>Suggestions for {{performance_level}} Performers:</p>
+        <ul>
+            <li>{{suggestions}}</li>
+            <!-- {% comment %} <li>Provide additional tutoring sessions or resources.</li>
+            <li>Encourage participation in study groups.</li>
+            <li>Reevaluate current study habits and recommend better strategies.</li> {% endcomment %} -->
+        </ul>
+    </div>
+    {% endif %}
+
+    <table>
+        <tr style="background: linear-gradient(90deg,#0047B2,#286bcf,#5e8acc); font-weight: bold;">
+            <th>Name</th>
+            <th>SAT Score</th>
+            <th>PAT Score</th>
+            <th>Attendance</th>
+            <th>Performance</th>
+        </tr>
+        {% for student in students %}
+        <tr>
+            <td>{{ student.name }}</td>
+            <td>{{ student.sat_score }}</td>
+            <td>{{ student.pat_score }}</td>
+            <td>{{ student.attendance }}</td>
+            <td>{{ student.performance_summary }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+</div>
+
+{% endblock content %}
+
+{% block script %}
+{% endblock script %}

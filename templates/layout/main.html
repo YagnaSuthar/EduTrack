@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}EduTrack{% endblock title %}</title>
+    {% include "base/css.html" %}
+ 
+  </head>
+
+  <body>
+    {% include "nav/navbar.html" %}
+    {% comment %} {% include "base/messages.html" %} {% endcomment %}
+    {% comment %} {% include "layout/hero.html" %} {% endcomment %}
+    {% comment %} {% include "layout/features.html" %} {% endcomment %}
+    {% comment %} {% include "layout/social_proof.html" %} {% endcomment %}
+    {% include "layout/homelandingpage.html" %}
+
+
+
+
+
+
+        {% block content %} 
+        {% endblock content %}
+        {% include "base/js.html" %}
+      
+  </body>

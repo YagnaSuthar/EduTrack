@@ -1,0 +1,245 @@
+{% extends "Dashboard/index.html" %}
+
+{% block title %}
+Students-list-{{ block.super }}
+{% endblock title %}
+
+{% block style %}
+{% include "base/css.html" %}
+<style>
+.side-23
+{
+    margin-left: 200px;
+}
+
+.chat-header {
+    background: linear-gradient(90deg,#0047B2,#286bcf,#5e8acc);
+    color: white;
+    padding: 15px;
+    text-align: center;
+    /* box-shadow: 0 2px 5px rgba(0,0,0,0.1); */
+    font-weight: bold;
+    font-size: 1.8em;
+}
+.nav-studentbar1{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+
+
+.student-section {
+    width: 90%;
+    margin: 0 auto;
+    background-color: black;
+    border-radius: 0%;
+}
+
+.student-create-btn {
+    text-align: center;
+    color: blue;
+    margin-bottom: 20px;
+}
+
+.student-search {
+    width: 60%;
+    text-align: center;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 20px;
+}
+
+.student-search input {
+    padding: 7px;
+    padding-left: 10px;
+    width: 50%;
+    border:rgba(255, 255, 255, 0); /* Soft white border */
+    border-radius: 26px;
+    background: rgba(255, 255, 255, 0.2); /* Transparent glass effect */
+    backdrop-filter: blur(10px); /* Frosted glass effect */
+    box-shadow: 
+        inset 5px -10px 15px rgba(255, 255, 255, 0.5), /* Top soft highlight */
+        inset -5px 10px 15px rgba(0, 0, 0, 0.2), /* Bottom shadow */
+        0px 4px 10px rgba(0, 0, 0, 0.1); /* Outer shadow */
+    transition: all 0.6s ease-in-out; /* Smooth effect */
+}
+
+.student-search input:hover {
+    box-shadow: 
+        inset 8px -15px 20px rgba(255, 255, 255, 0.6), /* Increased highlight */
+        inset -8px 15px 20px rgba(0, 0, 0, 0.3), /* Darker bottom shadow */
+        0px 6px 15px rgba(0, 0, 0, 0.15); /* Outer shadow */
+    background: rgba(255, 255, 255, 0.3); /* Slightly brighter glass */
+}
+
+.styled-line {
+    border: 1px solid #d8d8d8; /* Black border */
+    width: 100%;             /* 80% width of the container */
+    margin-bottom: 30px;
+}    
+
+
+.student-data {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.student-table-container {
+    width: 100%;
+    overflow-x: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-color: #dddddd2d;
+}
+
+.student-main-table {
+    width: 100%;
+    border-collapse: separate; /* Important for applying border-radius */
+    border-spacing: 0; /* Ensures borders are adjacent */
+    border-radius: 10px; /* Apply border-radius to the entire table */
+    overflow: hidden; /* Ensures the corners of the table are clipped */
+}
+
+.student-main-table th, .student-main-table td {
+    border: 1px solid #dddddda6;
+    padding: 8px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.student-main-table th {
+    background-color: #0047b2ec;
+    font-weight: bold;
+    color: #fff;
+    
+}
+
+.btn-student-data button {
+    color: rgb(255, 255, 255);
+    border:rgba(0, 0, 0, 0);
+    border-radius: 25px;
+    background: linear-gradient(45deg,#0047B2,#0e4fb1,#8893a3b6);
+    font-weight: bold;
+    padding: 11px 20px 11px 20px;/* Order: TOP RIGHT BOTTOM LEFT */
+    margin: 10px;
+}
+
+.btn-student-data button:hover {
+    background: linear-gradient(49deg,#8893a3b6,#0e4fb1,#0047B2);
+    transform: scale(1.05); /* Slight zoom effect */
+    transition: all 0.3s ease-out;
+}
+
+.btn-student-data button:not(:hover) {
+    transition: all ease-in-out 0.3s; /* Adds a delay before shrinking */
+}
+
+.student-main-table th, .student-main-table td {
+    padding: 10px 8px 10px 8px;
+    text-align: left;
+    white-space: nowrap;
+    border-left: none; /* Remove left vertical border */
+    border-right: none; /* Remove right vertical border */
+    border-top: 1px solid #ddd; /* Ensure top border exists for all rows */
+}
+
+.student-main-table tr {
+    border-bottom: 1px solid #ddd; /* Add horizontal borders between rows */
+}
+
+/* Add a bottom border for the last row to avoid any difference */
+.student-main-table tr:last-child td {
+    border-bottom: 2px solid #ddddddd8; /* Ensure the last row has a bottom border */
+}
+
+
+
+@media screen and (max-width: 768px) {
+    .student-data {
+        margin-left: 0;
+        padding: 10px;
+    }
+    .student-main-table th, .student-main-table td {
+        padding: 5px;
+    }
+    .btn-student-data button {
+        padding: 8px;
+        font-size: 14px;
+    }
+    .student-search input {
+        width: 80%;
+    }
+}
+</style>
+{% endblock style %}
+
+{% block content %}
+
+
+<div class="side-23">
+    <div class="chat-header">
+        <h2>Student Data</h2>
+    </div>
+    <div class="student-data">
+    
+    <div class="nav-studentbar1">
+        
+    <div class="student-search">
+        <input type="text" id="search-bar" placeholder="Search students...">
+    </div>
+    <div class="student-create-btn">
+        
+        <a class="btn-student-data" href={% url 'create_teacher' %}><button>Add Teacher</button></a>
+    </div> 
+</div>
+
+<hr class="styled-line">
+    
+    <div class="student-table-container">
+        <table class="student-main-table">
+            <thead>
+                <tr>
+                    <th>Teacher Name</th>
+                    <th>Subject</th>
+                    <th>Gender</th>
+                    <th>First Name</th>
+                    <th>Secound name  </th>
+                    <th>Email</th>
+                    {% comment %} <th>Attendance</th> {% endcomment %}
+                    {% comment %} <th>Performance</th> {% endcomment %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for teacher in teachers %}
+                <tr>
+                    <td>{{ teacher.name }}</td>
+                    {% comment %} <td>{{ teacher.subject }}</td> {% endcomment %}
+                    <td>{{ teacher.get_subject_display }}</td>
+
+                    <td>{{ teacher.gender }}</td>
+                    <td>{{ teacher.first_name }}</td>
+                    <td>{{ teacher.last_name }}</td>
+                    <td>{{ teacher.email }}</td>
+                   
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <a class="btn-student-data" href={% url 'export_teacher_csv' %}><button>Download CSV</button></a>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block script %}
+{% include "base/js.html" %}
+{% endblock script %}

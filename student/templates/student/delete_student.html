@@ -1,0 +1,16 @@
+{% extends "layout/main.html" %}
+ {% block title %} Student-Deletion Form 
+ {%endblock title %} {% block style %} {% endblock style %} 
+ {% block content %}
+<div class="student_delete">
+  <form method="POST" action="">
+    {% csrf_token %}
+    <p>Are You sure you want to delete "{{obj}}"?</p>
+    <a href="{{request.META.HTTP_REFERER}}">Go Back</a>
+    <button type="submit">Delete_student</button>
+  </form>
+</div>
+
+{% endblock content %} 
+{% block script %} 
+{% endblock script %}

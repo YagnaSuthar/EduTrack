@@ -1,0 +1,291 @@
+{% extends "Dashboard/index.html" %}
+ 
+{% block content %}
+<!-- Main Content -->
+<main class="main-content">
+   <!-- Header -->
+   <header class="header">
+       <div class="search-bar">
+           <i class="fas fa-search"></i>
+           <input type="text" placeholder="Search Class, Documents, Activities...">
+       </div>
+       <div class="header-right">
+           <div class="theme-toggle">
+               <i class="fas fa-sun"></i>
+               <label class="switch">
+                   <input type="checkbox" id="theme-toggle">
+                   <span class="slider round"></span>
+               </label>
+               <i class="fas fa-moon"></i>
+           </div>
+           <div class="notifications">
+               <i class="fas fa-bell"></i>
+               <span class="notification-count">1</span>
+           </div>
+           <div class="settings">
+               <i class="fas fa-cog"></i>
+           </div>
+           <div class="profile">
+               <img src="user-3-line.png" alt="Profile">
+           </div>
+       </div>
+   </header>
+
+   <!-- Welcome Banner -->
+   <section class="welcome-banner">
+       <div class="welcome-text">
+           <h1>Welcome back, Teacher {{request.user}}</h1>
+           <p>You have 27 new student added to your domain. Please reach out to the Head Teacher if you want them excluded from your domain.</p>
+       </div>
+   </section>
+
+   <!-- Dashboard Grid -->
+   <div class="dashboard-grid">
+       <!-- Student Statistics -->
+       <div class="card student-statistic">
+           <div class="card-header">
+               <h2>Class Progress</h2>
+               <div class="date-navigator">
+                   <button class="arrow-btn"><i class="fas fa-angle-left"></i></button>
+                   <span>Sept 2022</span>
+                   <button class="arrow-btn"><i class="fas fa-angle-right"></i></button>
+               </div>
+           </div>
+           <div class="card-body">
+               <div class="chart-container">
+                   <canvas id="studentChart"></canvas>
+               </div>
+           </div>
+       </div>
+
+       <!-- Class Progress -->
+       <div class="card class-progress">
+           <div class="card-header">
+               <h2>Subject Progress</h2>
+               <label for="classSelect">Select Class:</label>
+               <select id="classSelect">
+                   <option value="A">Class A</option>
+                   <option value="B">Class B</option>
+                   <option value="C">Class C</option>
+                   <option value="D">Class D</option>
+                   <option value="E">Class E</option>
+                   <option value="F">Class F</option>
+               </select>
+           </div>
+           <div class="card-body">
+               <div class="progress-list">
+                   <div class="progress-item">
+                       <div class="progress-info">
+                           <h3>Science</h3>
+                           <p>78 Student</p>
+                       </div>
+                       <div class="progress-chart">
+                           <canvas id="progressChartA"></canvas>
+                           <span class="progress-percentage">32%</span>
+                       </div>
+                   </div>
+                   <div class="progress-item">
+                       <div class="progress-info">
+                           <h3>Mathematic</h3>
+                           <p>60 Students</p>
+                       </div>
+                       <div class="progress-chart">
+                           <canvas id="progressChartB"></canvas>
+                           <span class="progress-percentage">43%</span>
+                       </div>
+                   </div>
+                   <div class="progress-item">
+                       <div class="progress-info">
+                           <h3>English</h3>
+                           <p>80 Students</p>
+                       </div>
+                       <div class="progress-chart">
+                           <canvas id="progressChartC"></canvas>
+                           <span class="progress-percentage">67%</span>
+                       </div>
+                   </div>
+                   <div class="progress-item">
+                       <div class="progress-info">
+                           <h3>Social Science</h3>
+                           <p>64 Students</p>
+                       </div>
+                       <div class="progress-chart">
+                           <canvas id="progressChartD"></canvas>
+                           <span class="progress-percentage">56%</span>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </div>
+
+       <!-- Upcoming Activities -->
+       <div class="card upcoming-activities">
+           <div class="card-header">
+               <h2>Upcoming Activities</h2>
+               <a href="#" class="view-all">See all</a>
+           </div>
+       <div class="card-body">
+               <div class="activity-list">
+                   <a href="#" style="color: black; text-decoration: none;"><div class="activity-item">
+                       <div class="activity-date">
+                           <span class="date-box">31</span>
+                       </div>
+                       <div class="activity-info">
+                           <h3>Meeting with the Staff</h3>
+                           <p>Meeting link/<a href="http://www.zoom.com">www.zoom.com</a></p>
+                           <div class="activity-time">
+                               <span><i class="far fa-clock"></i> 10 A.M - 11A.M</span>
+                               <span class="due-soon">Due soon</span>
+                           </div>
+                       </div>
+                   </div></a>
+                   <a href="#" style="color: black; text-decoration: none;"><div class="activity-item">
+                       <div class="activity-date">
+                           <span class="date-box">04</span>
+                       </div>
+                       <div class="activity-info">
+                           <h3>Meeting with the Principle</h3>
+                           <p>Meeting link/<a href="http://www.zoom.com">www.zoom.com</a></p>
+                           <div class="activity-time">
+                               <span><i class="far fa-clock"></i> 11 A.M - 12P.M</span>
+                               <span class="upcoming">Upcoming</span>
+                           </div>
+                       </div>
+                   </div></a>
+                   <a href="#" style="color: black; text-decoration: none;"><div class="activity-item">
+                       <div class="activity-date">
+                           <span class="date-box">12</span>
+                       </div>
+                       <div class="activity-info">
+                           <h3>Class B Reporting</h3>
+                           <p>Physical science lab</p>
+                           <div class="activity-time">
+                               <span><i class="far fa-clock"></i> 12 P.M - 13P.M</span>
+                               <span class="upcoming">Upcoming</span>
+                           </div>
+                       </div>
+                   </div></a>
+                   <a href="#" style="color: black; text-decoration: none;"><div class="activity-item">
+                       <div class="activity-date">
+                           <span class="date-box">16</span>
+                       </div>
+                       <div class="activity-info">
+                           <h3>Class Test...</h3>
+                           <p>Send Document via email</p>
+                           <div class="activity-time">
+                               <span><i class="far fa-clock"></i> 14 P.M - 15P.M</span>
+                               <span class="upcoming">Upcoming</span>
+                           </div>
+                       </div>
+                   </div></a>
+                   
+               </div></a>    
+           </div>
+       </div>
+
+       <!-- Attendance -->
+       <div class="card attendance">
+           <div class="card-header">
+               <h2>Attendance</h2>
+               <div class="date-navigator">
+                   <button class="arrow-btn"><i class="fas fa-angle-left"></i></button>
+                   <span>Sept 2022</span>
+                   <button class="arrow-btn"><i class="fas fa-angle-right"></i></button>
+               </div>
+           </div>
+           <div class="card-body">
+               <div class="chart-container">
+                   <canvas id="attendanceChart"></canvas>
+               </div>
+           </div>
+       </div>
+
+       <!-- Staff Room -->
+       <div class="card staff-room">
+           <div class="card-header">
+               <h2>Staff Room</h2>
+               <a href="#" class="view-all">See all</a>
+           </div>
+           <div class="card-body">
+               <div class="staff-list">
+                   <div class="staff-item">
+                       <div class="staff-avatar">
+                           <span>YD</span>
+                       </div>
+                       <div class="staff-info">
+                           <h3>Yagna Dhar</h3>
+                           <p>Hello, let's have a call after class 5. two</p>
+                       </div>
+                       <div class="staff-time">
+                           <span>10:55 am</span>
+                       </div>
+                   </div>
+                   <div class="staff-item">
+                       <div class="staff-avatar">
+                           <span>NS</span>
+                       </div>
+                       <div class="staff-info">
+                           <h3>Neel Surani</h3>
+                           <p>Please schedule your class test</p>
+                       </div>
+                       <div class="staff-time">
+                           <span>12:35 pm</span>
+                       </div>
+                   </div>
+                   <div class="staff-item">
+                       <div class="staff-avatar">
+                           <span>KR</span>
+                       </div>
+                       <div class="staff-info">
+                           <h3>Kavya Rathod</h3>
+                           <p>Please submit your session records</p>
+                       </div>
+                       <div class="staff-time">
+                           <span>04:30 pm</span>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </div>
+
+       <!-- Documents -->
+       <div class="card documents">
+           <div class="card-header">
+               <h2>Documents</h2>
+               <a href="#" class="view-all">See all</a>
+           </div>
+           <div class="card-body">
+               <div class="document-list">
+                   <div class="document-item">
+                       <div class="document-icon">
+                           <i class="fas fa-file-alt"></i>
+                       </div>
+                       <div class="document-info">
+                           <a href="#" style="color: black; text-decoration: none;"><h3>Class A 1st semester result</h3></a>
+                           <p>04 May, 07:25AM</p>
+                       </div>
+                   </div>
+                   <div class="document-item">
+                       <div class="document-icon">
+                           <i class="fas fa-file-alt"></i>
+                       </div>
+                       <div class="document-info">
+                           <a href="#" style="color: black; text-decoration: none;"><h3>Progress Report-sheet</h3></a>
+                           <p>11 Aug, 04:25PM</p>
+                       </div>
+                   </div>
+                   <div class="document-item">
+                       <div class="document-icon">
+                           <i class="fas fa-file-alt"></i>
+                       </div>
+                       <div class="document-info">
+                           <a href="#" style="color: black; text-decoration: none;"><h3>Class E attendance sheet</h3></a>
+                           <p>01 Oct, 08:25AM</p>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </div>
+   </div>
+</main>
+{% endblock content %}

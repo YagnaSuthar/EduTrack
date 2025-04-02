@@ -1,0 +1,113 @@
+{% extends "account/base_entrance.html" %}
+{% load i18n %}
+{% load account %}
+{% load allauth %}
+
+{% block head_title %}
+    {% trans "Confirm Email Address" %}
+{% endblock head_title %}
+
+{% block content %}
+    {% element h1 %}
+        {% trans "Confirm Email Address" %}
+    {% endelement %}
+
+    <div class="confirmation-container">
+        {% if confirmation %}
+            {% user_display confirmation.email_address.user as user_display %}
+            {% if can_confirm %}
+                {% element p %}
+                    {% blocktrans with confirmation.email_address.email as email %}Please confirm that <a href="mailto:{{ email }}">{{ email }}</a> is an email address for user {{ user_display }}.{% endblocktrans %}
+                {% endelement %}
+                
+                {% url 'account_confirm_email' confirmation.key as action_url %}
+                
+                {% element form method="post" action=action_url %}
+                    {% slot actions %}
+                        {% csrf_token %}
+                        {{ redirect_field }}
+                        {% element button type="submit" %}
+                            {% trans 'Confirm' %}
+                        {% endelement %}
+                    {% endslot %}
+                {% endelement %}
+            {% else %}
+                {% element p %}
+                    {% blocktrans %}Unable to confirm {{ email }} because it is already confirmed by a different account.{% endblocktrans %}
+                {% endelement %}
+            {% endif %}
+        {% else %}
+            {% url 'account_email' as email_url %}
+            {% element p %}
+                {% blocktrans %}This email confirmation link expired or is invalid. Please <a href="{{ email_url }}">issue a new email confirmation request</a>.{% endblocktrans %}
+            {% endelement %}
+        {% endif %}
+    </div>
+
+    <style>
+        .confirmation-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .confirmation-container p {
+            font-size: 16px;
+            color: #555;
+        }
+
+        .confirmation-container a {
+            color: #007bff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .confirmation-container a:hover {
+            color: #0056b3;
+        }
+
+        .confirmation-container .form-actions {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .confirmation-container .form-actions button {
+            background-color: #28a745;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .confirmation-container .form-actions button:hover {
+            background-color: #218838;
+        }
+
+        .confirmation-container .confirmation-error p {
+            font-size: 16px;
+            color: #e74c3c;
+        }
+
+        .confirmation-container .confirmation-error a {
+            color: #5bc0de;
+            text-decoration: none;
+        }
+
+        .confirmation-container .confirmation-error a:hover {
+            color: #31b0d5;
+        }
+    </style>
+
+{% endblock content %}

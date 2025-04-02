@@ -1,0 +1,104 @@
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="logo">
+        <i class="fas fa-graduation-cap"></i>
+        <span>Edutrack</span>
+    </div>
+    <ul class="nav-links">
+        <li>
+            {% if is_teacher %}
+            <a href="{% url 'teacher_dash'%}">
+                <i class="fas fa-home"></i>
+                <span>Teacher- Home</span>
+            </a>
+            {% elif is_student %}  
+           
+            <a href="{% url 'student_dash'%}">
+                <i class="fas fa-home"></i>
+                <span>student-Home</span>
+            </a>
+            {% elif is_schooladmin %}
+            <a href="{% url 'schooladmin_dash'%}">
+                <i class="fas fa-home"></i>
+                <span>schooladmin-Home</span>
+            </a>
+
+            {% endif %}
+        </li>
+            
+        
+        <li>
+            {% if is_teacher %}
+            <a href="{% url 'student_data'%}">
+                <i class="fas fa-user-graduate"></i>
+                <span>Students</span>
+            </a>
+            {% elif is_student %}  
+            {% comment %} {% else %} {% endcomment %}
+            <p>Student ID: {{ student.student_id }}</p>
+            <a href="{% url 'student_marks' pk=student.student_id %}">
+                <i class="fas fa-user-graduate"></i>
+                <span>View Marks</span>
+            </a>
+            {% elif is_schooladmin %}
+            <a href="{% url 'teacher_data'  %}">
+                <i class="fas fa-user-graduate"></i>
+                <span>Teachers</span>
+            </a>
+
+            {% endif %}
+        </li>
+        <li>
+            <a href="{% url 'chatbot'%}">
+                <i class="fas fa-chalkboard"></i>
+                <span>Chatbot</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="fas fa-clipboard-list"></i>
+                <span>Performance</span>
+            </a>
+        </li>
+        <li>
+            {% if is_teacher %}
+            <a href="{% url 'suggesions'%}">
+                <i class="fas fa-chart-bar"></i>
+                <span>Suggestions</span>
+            </a>
+            {% elif is_student %}
+            <a href="{% url 'student_suggesions' student.student_id%}">
+                <i class="fas fa-chart-bar"></i>
+                <span>Suggestions-st</span>
+            </a>
+
+            {% endif %}
+        </li>
+        <li>
+            <a href="#">
+                <i class="fas fa-cog"></i>
+                <span>Attendance</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="fas fa-users"></i>
+                <span>Staff Room</span>
+                <span class="notification">3</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'account_reset_password'%}">
+                <i class="fas fa-users"></i>
+                <span>Reset Password</span>
+                
+            </a>
+        </li>
+    </ul>
+    <div class="sign-out">
+        <a href="{% url 'account_logout'%}">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Sign Out</span>
+        </a>
+    </div>
+</nav>

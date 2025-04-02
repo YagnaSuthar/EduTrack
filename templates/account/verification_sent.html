@@ -1,0 +1,78 @@
+{% extends "account/base_entrance.html" %}
+{% load i18n %}
+{% load allauth %}
+
+{% block head_title %}
+    {% trans "Verify Your Email Address" %}
+{% endblock head_title %}
+
+{% block style %}
+<style>
+/* Email Verification Page Styles */
+.email-verification-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.heading-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.verification-text {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.6;
+    margin-top: 20px;
+}
+
+.verification-text a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.verification-text a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+    .email-verification-container {
+        margin: 20px;
+        padding: 15px;
+    }
+
+    .heading-title {
+        font-size: 20px;
+    }
+
+    .verification-text {
+        font-size: 14px;
+    }
+}
+</style>
+
+{% endblock style %}
+
+
+{% block content %}
+    <div class="email-verification-container">
+        {% element h1 %}
+            <span class="heading-title">{% trans "Verify Your Email Address" %}</span>
+        {% endelement %}
+
+        {% element p %}
+            <span class="verification-text">
+                {% blocktrans %}
+                    We have sent an email to you for verification. Follow the link provided to finalize the signup process. If you do not see the verification email in your main inbox, check your spam folder. Please contact us if you do not receive the verification email within a few minutes.
+                {% endblocktrans %}
+            </span>
+        {% endelement %}
+    </div>
+{% endblock content %}
