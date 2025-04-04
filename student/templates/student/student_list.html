@@ -212,6 +212,7 @@ Students-list-{{ block.super }}
                     <th>PAT Score</th>
                     <th>SAT Score</th>
                     <th>Attendance</th>
+                    <th>Standard</th>
                     <th>Performance</th>
                 </tr>
             </thead>
@@ -223,6 +224,14 @@ Students-list-{{ block.super }}
                     <td>{{ student.pat_score }}</td>
                     <td>{{ student.sat_score }}</td>
                     <td>{{ student.attendance }}</td>
+                    <td> {% if student.subject.all %}
+                            {% for subject in student.subject.all %}
+                                {{ subject }} {% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            No subjects assigned
+                        {% endif %}
+                </td>
                     <td>{% if student.performance_summary %}{{ student.performance_summary }}{% else %}Not Predicted{% endif %}</td>
                 </tr>
                 {% endfor %}

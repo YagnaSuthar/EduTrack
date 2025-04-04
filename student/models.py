@@ -8,6 +8,67 @@ import string
 User = get_user_model()
 # Create your models here.
 
+class SchoolAdminProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+  
+    gender = models.CharField(max_length=1)
+    phone_number = models.CharField(max_length=15, blank=True, null=True)
+    dob = models.DateField(default=None, null=True)
+    approved = models.BooleanField(default=False)
+    school_id = models.FileField(upload_to='school_ids/', null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.user.username} Profile"
+class School(models.Model):
+    name = models.CharField(max_length=100,null=True,blank=False)
+    address = models.TextField()
+    principal = models.OneToOneField(SchoolAdminProfile, on_delete=models.SET_NULL, null=True, related_name='managed_school')
+
+    
+    def __str__(self):
+        return self.name
+
+class Standard(models.Model):
+    standard_choices = [('1st','1st'),
+                        ('2nd','2nd'),
+                        ('3rd','3rd'),
+                        ('4th','4th'),
+                        ('5th','5th'),
+                        ('6th','6th'),
+                        ('7th','7th'),
+                        ('8th','8th'),
+                        ('9th','9th'),
+                        ('10th','10th'),
+                        ('11th','11th'),
+                        ('12th','12th'),
+                        
+                        ]
+    school = models.ForeignKey(School,on_delete=models.CASCADE)
+    name = models.CharField(max_length=20,choices=standard_choices,)
+    class Meta:
+        unique_together = ('school', 'name')  # Prevents duplicate standards per school
+    def __str__(self):
+        return self.name
+
+class ClassSection(models.Model):
+    class_choices = [
+        ('A','A'),('B','B'),('C','C'),('D','D')
+    ]
+    standard = models.ForeignKey(Standard,on_delete=models.CASCADE)
+    name = models.CharField(choices=class_choices,max_length=5) 
+    class Meta:
+        unique_together = ('standard', 'name')
+    def __str__(self):
+        return f"{self.standard.name} - {self.name}"
+    
+
+class Subject(models.Model):
+    name = models.CharField(max_length=100)  # Example: "Mathematics", "Science"
+    standard = models.ForeignKey(Standard, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.name} ({self.standard.name})"
+
 class Teacher(models.Model):
     GENDER_CHOICES = [('M', 'Male'), ('F', 'Female'), ('O', 'Other')]
     # SUBJECT_CHOICES = [('physics','physics'),('maths','maths'),('chemistry','chemistry')]
@@ -18,7 +79,11 @@ class Teacher(models.Model):
     ]
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     teacher_id= models.AutoField(primary_key=True)
-    subject = models.CharField(max_length=10,choices=SUBJECT_CHOICES,default='Unknown')
+    # subject = models.CharField(max_length=10,choices=SUBJECT_CHOICES,default='Unknown')
+    subject = models.ManyToManyField(Subject)
+    standard = models.ManyToManyField(Standard)
+    standard_class = models.ManyToManyField(ClassSection)
+    # school = models.ForeignKey(School,on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES, default='O')  # Use 'O' (Other) as default
     email = models.EmailField()
@@ -47,6 +112,9 @@ class student(models.Model):
     date_of_birth = models.DateField(default='2000-01-01')
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default='O')  # Use 'O' (Other) as default
     attendance = models.IntegerField()  # Remove max_length
+    subject = models.ManyToManyField(Subject)
+    standard = models.ManyToManyField(Standard)
+    standard_class = models.ManyToManyField(ClassSection)
     pat_score = models.IntegerField()  # Remove max_length
     sat_score = models.IntegerField()  # Remove max_length
     raw_password = models.CharField(max_length=20, null=True, blank=True)  
@@ -55,40 +123,29 @@ class student(models.Model):
     performance_summary = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.name}"
 
     def get_full_name(self):  
         return f"{self.first_name} {self.last_name}"
 
 
 
-    def __str__(self):
-        return f'{self.first_name} {self.last_name}'
-    
-    # def generate_password(self, length=8):
-    #     """Generate a random password"""
-    #     return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
-
-# class teacher_response(models.Model):
-#     teacher_input = models.CharField(max_length=50)
+   
 
 
-# srudent ->
-#       student_id (Unique for all the students)
-#       name (FirstName,LastName)
-#       Email(Email Verification SMTP)
-#       DOB
-#       in views - student create and delete(CRUD) & read (performance) options are there
 
+# SchoolAdmin - > 
+    # create teacher and make teacher associates with standard 
+    # create standards and standard wise classes so that it can associate to teacher while creating teacher profile by Sca
+    #after it was done 
 
-class SchoolAdminProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-  
-    gender = models.CharField(max_length=1)
-    phone_number = models.CharField(max_length=15, blank=True, null=True)
-    dob = models.DateField(default=None, null=True)
-    approved = models.BooleanField(default=False)
-    school_id = models.FileField(upload_to='school_ids/', null=True, blank=True)
+# Teacher - >
+    # login via spreadsheet of account id pasword -> teacher login and then 
+    # redy standard and class structure which was created by schooladmin is used to add studentdata / creating student profile
+    # ex dhrumil is student it was created by teacher and added to standard 4th class/Division A 
+    # standards have partucular subjects given by schooladmin 
 
-    def __str__(self):
-        return f"{self.user.username} Profile"
+# Student->
+    #can view it's data enterd by teacher and get subject wise sugggesions 
+
+# School Admin creates structure of school which is used by students and Teachers 

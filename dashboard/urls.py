@@ -18,6 +18,9 @@ urlpatterns = [
     path('schooladmin_home',views.schooladmin_home_dash,name='schooladmin_dash'),
     path('teacher-list',views.TeacherList,name='teacher_data'),
     path('export-csv-forschooladmin/', views.export_teachers_csv_toschooladmin, name='export_teacher_csv'),
+    path('standards-classes/',views.standard_class_list,name='standards_list'),
+    path('standard-create-form/',views.createStandard,name='standard_create'),
+    path('class-standard-association/',views.createClassToParticularStandard,name='class_create'),
 
 
     # Teacher - DashBoard Urls

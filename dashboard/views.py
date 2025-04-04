@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from .decorators import allowed_users,teacher_only,student_only,school_admin_only
 from allauth.account.views import PasswordResetView,PasswordResetDoneView
 from django.core.exceptions import ObjectDoesNotExist
+from student.forms import standardForm ,classForm
 # Create your views here.
 
 from django.contrib.auth.decorators import user_passes_test
@@ -376,14 +377,18 @@ def export_teachers_csv_toschooladmin(request):
 
     writer = csv.writer(response)
     writer.writerow(['Teacher Name','Email','Genrated password','Gender','subject'])
-
     for teacher_obj in Teachers:
+        # Extract the subject names into a list of strings
+        subject_names = [subject.name for subject in teacher_obj.subject.all()]
+        
+        # Join the subject names into a single string, if you want to separate them by commas, for example
+        subject_str = ", ".join(subject_names)
         writer.writerow([
             teacher_obj.name,
             teacher_obj.email,
             teacher_obj.raw_password if teacher_obj.raw_password else "N/A",
             teacher_obj.gender,
-            teacher_obj.subject
+            subject_str
         ])
     return response
 
@@ -408,6 +413,7 @@ class CustomPasswordResetView(PasswordResetView):
 
         # Add your custom context variables here
         context['is_teacher'] = is_teacher(self.request.user)
+        context['is_schooladmin'] = is_schooladmin(self.request.user)
 
         return context
     
@@ -449,3 +455,50 @@ def approveScAdmin(request, user_id):
     
     messages.success(request, "School Admin approved successfully!")
     return redirect('pending_requests')
+
+################################################################# school-admin classes and standards #################################################
+
+# creation-forms -> student -> views.py 
+
+def standard_class_list(request):
+    context ={
+        'is_teacher':is_teacher(request.user),
+        'is_student':is_student(request.user),
+        'is_schooladmin':is_schooladmin(request.user),
+    }
+    return render(request,'Dashboard/school_admin/standards_list.html',context)
+
+
+def createStandard(request):
+    form = standardForm()
+    if request.method == 'POST':
+        form = standardForm(request.POST)
+        if form.is_valid:
+            form.save()
+            return redirect('standards_list')
+        else:
+            messages.error(request,'Error During Standard Creation')
+        
+    context = {
+        'form':form,
+        'is_schooladmin':is_schooladmin(request.user)
+    }
+    return render(request,'student/standard_create.html',context)
+
+def createClassToParticularStandard(request):
+    form = classForm()
+
+    if request.method == 'POST':
+        form  = classForm(request.POST)
+
+        if form.is_valid:
+            form.save()
+            return redirect('standards_list')
+        else:
+            messages.error(request,'Error During class Association')
+
+    context = {
+        'form':form,
+        'is_schooladmin':is_schooladmin(request.user),
+    }
+    return render(request,'student/class_create.html',context)

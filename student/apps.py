@@ -1,9 +1,11 @@
 from django.apps import AppConfig
-
+# from .models import student
 class StudentConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'student'
 
+
+    
     def ready(self):
         from django.contrib.auth.models import Group  # ✅ Import inside the method
         create_groups()

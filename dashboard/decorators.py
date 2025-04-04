@@ -21,6 +21,7 @@ def unauthenticated_user(view_func):
             if group == 'SchoolAdmin':
                 return redirect('schooladmin_dash')
             
+            
             # return redirect('/dashboard-home/')
         else:
             return view_func(request,*args, **kwargs)

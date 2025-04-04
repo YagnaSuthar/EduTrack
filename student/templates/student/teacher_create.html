@@ -71,7 +71,7 @@ Teacher Creation Form
 <div class="teacher_create_form">
     <form method="POST" action="">
         {% csrf_token %}
-        <label>Name</label>
+        {% comment %} <label>Name</label>
         {{form.name}}
         <hr>
        
@@ -86,7 +86,8 @@ Teacher Creation Form
 
         <label for="subjects">Subjects</label>
         {{ form.subject }}
-        <hr>
+        <hr> {% endcomment %}
+        {{form.as_p}}
 
         <button type="submit">Submit</button>
     </form>

@@ -1,0 +1,26 @@
+{% extends "Dashboard/index.html" %}
+ 
+{% block style %}
+<style>
+.standard-list-container{
+margin-left:210px;
+}
+
+{% comment %} Work pendin Dhrumil Khradi {% endcomment %}
+</style>
+{% endblock style %}
+
+
+
+
+
+{% block content %}
+<div class='standard-list-container'>
+
+<p class=''> This is standards list data page !!!</p>
+
+<a href="{% url 'standard_create'%}">Add_Standards</a>
+<a href="{% url 'class_create'%}">Add_Class_To_particular_standard</a>
+</div>
+
+{% endblock content %}

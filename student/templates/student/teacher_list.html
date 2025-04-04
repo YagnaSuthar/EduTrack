@@ -221,7 +221,15 @@ Students-list-{{ block.super }}
                 <tr>
                     <td>{{ teacher.name }}</td>
                     {% comment %} <td>{{ teacher.subject }}</td> {% endcomment %}
-                    <td>{{ teacher.get_subject_display }}</td>
+                    <td>
+                        {% if teacher.subject.all %}
+                            {% for subject in teacher.subject.all %}
+                                {{ subject }} {% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            No subjects assigned
+                        {% endif %}
+                    </td>
 
                     <td>{{ teacher.gender }}</td>
                     <td>{{ teacher.email }}</td>

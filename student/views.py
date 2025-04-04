@@ -146,7 +146,7 @@ def TeacherCreate(request):
 
             
             teacher_obj.save()
-           
+            form.save_m2m()
         
             return redirect('teacher_data')
     context={

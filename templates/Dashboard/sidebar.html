@@ -58,15 +58,15 @@
         </li>
         <li>
             {% if is_schooladmin %}
-            <a href="#">
+            <a href="{% url 'standards_list'%}">
                 <i class="fas fa-clipboard-list"></i>
                 <span>Standers&nbsp;& Classes</span>
             </a>
             {% else %}
-            <a href="#">
+            {% comment %} <a href="#">
                 <i class="fas fa-clipboard-list"></i>
                 <span>Performance</span>
-            </a>
+            </a> {% endcomment %}
             {% endif %}
         </li>
         <li>
@@ -83,19 +83,8 @@
 
             {% endif %}
         </li>
-        <li>
-            <a href="#">
-                <i class="fas fa-cog"></i>
-                <span>Attendance</span>
-            </a>
-        </li>
-        <li>
-            <a href="#">
-                <i class="fas fa-users"></i>
-                <span>Staff Room</span>
-                <span class="notification">3</span>
-            </a>
-        </li>
+      
+    
         <li>
             <a href="{% url 'account_reset_password'%}">
                 <i class="fas fa-users"></i>

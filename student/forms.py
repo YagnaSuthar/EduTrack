@@ -1,12 +1,18 @@
 from django.forms import ModelForm
-from .models import student,Teacher
+from .models import student,Teacher,School,Standard,Subject,ClassSection
 from django import forms
 from django.contrib.auth.models import Group
+from django import forms
+from django.contrib.auth.models import User, Group
+from allauth.account.forms import SignupForm
+from django.core.exceptions import ValidationError
+from .models import SchoolAdminProfile
+from datetime import datetime
 
 class StudentForm(ModelForm):
     class Meta:
         model = student
-        fields = ['name', 'gender', 'sat_score', 'pat_score', 'attendance','email']  # Exclude 'performance'
+        fields = ['name', 'gender', 'sat_score', 'pat_score', 'attendance','email','subject','standard_class']  # Exclude 'performance'
     def save(self, commit=True):
         user = super().save(commit=False)
         if commit:
@@ -20,10 +26,25 @@ class StudentForm(ModelForm):
 class TeacherForm(forms.ModelForm):
     class Meta:
         model = Teacher
-        fields = ['name','email','subject','gender']
+        fields = ['name','email','gender','subject','standard_class']
 
   
+    subject = forms.ModelMultipleChoiceField(
+        queryset=Subject.objects.all(), 
+        widget=forms.CheckboxSelectMultiple,
+        required=True
+    )
 
+    # standard = forms.ModelMultipleChoiceField(
+    #     queryset=Standard.objects.all(), 
+    #     widget=forms.CheckboxSelectMultiple,
+    #     required=True
+    # )
+    standar_class= forms.ModelMultipleChoiceField(
+        queryset=ClassSection.objects.all(), 
+        widget=forms.CheckboxSelectMultiple,
+        required=True
+    )
     # Use Checkboxes for selecting multiple subjects
     
 
@@ -33,12 +54,6 @@ class TeacherForm(forms.ModelForm):
 #         model = teacher_response
 #         fields =['teacher_input']
 
-from django import forms
-from django.contrib.auth.models import User, Group
-from allauth.account.forms import SignupForm
-from django.core.exceptions import ValidationError
-from .models import SchoolAdminProfile
-from datetime import datetime
 
 class CustomSignupForm(SignupForm):
     # full_name = forms.CharField(max_length=100, required=True, label="Full Name")
@@ -94,3 +109,14 @@ class CustomSignupForm(SignupForm):
         user.groups.add(school_admin_group)
 
         return user
+    
+
+class standardForm(ModelForm):
+    class Meta:
+        model = Standard
+        fields = '__all__'
+
+class classForm(ModelForm):
+    class Meta:
+        model =ClassSection
+        fields ='__all__'

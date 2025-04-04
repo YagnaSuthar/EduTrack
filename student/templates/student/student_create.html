@@ -97,7 +97,7 @@ Student-creation Form
     <div class="student_center">
         <form method="POST" action="">
         {% csrf_token %}
-        <label>Student Name</label>
+        {% comment %} <label>Student Name</label>
         {{form.name}}
         <hr>
         <label>Student Gender</label>
@@ -114,7 +114,8 @@ Student-creation Form
         <hr>
         <label>Student's Email</label>
         {{form.email}}
-        <hr>
+        <hr> {% endcomment %}
+        {{form.as_p}}
         <button type="submit">Submit</button>
       </form>
     </div>
