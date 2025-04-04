@@ -37,6 +37,8 @@ def role_based_redirect(request):
     elif user.groups.filter(name="SchoolAdmin").exists():
         return redirect('schooladmin_dash')
     
+    elif user.groups.filter(name="Admin").exists():
+        return redirect('pending_requests')
     
     
 
@@ -427,3 +429,23 @@ class CustomePasswordResetDoneView(PasswordResetDoneView):
 
         return context
     
+
+
+    ######################################################################### School -admin approvel Registration #############################################
+
+from student.models import SchoolAdminProfile
+from django.contrib import messages
+def pendingRequest(request):
+    pending_requests = SchoolAdminProfile.objects.filter(approved = False)
+    context = {
+        'pending_requests':pending_requests,
+    }
+    return render(request,'Dashboard/Admin/pending_requests.html',context)
+
+def approveScAdmin(request, user_id):
+    school_admin = SchoolAdminProfile.objects.get(user_id=user_id)
+    school_admin.approved = True
+    school_admin.save()
+    
+    messages.success(request, "School Admin approved successfully!")
+    return redirect('pending_requests')

@@ -52,11 +52,10 @@ def teacher_only(view_func):
             if group == 'Student':
                 return redirect('student_dash')
             
+            if group == 'SchoolAdmin':
+                return redirect('schooladmin_dash')
             if group == 'Teacher':
                 return view_func(request,*args, **kwargs)
-            
-            if group == 'schooladmin':
-                return redirect('schooladmin_dash')
             
     return wrapper_function
 

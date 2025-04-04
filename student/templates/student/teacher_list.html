@@ -210,8 +210,7 @@ Students-list-{{ block.super }}
                     <th>Teacher Name</th>
                     <th>Subject</th>
                     <th>Gender</th>
-                    <th>First Name</th>
-                    <th>Secound name  </th>
+                    
                     <th>Email</th>
                     {% comment %} <th>Attendance</th> {% endcomment %}
                     {% comment %} <th>Performance</th> {% endcomment %}
@@ -225,8 +224,6 @@ Students-list-{{ block.super }}
                     <td>{{ teacher.get_subject_display }}</td>
 
                     <td>{{ teacher.gender }}</td>
-                    <td>{{ teacher.first_name }}</td>
-                    <td>{{ teacher.last_name }}</td>
                     <td>{{ teacher.email }}</td>
                    
                 </tr>

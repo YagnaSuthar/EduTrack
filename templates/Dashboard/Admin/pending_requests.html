@@ -1,0 +1,152 @@
+{% extends 'Dashboard/index.html' %}  {# Extend from your main template #}
+{% block style %}
+    <style>
+        /* Container styling */
+        .container-pendingreq {
+            max-width: 90%; /* Maximum width */
+          
+        }
+
+        /* Heading styling */
+        h2 {
+            margin-left:210px;
+            font-size: 28px;
+            font-weight: 700;
+            color: #007bff; /* Primary blue color */
+        }
+
+        /* Table styles */
+        .table {
+
+            margin-left:210px;
+            width: 90%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Shadow effect */
+            border-radius: 8px; /* Rounded corners for table */
+        }
+
+        .table thead {
+            background-color: #343a40; /* Dark background for the table header */
+            color: #fff; /* White text color */
+        }
+
+        .table-striped tbody tr:nth-child(odd) {
+            background-color: #f9f9f9; /* Light gray for odd rows */
+        }
+
+        .table th, .table td {
+            text-align: center;
+            vertical-align: middle;
+            padding: 12px 15px;
+        }
+
+        /* Form button styles */
+        .btn-success {
+            background-color: #28a745;
+            color: #fff;
+            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: 5px;
+            box-shadow: 0 3px 5px rgba(0, 128, 0, 0.2);
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+
+        /* Table row hover effect */
+        .table tbody tr:hover {
+            background-color: #f1f1f1; /* Light hover effect */
+            cursor: pointer; /* Change cursor to pointer on hover */
+        }
+
+        /* Alert for no pending requests */
+        .alert-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+            padding: 15px;
+            font-size: 16px;
+        }
+
+        /* Button inside the table */
+        .btn-sm {
+            padding: 5px 12px;
+            font-size: 14px;
+        }
+
+        /* Icon style inside button */
+        .fas {
+            margin-right: 5px;
+        }
+
+        /* Responsive design for small screens */
+        @media (max-width: 767px) {
+            .table-responsive {
+                overflow-x: auto;
+            }
+
+            .container {
+                max-width: 100%;
+                margin-top: 20px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+
+            .btn-sm {
+                padding: 5px 10px;
+                font-size: 12px;
+            }
+        }
+    </style>
+{% endblock style%}
+{% block content %}
+<div class="container-pendingreq mt-4">
+    <h2 class="mb-3">Pending School Admin Approvals</h2>
+    
+    {% if pending_requests %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Phone&nbsp;No</th>
+                    <th>Document</th>
+
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in pending_requests %}
+                <tr>
+                    <td>{{ request.user.id }}</td>
+                    <td>{{ request.user.username }}</td>
+                    <td>{{ request.user.email }}</td>
+                    <td>{{ request.user.schooladminprofile.phone_number }}</td>
+                    <td>
+                        {% if request.user.schooladminprofile.school_id %}
+                            <a href="{{ request.user.schooladminprofile.school_id.url }}" target="_blank">View Document</a> 
+                        {% else %}
+                            <span>No document</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <form method="post" action="{% url 'approve_scadmin' request.user.id %}">
+
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success">Approve</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No pending approvals.</p>
+    {% endif %}
+</div>
+{% endblock %}

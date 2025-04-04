@@ -7,13 +7,14 @@ Teacher Creation Form
 {% block style %}
 <style>
 .teacher_create_form {
-    margin: 25vh 43vw;
+    {% comment %} margin: 25vh 43vw; {% endcomment %}
+    margin-left:210px;
 }
 
 .teacher_create_form {
     height: fit-content;
     width: 50%;
-    margin: 20vh auto;
+    {% comment %} margin: 20vh auto; {% endcomment %}
     padding: 15px;
     background-color: #f9f9f9;
     border-radius: 8px;
@@ -73,13 +74,7 @@ Teacher Creation Form
         <label>Name</label>
         {{form.name}}
         <hr>
-        <label for="first_name">First Name</label>
-        {{ form.first_name }}
-        <hr>
-
-        <label for="last_name">Last Name</label>
-        {{ form.last_name }}
-        <hr>
+       
         
         <label for="last_name">gender</label>
         {{ form.gender}}

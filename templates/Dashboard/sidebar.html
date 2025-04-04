@@ -49,16 +49,25 @@
             {% endif %}
         </li>
         <li>
+            {% if is_teacher %}
             <a href="{% url 'chatbot'%}">
                 <i class="fas fa-chalkboard"></i>
                 <span>Chatbot</span>
             </a>
+            {% endif %}
         </li>
         <li>
+            {% if is_schooladmin %}
+            <a href="#">
+                <i class="fas fa-clipboard-list"></i>
+                <span>Standers&nbsp;& Classes</span>
+            </a>
+            {% else %}
             <a href="#">
                 <i class="fas fa-clipboard-list"></i>
                 <span>Performance</span>
             </a>
+            {% endif %}
         </li>
         <li>
             {% if is_teacher %}

@@ -2,10 +2,16 @@ from .import views
 from django.urls import path,include
 
 
+
 urlpatterns = [
 
     #  Role based redirection to the disred url or render view ['Admin','Teacher','Student']
     path('redirect/', views.role_based_redirect, name='role_based_redirect'),
+
+
+    # Main admin which will approve school-admin profile - part of Admin group 
+    path('admin_pending_request/',views.pendingRequest,name='pending_requests'),
+    path('approve_school_admin/<int:user_id>/', views.approveScAdmin, name='approve_scadmin'),
 
 
     # School - Admin Dashboard urls 
@@ -14,9 +20,6 @@ urlpatterns = [
     path('export-csv-forschooladmin/', views.export_teachers_csv_toschooladmin, name='export_teacher_csv'),
 
 
-
-
-    
     # Teacher - DashBoard Urls
 
     path('teacher_home/',views.teacher_home_dash,name='teacher_dash'),

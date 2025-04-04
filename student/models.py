@@ -16,19 +16,17 @@ class Teacher(models.Model):
         ('m', 'Maths'),
         ('c', 'Chemistry'),
     ]
-
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     teacher_id= models.AutoField(primary_key=True)
     subject = models.CharField(max_length=10,choices=SUBJECT_CHOICES,default='Unknown')
     name = models.CharField(max_length=100)
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES, default='O')  # Use 'O' (Other) as default
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
     email = models.EmailField()
     raw_password = models.CharField(max_length=20,null=True,blank=True)
     
 
     def __str__(self):
-        return f'{self.first_name} {self.last_name}'
+        return f'{self.name}'
 
 # class Subject(models.Model):
 #     SUBJECT_CHOICES = [('p','physics'),('m','maths'),('c','chemistry')]
@@ -83,4 +81,14 @@ class student(models.Model):
 #       in views - student create and delete(CRUD) & read (performance) options are there
 
 
-    
+class SchoolAdminProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+  
+    gender = models.CharField(max_length=1)
+    phone_number = models.CharField(max_length=15, blank=True, null=True)
+    dob = models.DateField(default=None, null=True)
+    approved = models.BooleanField(default=False)
+    school_id = models.FileField(upload_to='school_ids/', null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.user.username} Profile"

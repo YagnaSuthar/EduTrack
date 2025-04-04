@@ -1,0 +1,110 @@
+{% load i18n %}
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+            {% block head_title %}
+            {% endblock head_title %}
+        </title>
+        {% block extra_head %}
+        {% endblock extra_head %}
+        
+        <style>
+            /* General alert box styling */
+            .alert-container {
+                max-width: 100%; /* Maximum width for message container */
+               
+                box-sizing: border-box;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                /* background-color: rgb(40, 170, 35); */
+                background-color: #fff3cd;
+                z-index: 9999; /* Ensure it's always on top */
+            }
+            
+            .alert {
+                
+                padding: 15px;
+                margin: 10px 0;
+                border-radius: 8px;
+                font-size: 16px;
+                width: 100%;
+                box-sizing: border-box;
+                transition: opacity 0.3s ease-in-out;
+                display: block;
+                font-weight: bold;
+            }
+
+            /* Success Message */
+            .alert-success {
+                background-color: #d4edda;
+                color: #155724;
+                border: 1px solid #c3e6cb;
+                box-shadow: 0 0 10px rgba(0, 128, 0, 0.1);
+            }
+
+            /* Error Message */
+            .alert-danger {
+                background-color: #f8d7da;
+                color: #721c24;
+                border: 1px solid #f5c6cb;
+                box-shadow: 0 0 10px rgba(255, 0, 0, 0.1);
+            }
+
+            /* Info Message */
+            .alert-info {
+                background-color: #d1ecf1;
+                color: #0c5460;
+                border: 1px solid #bee5eb;
+                box-shadow: 0 0 10px rgba(0, 123, 255, 0.1);
+            }
+
+            /* Warning Message */
+            .alert-warning {
+                background-color: #fff3cd;
+                color: #856404;
+                border: 1px solid #ffeeba;
+                box-shadow: 0 0 10px rgba(255, 193, 7, 0.1);
+            }
+
+            /* For the alert's p text */
+            .alert p {
+                font-weight: bolder;
+                margin: 0;
+                font-size: 24px;
+                line-height: 0.5;
+            }
+
+        </style>
+
+        {% block style %}
+        <!-- Additional custom styles for messages can go here -->
+        {% endblock style %}
+    </head>
+
+    <body>
+        {% comment %} {% include "nav/navbar.html" %} {% endcomment %}
+        
+        {% if messages %}
+        <div class="alert-container">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    <p>{{ message }}</p>
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% block body %}
+        {% block content %}
+        {% endblock content %}
+        {% endblock body %}
+
+        {% block extra_body %}
+        {% endblock extra_body %}
+    </body>
+</html>

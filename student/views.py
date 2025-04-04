@@ -13,7 +13,7 @@ import csv
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import Group
 from dashboard.decorators import unauthenticated_user
-from dashboard.views import is_teacher,is_student
+from dashboard.views import is_teacher,is_student,is_schooladmin
 
 LOGIN_URL = settings.LOGIN_URL
 
@@ -21,7 +21,7 @@ LOGIN_URL = settings.LOGIN_URL
 
 # @staff_member_required(login_url=LOGIN_URL)
 # @login_required
-@unauthenticated_user
+# @unauthenticated_user
 def homePage(request):
     # if request.user.is_authenticated:
     #     # return student_home_dash(request)
@@ -130,9 +130,12 @@ def TeacherCreate(request):
 
             password = generate_password()
             teacher_obj.raw_password = password
+            print(password)
+            print(teacher_obj.raw_password)
+            teacher_obj.save()
 
-            username = f"{teacher_obj.first_name.lower()}{teacher_obj.name}"
-            user = User.objects.create(username = username,email=email,password=password)
+            username = f"{teacher_obj.name.lower()}"
+            user = User.objects.create_user(username = username,email=email,password=password)
             user.save()
 
             teacher_group = Group.objects.get(name='Teacher')
@@ -150,6 +153,7 @@ def TeacherCreate(request):
         'form':form,
         'is_teacher':is_teacher(request.user),
         'is_student':is_student(request.user),
+        'is_schooladmin':is_schooladmin(request.user),
     }
 
     
@@ -170,3 +174,54 @@ def studentDelete(request,pk):
 
 
 
+
+
+
+
+########## new changes 
+from django.http import HttpResponseForbidden
+from django.shortcuts import render, redirect
+from allauth.account.views import SignupView
+from .forms import CustomSignupForm
+from .models import SchoolAdminProfile
+class CustomSignupView(SignupView):
+    form_class = CustomSignupForm
+
+    def dispatch(self, *args, **kwargs):
+        """
+        Restrict the signup page to only be accessible by school admins.
+        For example, if you want to only allow admins to register through this form, you can
+        add additional checks here (e.g., check for a specific permission or role).
+        """
+        if not self.request.user.is_authenticated or not self.request.user.is_superuser:
+            # You can add more specific checks for admins here, or use permissions
+            return HttpResponseForbidden("You are not authorized to access this page.")
+        return super().dispatch(*args, **kwargs)
+
+    def get_success_url(self):
+        # Redirect to a success page (e.g., dashboard or home page)
+        return '/'  # Change this to your desired success URL
+    
+
+from django.contrib import messages 
+
+
+@unauthenticated_user
+def register_school_admin(request):
+    if request.method == "POST":
+        form = CustomSignupForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            # Form is valid, save the user and profile
+            form.save(request)
+            messages.success(request, "Registration successful. Your account is under review.")
+            return redirect('home')  # Make sure 'success_url' is valid
+        else:
+            # Print form errors to debug
+            print("Form errors:", form.errors)
+            messages.error(request, "There was an error with your registration form. Please check the details and try again.")
+    
+    else:
+        form = CustomSignupForm()
+
+    return render(request, 'Dashboard/school_admin/register.html', {'form': form})

@@ -1,0 +1,279 @@
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f4f4f4;
+            margin: 0;
+            padding-top: 8%;
+            padding-bottom: 8%;
+            background-color: #ccc;
+        }
+        .container-registration {
+            background: rgb(233, 233, 233);
+            padding: 50px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(4, 0, 248, 0.2);
+            width: 320px;
+            text-align: center;
+            border: 2px solid #ccc;
+            border-radius: 15px;
+            padding-right: 70px;
+        }
+        h2 {
+            margin-bottom: 15px;
+            color: #060d99a0;
+            font-size: 20px;
+        }
+        label {
+            display: block;
+            text-align: left;
+            font-weight: bold;
+            margin-top: 10px;
+            color: #0018a0;
+            font-size: 14px;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            font-size: 13px;
+            transition: 0.3s;
+            background: #f9f9f9;
+            margin-right: 40%;
+        }
+        input:focus, select:focus {
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 8px rgba(102, 126, 234, 0.5);
+            background: #fff;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #182b93;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+        #role {
+            color: #0018a0;
+        }
+        button:hover {
+            background: #5648a0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-registration">
+        <h2>School Admin Registration</h2>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <label for="name">Full Name</label>
+            <input type="text" name="full_name" required placeholder="Type Here">
+            
+            <label for="email">Email</label>
+            <input type="email" name="email" required placeholder="abc@gmail.com">
+            
+            <label for="phone">Phone Number</label>
+            <input type="tel" name="phone_number" required placeholder="+91 0987654321">
+            
+            <label for="password">Password</label>
+            <input type="password" name="password1" required placeholder="Type Here">
+
+            <label for="password">Confirm Password</label>
+            <input type="password" name="password2" required placeholder="Password">
+            
+            <label for="dob">Date of Birth</label>
+            <input type="date" name="dob" required>
+            
+            <label for="school">School Name</label>
+            <input type="text" name="school_name" required placeholder="Full name">
+            
+            <label for="idImage">Upload ID for Approval</label>
+            <input type="file" name="school_id" accept="image/*" required>
+            
+            <button type="submit">Register</button>
+        </form>
+    </div>
+</body>
+</html> {% endcomment %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f4f4f4;
+            margin: 0;
+            padding-top: 8%;
+            padding-bottom: 8%;
+            background-color: #ccc;
+        }
+        .container-registration {
+            background: rgb(233, 233, 233);
+            padding: 50px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(4, 0, 248, 0.2);
+            width: 320px;
+            text-align: center;
+            border: 2px solid #ccc;
+            border-radius: 15px;
+            padding-right: 70px;
+        }
+        h2 {
+            margin-bottom: 15px;
+            color: #060d99a0;
+            font-size: 20px;
+        }
+        label {
+            display: block;
+            text-align: left;
+            font-weight: bold;
+            margin-top: 10px;
+            color: #0018a0;
+            font-size: 14px;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            font-size: 13px;
+            transition: 0.3s;
+            background: #f9f9f9;
+            margin-right: 40%;
+        }
+        input:focus, select:focus {
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 8px rgba(102, 126, 234, 0.5);
+            background: #fff;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #182b93;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+        #role {
+            color: #0018a0;
+        }
+        button:hover {
+            background: #5648a0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-registration">
+        <h2>School Admin Registration</h2>
+        
+        <!-- Display messages -->
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div>{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+
+            <label for="username">Username</label>
+            <input type="text" name="username" required placeholder="Username">
+            {% if form.username.errors %}
+                <div class="error">{{ form.username.errors }}</div>
+            {% endif %}
+
+            {% comment %} <label for="name">Full Name</label>
+            <input type="text" name="full_name" required placeholder="Type Here">
+            {% if form.full_name.errors %}
+                <div class="error">{{ form.full_name.errors }}</div>
+            {% endif %} {% endcomment %}
+            <label for="gender">Gender</label>
+            <select name="gender">
+            <option value="M">Male</option>
+            <option value="F">Female</option>
+            <option value="O">Other</option>
+            </select>
+            {% if form.gender.errors %}
+            <div class="error">{{ form.gender.errors }}</div>
+            {% endif %}
+            <label for="email">Email</label>
+            <input type="email" name="email" required placeholder="abc@gmail.com">
+            {% if form.email.errors %}
+                <div class="error">{{ form.email.errors }}</div>
+            {% endif %}
+            
+            <label for="phone">Phone Number</label>
+            <input type="tel" name="phone_number" required placeholder="+91 0987654321">
+            {% if form.phone_number.errors %}
+                <div class="error">{{ form.phone_number.errors }}</div>
+            {% endif %}
+            
+            <label for="password">Password</label>
+            <input type="password" name="password1" required placeholder="Type Here">
+            {% if form.password1.errors %}
+                <div class="error">{{ form.password1.errors }}</div>
+            {% endif %}
+
+            <label for="password">Confirm Password</label>
+            <input type="password" name="password2" required placeholder="Password">
+            {% if form.password2.errors %}
+                <div class="error">{{ form.password2.errors }}</div>
+            {% endif %}
+            
+            <label for="dob">Date of Birth</label>
+            <input type="date" name="dob" required>
+            {% if form.dob.errors %}
+                <div class="error">{{ form.dob.errors }}</div>
+            {% endif %}
+            
+            <label for="school">School Name</label>
+            <input type="text" name="school_name" required placeholder="Full name">
+            {% if form.school_name.errors %}
+                <div class="error">{{ form.school_name.errors }}</div>
+            {% endif %}
+            
+            <label for="idImage">Upload ID for Approval</label>
+            <input type="file" name="school_id" accept="image/*" required>
+            {% if form.school_id.errors %}
+                <div class="error">{{ form.school_id.errors }}</div>
+            {% endif %}
+            
+            <button type="submit">Register</button>
+        </form>
+    </div>
+</body>
+</html>
