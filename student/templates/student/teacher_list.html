@@ -43,36 +43,58 @@ Students-list-{{ block.super }}
 }
 
 .student-search {
-    width: 60%;
     text-align: center;
     margin-bottom: 20px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding-left: 20px;
+    padding: 7px;
+    padding-left: 10px;
+    width: 30%;
+    border:rgba(255, 255, 255, 0); /* Soft white border */
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.2); /* Transparent glass effect */
+    backdrop-filter: blur(10px); /* Frosted glass effect */
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1) ;
+    height: 40px;
+    margin-top: 15px;
+    margin-left: 10px;
 }
 
 .student-search input {
     padding: 7px;
     padding-left: 10px;
     width: 50%;
-    border:rgba(255, 255, 255, 0); /* Soft white border */
-    border-radius: 26px;
-    background: rgba(255, 255, 255, 0.2); /* Transparent glass effect */
-    backdrop-filter: blur(10px); /* Frosted glass effect */
+    border:rgba(255, 255, 255, 0); 
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.2); 
+    backdrop-filter: blur(10px); 
+    height: 20px;
+    /* box-shadow: 0px 0px 6px 0px rgba(0,0,0,0.1) ; */
+    /* box-shadow: 
+        inset 5px -10px 15px rgba(255, 255, 255, 0.5), 
+        inset -5px 10px 15px rgba(0, 0, 0, 0.2), 
+         0px 4px 10px rgba(0, 0, 0, 0.1); 
+     transition: all 0.6s ease-in-out; */
+} 
+
+/* .student-search input:hover {
     box-shadow: 
-        inset 5px -10px 15px rgba(255, 255, 255, 0.5), /* Top soft highlight */
-        inset -5px 10px 15px rgba(0, 0, 0, 0.2), /* Bottom shadow */
-        0px 4px 10px rgba(0, 0, 0, 0.1); /* Outer shadow */
-    transition: all 0.6s ease-in-out; /* Smooth effect */
+        inset 8px -15px 20px rgba(255, 255, 255, 0.6),
+        inset -8px 15px 20px rgba(0, 0, 0, 0.3),
+        0px 6px 15px rgba(0, 0, 0, 0.15); 
+    background: rgba(255, 255, 255, 0.3); 
+} */
+
+#search-bar {
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: none; 
 }
 
-.student-search input:hover {
-    box-shadow: 
-        inset 8px -15px 20px rgba(255, 255, 255, 0.6), /* Increased highlight */
-        inset -8px 15px 20px rgba(0, 0, 0, 0.3), /* Darker bottom shadow */
-        0px 6px 15px rgba(0, 0, 0, 0.15); /* Outer shadow */
-    background: rgba(255, 255, 255, 0.3); /* Slightly brighter glass */
+#search-bar:focus {
+  outline: none;
+  border-color: #ccc;    /* keeps the same border color */
+  box-shadow: none;      /* removes the blue glow in Chrome/Edge */
 }
 
 .styled-line {
@@ -116,26 +138,29 @@ Students-list-{{ block.super }}
 }
 
 .student-main-table th {
-    background-color: #0047b2ec;
-    font-weight: bold;
+    /* background-color: #0047b2ec;
+    font-weight: bold; */
     color: #fff;
     
 }
 
 .btn-student-data button {
-    color: rgb(255, 255, 255);
     border:rgba(0, 0, 0, 0);
-    border-radius: 25px;
-    background: linear-gradient(45deg,#0047B2,#0e4fb1,#8893a3b6);
-    font-weight: bold;
+    border-radius: 15px;
+    color: #001570;
+    background:#e9e9e9;
+    font-weight:lighter;
     padding: 11px 20px 11px 20px;/* Order: TOP RIGHT BOTTOM LEFT */
     margin: 10px;
+    box-shadow: 1px 2px 1px rgba(0, 0, 0, 0.15);
 }
 
 .btn-student-data button:hover {
-    background: linear-gradient(49deg,#8893a3b6,#0e4fb1,#0047B2);
+    color: rgb(255, 255, 255);
+    background: #0047B2;
     transform: scale(1.05); /* Slight zoom effect */
-    transition: all 0.3s ease-out;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
 }
 
 .btn-student-data button:not(:hover) {
@@ -193,11 +218,11 @@ Students-list-{{ block.super }}
     <div class="nav-studentbar1">
         
     <div class="student-search">
+        <i class="fas fa-search"></i>
         <input type="text" id="search-bar" placeholder="Search students...">
     </div>
     <div class="student-create-btn">
-        
-        <a class="btn-student-data" href={% url 'create_teacher' %}><button>Add Teacher</button></a>
+        <a class="btn-student-data" href={% url 'create_student' %}><button>Add Student</button></a>
     </div> 
 </div>
 
@@ -205,7 +230,7 @@ Students-list-{{ block.super }}
     
     <div class="student-table-container">
         <table class="student-main-table">
-            <thead>
+            <thead style="background: linear-gradient(90deg,#0047B2,#286bcf,#5e8acc); font-weight: bold;">
                 <tr>
                     <th>Teacher Name</th>
                     <th>Subject</th>
@@ -237,19 +262,19 @@ Students-list-{{ block.super }}
                     <td>{{ teacher.email }}</td>
                     <td>
                         {% if is_schooladmin %}
-                        <a href="{% url 'teacher_edit' teacher.teacher_id %}">Edit</a>
+                        <a href="{% url 'teacher_edit' teacher.teacher_id %}" style="color: #0047B2;"onmouseover="this.style.color='#001570';" onmouseout="this.style.color='#0047B2';">Edit</a>
 
                         {% endif %}
                     </td>
                     <td>
-                        <a href="{% url 'teacher_delete' teacher.teacher_id%}">Delete</a>
+                        <a href="{% url 'teacher_delete' teacher.teacher_id%}" style="color: #0047B2;"onmouseover="this.style.color='#001570';" onmouseout="this.style.color='#0047B2';">Delete</a>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
-    <a class="btn-student-data" href={% url 'export_teacher_csv' %}><button>Download CSV</button></a>
+        <a class="btn-student-data" href={% url 'export_teacher_csv' %}><button style="margin-top: 23px;">Download CSV</button></a>
     </div>
 </div>
 

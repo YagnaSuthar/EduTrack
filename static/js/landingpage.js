@@ -7,7 +7,7 @@ for (let i = 0; i < particleCount; i++) {
     particle.classList.add('particle');
     
     // Random size between 5px and 20px
-    const size = Math.random() * 20 + 5;
+    const size = Math.random() * 15 + 5;
     particle.style.width = `${size}px`;
     particle.style.height = `${size}px`;
     
@@ -23,7 +23,7 @@ for (let i = 0; i < particleCount; i++) {
     particle.style.animationDuration = `${duration}s`;
     
     // Random animation delay
-    const delay = Math.random() * 10;
+    const delay = Math.random() * 0;
     particle.style.animationDelay = `${delay}s`;
     
     particlesContainer.appendChild(particle);
