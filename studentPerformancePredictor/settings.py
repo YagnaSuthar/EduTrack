@@ -28,7 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 LOGIN_REDIRECT_URL = reverse_lazy('role_based_redirect')
-
+LOGOUT_REDIRECT_URL = '/'
 
 # Application definition
 
@@ -93,7 +93,7 @@ WSGI_APPLICATION = 'studentPerformancePredictor.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'spp',
+        'NAME': 'newspp',
         'USER':'root',
         'PASSWORD':'Yagna@2912',
         'HOST':'127.0.0.1',
@@ -190,3 +190,5 @@ ACCOUNT_ADAPTER = 'dashboard.account_adapter.CustomAccountAdapter'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
     
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True

@@ -2,22 +2,19 @@
  {% block title %} Student-Deletion Form 
  {%endblock title %} {% block style %} 
  <style>
-.student_delete{
+.teacher_delete{
   margin-left:210px;
 }
  </style>
  {% endblock style %} 
  {% block content %}
-<div class="student_delete">
+<div class="teacher_delete">
   <form method="POST" action="">
     {% csrf_token %}
-    <p>Are You sure you want to delete "{{obj}}"?</p>
+    <p>Are You sure you want to delete "{{teacher}}"?</p>
     <a href="{{request.META.HTTP_REFERER}}">Go Back</a>
-    <button type="submit">Delete_student</button>
+    <button type="submit">Delete_teacher</button>
   </form>
 </div>
 
 {% endblock content %} 
-
-
-

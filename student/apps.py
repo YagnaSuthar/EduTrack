@@ -4,7 +4,8 @@ class StudentConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'student'
 
-
+    def ready(self):
+        import student.signals
     
     def ready(self):
         from django.contrib.auth.models import Group  # ✅ Import inside the method

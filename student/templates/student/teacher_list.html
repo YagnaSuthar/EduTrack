@@ -212,6 +212,8 @@ Students-list-{{ block.super }}
                     <th>Gender</th>
                     
                     <th>Email</th>
+                    <th>Edit</th>
+                    <th>delete</th>
                     {% comment %} <th>Attendance</th> {% endcomment %}
                     {% comment %} <th>Performance</th> {% endcomment %}
                 </tr>
@@ -233,7 +235,15 @@ Students-list-{{ block.super }}
 
                     <td>{{ teacher.gender }}</td>
                     <td>{{ teacher.email }}</td>
-                   
+                    <td>
+                        {% if is_schooladmin %}
+                        <a href="{% url 'teacher_edit' teacher.teacher_id %}">Edit</a>
+
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'teacher_delete' teacher.teacher_id%}">Delete</a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

@@ -21,7 +21,8 @@ urlpatterns = [
     path('standards-classes/',views.standard_class_list,name='standards_list'),
     path('standard-create-form/',views.createStandard,name='standard_create'),
     path('class-standard-association/',views.createClassToParticularStandard,name='class_create'),
-
+    path('add-school/',views.add_school,name='school_create'),
+    path('add-subject',views.add_new_subject,name='subject_create'),
 
     # Teacher - DashBoard Urls
 
@@ -30,6 +31,7 @@ urlpatterns = [
     path('export-csv-forteacher/', views.export_students_csv_toteacher, name='export_students_csv'),
     path('teacherchatbot/',views.teacherchatbot,name="chatbot"),
     path('student_data/',views.student_data,name="student_data"),
+    path('add-marks/<int:student_id>/', views.add_student_marks, name='add_marks'),
 
 
     #  Student - Dashboard Urls

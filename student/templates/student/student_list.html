@@ -209,11 +209,13 @@ Students-list-{{ block.super }}
                 <tr>
                     <th>Student Name</th>
                     <th>Gender</th>
-                    <th>PAT Score</th>
-                    <th>SAT Score</th>
+                    <th>Avg PAT Score</th>
+                    <th>Avg SAT Score</th>
                     <th>Attendance</th>
                     <th>Standard</th>
                     <th>Performance</th>
+                    <th>Add_marks</th>
+                    <th>Delete-Student</th>
                 </tr>
             </thead>
             <tbody>
@@ -221,18 +223,19 @@ Students-list-{{ block.super }}
                 <tr>
                     <td>{{ student.name }}</td>
                     <td>{{ student.gender }}</td>
-                    <td>{{ student.pat_score }}</td>
-                    <td>{{ student.sat_score }}</td>
+                    <td>{{ student.avg_pat_score }}</td>
+                    <td>{{ student.avg_sat_score }}</td>
                     <td>{{ student.attendance }}</td>
-                    <td> {% if student.subject.all %}
-                            {% for subject in student.subject.all %}
-                                {{ subject }} {% if not forloop.last %}, {% endif %}
-                            {% endfor %}
-                        {% else %}
-                            No subjects assigned
-                        {% endif %}
+                    <td> {{student.standard.name}}
                 </td>
                     <td>{% if student.performance_summary %}{{ student.performance_summary }}{% else %}Not Predicted{% endif %}</td>
+                    <td>{% if is_teacher %}
+                        <a href="{% url 'add_marks' student.student_id%}">Add Marks</a>
+                        {% else %} 
+                        not editable
+                        {% endif %}
+                    </td>
+                    <td><a href="{% url 'student_delete' student.student_id%}">Delete</td>
                 </tr>
                 {% endfor %}
             </tbody>

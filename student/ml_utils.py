@@ -5,7 +5,7 @@ from .models import student # Fix import (capitalize "Student")
 # Set up Gemini API
 genai.configure(api_key=settings.GEMINI_API_KEY)
 
-def predict_student_performance(gender, sat_score, pat_score, attendance):
+def predict_student_performance(gender, avg_sat_score, avg_pat_score, attendance):
     # Prepare the input prompt
     prompt = f"""
     Predict the student's performance as one of the following:
@@ -15,8 +15,8 @@ def predict_student_performance(gender, sat_score, pat_score, attendance):
 
     Student details:
     - Gender: {gender}
-    - SAT Score: {sat_score}
-    - PAT Score: {pat_score}
+    - SAT Score: {avg_sat_score}
+    - PAT Score: {avg_pat_score}
     - Attendance: {attendance}%
 
     Return **only one word** (Low, Medium, or High). Do not include any explanations.

@@ -1,6 +1,6 @@
 import csv   
-from django.shortcuts import render,redirect,HttpResponse
-from student.models import student,Teacher
+from django.shortcuts import render,redirect,HttpResponse,get_object_or_404
+from student.models import student,Teacher,Marks
 from .teacher_chatbot import giveResponse_Teacher
 from django.http import JsonResponse
 from .get_suggesions import generate_suggestions_for_teacher,generate_suggestions_for_student
@@ -8,7 +8,8 @@ from django.contrib.auth.decorators import login_required
 from .decorators import allowed_users,teacher_only,student_only,school_admin_only
 from allauth.account.views import PasswordResetView,PasswordResetDoneView
 from django.core.exceptions import ObjectDoesNotExist
-from student.forms import standardForm ,classForm
+from student.forms import standardForm ,classForm,SchoolForm,SubjectForm,MarkForm
+from django.views.decorators.cache import never_cache
 # Create your views here.
 
 from django.contrib.auth.decorators import user_passes_test
@@ -64,6 +65,7 @@ def is_student(user):
 def is_schooladmin(user):
     return user.groups.filter(name='SchoolAdmin').exists()
 
+@never_cache
 @login_required
 @school_admin_only
 def schooladmin_home_dash(request):
@@ -77,7 +79,7 @@ def schooladmin_home_dash(request):
     return render(request,'Dashboard/school_admin/schooladmin_main_dash_home.html',context)
 
 
-
+@never_cache
 @login_required
 @teacher_only
 def teacher_home_dash(request):
@@ -96,7 +98,7 @@ def teacher_home_dash(request):
     else:
         return HttpResponse(f"You are not allowed here {request.user}, Role - {user_role}")
 
-
+@never_cache
 @login_required
 @student_only
 @allowed_users(allowed_roles=['Student'])
@@ -350,7 +352,7 @@ def export_students_csv_toteacher(request):
     response['Content-Disposition'] = 'attachment; filename="students_data.csv"'
 
     writer = csv.writer(response)
-    writer.writerow(['Student Name', 'Email', 'Generated Password', 'Gender', 'PAT Score', 'SAT Score', 'Attendance', 'Performance'])
+    writer.writerow(['Student Name', 'Email', 'Generated Password', 'Gender', 'Avg PAT Score', 'Avg SAT Score', 'Attendance', 'Performance'])
 
     for student_obj in students:
         writer.writerow([
@@ -358,8 +360,8 @@ def export_students_csv_toteacher(request):
             student_obj.email,
             student_obj.raw_password if student_obj.raw_password else "N/A",  # ✅ Exact password
             student_obj.gender,
-            student_obj.pat_score,
-            student_obj.sat_score,
+            student_obj.avg_pat_score,
+            student_obj.avg_sat_score,
             student_obj.attendance,
             student_obj.performance_summary
         ])
@@ -502,3 +504,102 @@ def createClassToParticularStandard(request):
         'is_schooladmin':is_schooladmin(request.user),
     }
     return render(request,'student/class_create.html',context)
+
+
+
+
+def add_school(request):
+    form = SchoolForm()
+
+    if request.method == "POST":
+        form = SchoolForm(request.POST)
+
+        if form.is_valid:
+            form.save()
+            return redirect('standards_list')
+        else:
+            messages.error(request,'Error during adding school')
+    context = {
+        'form':form,
+        'is_schooladmin':is_schooladmin(request.user)
+
+    }
+    return render(request,'student/school_create.html',context)
+
+
+def add_new_subject(request):
+    form = SubjectForm()
+
+    if request.method == 'POST':
+        form = SubjectForm(request.POST)
+        if form.is_valid:
+            form.save()
+            return redirect('standards_list')
+        else:
+            messages.error(request,'Error suring adding a new subject data')\
+   
+    context = {
+        'form':form,
+        'is_schooladmin':is_schooladmin(request.user)
+
+    }    
+    return render(request,'student/subject_create.html',context)
+
+
+
+
+
+################################################## student marks subject wise views herer ############################################################
+from django.db.models import Avg
+from student.models import Marks
+from student.ml_utils import predict_student_performance
+def add_student_marks(request, student_id):
+    student_obj = get_object_or_404(student, student_id=student_id)
+    teacher = get_object_or_404(Teacher, user=request.user)
+    subjects = teacher.subject.all()
+
+    if request.method == 'POST':
+        form = MarkForm(request.POST)
+        if form.is_valid():
+            subject = form.cleaned_data['subject']
+            if subject not in subjects:
+                return render(request, 'unauthorized.html')
+
+            mark, created = Marks.objects.get_or_create(student=student_obj, subject=subject)
+            mark.pat_score = form.cleaned_data['pat_score']
+            mark.sat_score = form.cleaned_data['sat_score']
+            mark.marks_obtained = form.cleaned_data['marks_obtained']
+            mark.added_by = request.user
+            mark.save()
+
+            # ✅ Recalculate averages
+            all_marks = Marks.objects.filter(student=student_obj)
+            avg_pat = all_marks.aggregate(Avg('pat_score'))['pat_score__avg'] or 0
+            avg_sat = all_marks.aggregate(Avg('sat_score'))['sat_score__avg'] or 0
+
+            # ✅ Update student model
+            student_obj.avg_pat_score = round(avg_pat, 2)
+            student_obj.avg_sat_score = round(avg_sat, 2)
+
+            # ✅ Predict performance again
+            student_obj.performance_summary = predict_student_performance(
+                student_obj.get_gender_display(),
+                avg_sat,
+                avg_pat,
+                student_obj.attendance
+            )[:20]  # Optional truncate
+
+            student_obj.save()
+
+            return redirect('teacher_dash')
+    else:
+        form = MarkForm()
+
+    return render(request, 'student/add_marks.html', {
+        'form': form,
+        'student': student_obj,
+        'subjects': subjects
+    })
+
+
+

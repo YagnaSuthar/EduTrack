@@ -1,0 +1,30 @@
+{% extends "Dashboard/index.html" %}
+
+{% block title %}
+School Creation Form
+{% endblock title %}
+
+{% block style %}
+<style>
+
+    .school_create_form{
+        margin-left:210px;
+    }
+        {% comment %} Work pending dhrumil kharadi {% endcomment %}
+</style>
+{% endblock style %}
+
+{% block content %}
+<div class="school_create_form">
+    <form method="POST" action="">
+        {% csrf_token %}
+       
+        {{form.as_p}}
+
+        <button type="submit">Submit</button>
+    </form>
+</div>
+{% endblock content %}
+
+{% block script %}
+{% endblock script %}

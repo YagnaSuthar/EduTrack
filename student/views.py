@@ -99,13 +99,14 @@ def studentCreate(request):
             student_obj.user = user  
 
             # Call Gemini API to predict performance
-            student_obj.performance_summary = predict_student_performance(
-                student_obj.get_gender_display(), 
-                student_obj.sat_score, 
-                student_obj.pat_score, 
-                student_obj.attendance
-            )[:20]  
+            # student_obj.performance_summary = predict_student_performance(
+            #     student_obj.get_gender_display(), 
+            #     student_obj.sat_score, 
+            #     student_obj.pat_score, 
+            #     student_obj.attendance
+            # )[:20]  
 
+            student_obj.performance_summary = 'pending'
             student_obj.save()  # Save student with credentials
 
             return redirect('student_list')  # Redirect to student list page
@@ -159,19 +160,97 @@ def TeacherCreate(request):
     
     return render(request,'student/teacher_create.html',context)
 
+
+def edit_teacher(request, teacher_id):
+    # Fetch the teacher object by its ID, or return 404 if not found
+    teacher_obj = get_object_or_404(Teacher, teacher_id=teacher_id)
+
+    # Pre-populate the form with the current teacher data
+    form = TeacherForm(instance=teacher_obj)
+
+    if request.method == "POST":
+        form = TeacherForm(request.POST, instance=teacher_obj)
+        
+        if form.is_valid():  # Ensure the form data is valid before saving
+            # Get the updated teacher object (but do not commit it to DB yet)
+            teacher_obj = form.save(commit=False)
+
+            # If you want to update the email or password, you can handle that logic here
+            email = teacher_obj.email
+
+            # If you don't want to reset the password, leave it as it is; if password should be updated, use the following logic
+            if not teacher_obj.raw_password:  # Ensure we're not overriding a previously set password
+                password = generate_password()  # Function to generate a new password
+                teacher_obj.raw_password = password
+                print("Generated password:", password)  # You might want to store or send this password elsewhere if needed
+
+            # Save the teacher object to the database
+            teacher_obj.save()
+
+            # Update the user associated with this teacher
+            user = teacher_obj.user
+            user.email = email
+            user.save()
+
+            # Reassign the teacher to the 'Teacher' group if needed
+            teacher_group = Group.objects.get(name='Teacher')
+            if teacher_group not in user.groups.all():
+                user.groups.add(teacher_group)
+            user.save()
+
+            # Handle class section assignments - remove old and assign new ones
+            # Clear previous assignments
+            
+            teacher_obj.standard_class.clear()
+
+            # Save the many-to-many relationships for class sections
+            form.save_m2m()
+
+           
+
+    context = {
+        'form': form,
+        'teacher': teacher_obj,
+        'is_teacher': is_teacher(request.user),
+        'is_student': is_student(request.user),
+        'is_schooladmin': is_schooladmin(request.user),
+    }
+
+    # Render the template for editing the teacher's data
+    return render(request, 'student/teacher_create.html', context)
+
+
+
 def studentDelete(request,pk):
     
     Student = student.objects.get(student_id=pk)
     if request.method == "POST":
+        user = Student.user
         Student.delete()
+        user.delete()
         return redirect('student_list')
-    
+
     context={
         'Student':Student
     }
         
     return render(request,'student/delete_student.html',{'obj':Student})
 
+def teacher_delete(request,pk):
+
+    teacher_obj = Teacher.objects.get(teacher_id = pk)
+    if request.method == "POST":
+        user = teacher_obj.user
+        teacher_obj.delete()
+        user.delete()
+        return HttpResponse("Teacher Object deleted sucessfully !!")
+    
+    context = {
+        'teacher':teacher_obj,
+        'is_schooladmin':is_schooladmin(request.user),
+    }
+
+    return render(request,'student/teacher_delete.html',context)
 
 
 

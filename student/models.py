@@ -115,8 +115,8 @@ class student(models.Model):
     subject = models.ManyToManyField(Subject)
     standard = models.ManyToManyField(Standard)
     standard_class = models.ManyToManyField(ClassSection)
-    pat_score = models.IntegerField()  # Remove max_length
-    sat_score = models.IntegerField()  # Remove max_length
+    avg_pat_score = models.FloatField(null=True, blank=True)
+    avg_sat_score = models.FloatField(null=True, blank=True)
     raw_password = models.CharField(max_length=20, null=True, blank=True)  
     
     # Store the predicted performance
@@ -129,7 +129,18 @@ class student(models.Model):
         return f"{self.first_name} {self.last_name}"
 
 
+class Marks(models.Model):
+    student = models.ForeignKey(student,on_delete=models.CASCADE)
+    subject = models.ForeignKey(Subject,on_delete=models.CASCADE)
 
+    pat_score = models.FloatField(null=True,blank=True)
+    sat_score = models.FloatField(null=True,blank=True)
+
+    marks_obtained = models.FloatField(null=True,blank=True)
+    added_by = models.ForeignKey(User,on_delete=models.SET_NULL,null=True)
+
+    class Meta:
+        unique_together = ('student','subject')
    
 
 
