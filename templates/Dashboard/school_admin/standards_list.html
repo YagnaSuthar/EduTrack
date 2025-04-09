@@ -30,9 +30,69 @@
     background-color: #f8f8f8;
 }
 
+.information_standard
+{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.total_information
+{
+    margin-left: 30px;
+    display: flex;
+}
+
+/* Overview section container */
+.overview-container {
+    display: flex;
+    gap: 15px;
+    margin: 0px 0;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Common style for all cards */
+.overview-card {
+    background: #f8f8f8;
+    padding: 4px 10px 4px 10px;
+    border-radius: 12px;
+    text-align: center;
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover effect */
+.overview-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling the number */
+.total_number {
+    margin: 0;
+    background: linear-gradient(180deg, #002a69, #266ef5);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Styling the label text */
+.overview-card p {
+    margin: 8px 0 0;
+    color: #555;
+    font-weight:510;
+}
+
+/* Optional: Specific card colors (if you want later) */
+/* 
+.total-standards { background: #e0f7fa; }
+.total-classes { background: #fce4ec; }
+.total-schools { background: #ede7f6; }
+*/
+
 
 .buttons-add {
-    width: 90%;
+    width: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -133,15 +193,39 @@
     </div>
 
     <div class="mainarea">
-        <div class="buttons-add">    
-            <a href="{% url 'standard_create'%}">Add Standards</a>
 
-            <a href="{% url 'class_create'%}">Add Class</a>
+        <div class="information_standard">
 
-            <a href="{% url 'school_create'%}">Add School</a>
+            <div class="total_information">
 
-            <a href="{% url 'subject_create'%}">Add Subject</a>
-        </div>
+                <div class="overview-container">
+                    <div class="overview-card total-standards">
+                      <h4 class="total_number">12</h4>
+                      <p>Total Standards</p>
+                    </div>
+                    <div class="overview-card total-classes">
+                      <h4 class="total_number">48</h4>
+                      <p>Total Classes</p>
+                    </div>
+                    <div class="overview-card total-schools">
+                      <h4 class="total_number">3</h4>
+                      <p>Total Subjects</p>
+                    </div>
+                  </div>
+                  
+                  
+            </div>
+
+            <div class="buttons-add">    
+                <a href="{% url 'standard_create'%}">Add Standards</a>
+
+                <a href="{% url 'class_create'%}">Add Class</a>
+
+                <a href="{% url 'school_create'%}">Add School</a>
+
+                <a href="{% url 'subject_create'%}">Add Subject</a>
+            </div>
+        </div>        
 
         <hr class="styled-line">
 <div class="standard-class-table">
