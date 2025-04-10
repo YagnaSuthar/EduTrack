@@ -74,8 +74,12 @@ body {
     padding: 12px 30px;
     background: linear-gradient(90deg, #212a6c00, #203bb43f, #2c0a83a5);
     color: white;
-    border: 2px solid white;
-    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.466);
+    /* border-radius: 30px; */
+    border-radius: 37px 37px 60px 60px;
+    -moz-border-radius: 37px 37px 60px 60px;
+    -webkit-border-radius: 37px 37px 60px 60px;
+    
     font-size: 1rem;
     font-weight: 500;
     cursor: pointer;
@@ -102,11 +106,12 @@ body {
   /* <<< dark color text on hover */
     transform: translateY(-3px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    border-color: #000a1f00;
 }
 
 .btn:not(:hover)
 {
-    transition: all ease-in-out 0.3s;
+    transition: all ease-in-out 0.5s;
 }
 
 
