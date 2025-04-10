@@ -37,13 +37,14 @@ urlpatterns = [
     #  Student - Dashboard Urls
     # path('',views.student_home_dash,name='dashboard-home'),
     path('student_home',views.student_home_dash,name="student_dash"),
-    path('student-marks/<int:pk>/',views.student_marks,name='student_marks'),
+    path('student-marks/<int:pk>/',views.subject_wise_marks,name='student_marks'),
     path('student-suggestion/<int:pk>/',views.student_suggessions,name='student_suggesions'),
+    path('get_subject_suggestion/', views.get_subject_suggestion, name='get_subject_suggestion'),
+
+    # Notifications - chat platform 
+    path('chat/<int:pk>/',views.message_view,name='chat'),
+    path('Room-create/',views.room_create,name='room_create'),
 
 
-
-
-    
-    
     
     ]

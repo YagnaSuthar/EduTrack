@@ -44,7 +44,7 @@ def generate_suggestions_for_student(sat_score,pat_score,attendance,performance_
     You are a teacher or mentor providing recommendations for students based on their performance data. Given the following information about a student, suggest specific tasks or strategies they can use to improve their performance. Tailor your suggestions based on their SAT score, PAT score, attendance, and overall performance.
 
     Student details:
-
+    
     - SAT score: {sat_score}
     - PAT score: {pat_score}
     - Attendance: {attendance}%
@@ -88,3 +88,45 @@ def generate_suggestions_for_student(sat_score,pat_score,attendance,performance_
 
     # Return the suggestions
     return suggestions_list
+
+def generate_subject_wise_suggestions_for_student(subject, sat_score, pat_score):
+    # Constructing a detailed input prompt for the model with more general recommendations for any subject
+    prompt = f"""
+    You are a teacher or mentor providing personalized recommendations based on a student's performance. Given the student's subject, SAT score, and PAT score, print the subject name, SAT score, and PAT score first. Then, based on their scores, provide actionable and concise recommendations for improving the student's performance in that subject.
+
+    **Student Performance Details:**
+    - Subject: {subject}
+    - SAT Score: {sat_score}
+    - PAT Score: {pat_score}
+
+    **Instructions:**
+    1. Print the subject name followed by the SAT score and PAT score.
+    2. Provide a recommendation based on the student's SAT and PAT scores:
+        - If the **SAT score** is low (below 600), suggest extra practice with basic concepts, focusing on areas like problem-solving, practice tests, or review of key topics.
+        - If the **SAT score** is high (above 700), recommend advanced practice, focusing on solving higher-level problems or understanding more complex concepts.
+        - If the **PAT score** is low (below 60), suggest additional review of fundamental concepts and practice of core skills in the subject.
+        - If the **PAT score** is high (above 70), recommend tackling more challenging tasks and enhancing understanding through complex questions or real-world applications of the subject.
+
+    **Example Response:**
+    Subject: Math
+    SAT Score: 520
+    PAT Score: 60
+    Recommendation: "Focus on solving additional numerical problems and reviewing key concepts such as algebra and geometry. Practice problem-solving techniques to improve your SAT and PAT scores."
+
+    **Response Format:**
+    - Print the subject name, SAT score, and PAT score first.
+    - Then provide the relevant suggestion based on the student's scores.
+    - The suggestion should be brief and concise, focusing on practical, actionable steps.
+
+    **Your Response:**
+    """
+    
+    # Call Gemini API (assuming you have already configured it properly)
+    model = genai.GenerativeModel("gemini-2.0-flash")
+    response = model.generate_content(prompt)
+
+    # Extract and clean up the suggestion from the model response
+    suggestion = response.text.strip()
+
+    # Return the suggestion
+    return suggestion

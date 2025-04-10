@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import student,Teacher,School,Standard,Subject,ClassSection,Marks
+from .models import student,Teacher,School,Standard,Subject,ClassSection,Marks,Message,Room
 from django import forms
 from django.contrib.auth.models import Group
 from django import forms
@@ -8,31 +8,43 @@ from allauth.account.forms import SignupForm
 from django.core.exceptions import ValidationError
 from .models import SchoolAdminProfile
 from datetime import datetime
-
 class StudentForm(ModelForm):
     class Meta:
         model = student
-        fields = ['name', 'gender', 'attendance','email','subject','standard_class']  # Exclude 'performance'
-    
-    standard_class= forms.ModelMultipleChoiceField(
+        fields = ['name', 'gender', 'attendance', 'email', 'standard_class']  # 'subject' removed
+
+    standard_class = forms.ModelMultipleChoiceField(
         queryset=ClassSection.objects.all(), 
         widget=forms.CheckboxSelectMultiple,
         required=True
     )
-    subject = forms.ModelMultipleChoiceField(
-        queryset=Subject.objects.all(), 
-        widget=forms.CheckboxSelectMultiple,
-        required=True
-    )
-    
+
     def save(self, commit=True):
-        user = super().save(commit=False)
+        student_instance = super().save(commit=False)
+
         if commit:
-            # user.set_password(self.cleaned_data["password"])
-            user.save()
+            student_instance.save()
+            self.save_m2m()
+
+            # Add student to 'Student' group if user is linked
             student_group = Group.objects.get(name='Student')
-            user.groups.add(student_group)
-        return user
+            if student_instance.user:
+                student_instance.user.groups.add(student_group)
+
+            # Extract standards from selected classes
+            selected_standards = Standard.objects.filter(
+                classsection__in=student_instance.standard_class.all()
+            ).distinct()
+
+            # Assign these standards to the student
+            student_instance.standard.set(selected_standards)
+
+            # Get subjects for those standards
+            related_subjects = Subject.objects.filter(standard__in=selected_standards).distinct()
+            student_instance.subject.set(related_subjects)
+
+        return student_instance
+
 
 
 class TeacherForm(forms.ModelForm):
@@ -158,3 +170,19 @@ class MarkForm(ModelForm):
             'sat_score',
             'marks_obtained'
         ]
+
+
+# Messages and chats handling form 
+
+class MessageForm(ModelForm):
+    class Meta:
+        model = Message
+        fields = '__all__'
+
+
+
+class RoomForm(ModelForm):
+    class Meta:
+        model = Room
+        fields = '__all__'
+        exclude = ['participants']

@@ -2,8 +2,7 @@ from django.db import models
 from datetime import datetime
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
-import random
-import string
+from datetime import datetime
 
 User = get_user_model()
 # Create your models here.
@@ -132,7 +131,7 @@ class student(models.Model):
 class Marks(models.Model):
     student = models.ForeignKey(student,on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject,on_delete=models.CASCADE)
-
+   
     pat_score = models.FloatField(null=True,blank=True)
     sat_score = models.FloatField(null=True,blank=True)
 
@@ -142,6 +141,45 @@ class Marks(models.Model):
     class Meta:
         unique_together = ('student','subject')
    
+
+    @property
+    def standard(self):
+        return self.subject.standard
+    
+
+
+
+# messages and chats
+
+class Room(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    name = models.CharField(max_length=120)
+    participants =models.ManyToManyField(User,related_name='participants',blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-updated','-created']
+
+    def __str__(self):
+        return self.name
+    
+class Message(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    body = models.CharField(max_length=131)
+    # participants =models.ManyToManyField(User,related_name='participants',blank=True)
+    room = models.ForeignKey(Room,on_delete=models.CASCADE)
+
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.user.username} -message"
+
+    class Meta:
+        ordering =['-updated','-created']
+
+
 
 
 

@@ -1,18 +1,25 @@
 import csv   
 from django.shortcuts import render,redirect,HttpResponse,get_object_or_404
-from student.models import student,Teacher,Marks
+from student.models import student,Teacher,Marks,School,Standard,Subject,ClassSection,Message,Room
 from .teacher_chatbot import giveResponse_Teacher
 from django.http import JsonResponse
-from .get_suggesions import generate_suggestions_for_teacher,generate_suggestions_for_student
+from .get_suggesions import generate_suggestions_for_teacher,generate_suggestions_for_student,generate_subject_wise_suggestions_for_student
 from django.contrib.auth.decorators import login_required
 from .decorators import allowed_users,teacher_only,student_only,school_admin_only
 from allauth.account.views import PasswordResetView,PasswordResetDoneView
 from django.core.exceptions import ObjectDoesNotExist
-from student.forms import standardForm ,classForm,SchoolForm,SubjectForm,MarkForm
+from student.forms import standardForm ,classForm,SchoolForm,SubjectForm,MarkForm,MessageForm,RoomForm
 from django.views.decorators.cache import never_cache
 # Create your views here.
 
 from django.contrib.auth.decorators import user_passes_test
+
+
+######################################################################### Error Handling #################################################################################################
+
+
+
+                                                                            # pending #
 
 
 # ######################################################################## Role based redirecting to the dashboard ##################################################################################
@@ -129,18 +136,18 @@ def student_home_dash(request):
 
 
 ################################################################################ SHOW DATA TO PARTICULAR PAGE ############################################################################ 
-@login_required
-@allowed_users(allowed_roles='Student')
-def student_marks(request,pk):
-    student_obj = student.objects.get(student_id = pk)
-    user =request.user
-    print(student_obj)
-    context = {
-            'student': student_obj,  # Pass the student object to the template
-            'is_teacher':is_teacher(user),
-            'is_student':is_student(user)
-        }
-    return render(request, 'student/student_marks.html', context)
+# @login_required
+# @allowed_users(allowed_roles='Student')
+# def student_marks(request,pk):
+#     student_obj = student.objects.get(student_id = pk)
+#     user =request.user
+#     print(student_obj)
+#     context = {
+#             'student': student_obj,  # Pass the student object to the template
+#             'is_teacher':is_teacher(user),
+#             'is_student':is_student(user)
+#         }
+#     return render(request, 'student/student_marks.html', context)
 
 
 @login_required
@@ -326,7 +333,7 @@ def Teacher_suggesions(request):
 @student_only
 def student_suggessions(request,pk):
     student_obj = student.objects.get(student_id=pk)
-    genrated_suggestion = generate_suggestions_for_student(student_obj.sat_score,student_obj.pat_score,student_obj.attendance,student_obj.performance_summary)
+    genrated_suggestion = generate_suggestions_for_student(student_obj.avg_sat_score,student_obj.avg_pat_score,student_obj.attendance,student_obj.performance_summary)
     print(genrated_suggestion)
     # return HttpResponse('genrates suggestion for given student - DONE')
     context ={
@@ -338,6 +345,11 @@ def student_suggessions(request,pk):
     }
     return render(request,'Dashboard/student/student_suggesions.html',context)
 
+
+# def get_subject_wise_suggestions(request):
+#     student_obj = student.objects.get()
+#     marks = Marks.objects.get(student =student_obj)
+#     subject_wise_suggesion = generate_suggestions_for_student()
 
 
 
@@ -463,13 +475,27 @@ def approveScAdmin(request, user_id):
 # creation-forms -> student -> views.py 
 
 def standard_class_list(request):
+    # school = School.objects.get(principal = request.user)
+    standards = Standard.objects.all()
+    subjects = Subject.objects.all()
+    classes = ClassSection.objects.all()
+
+    standards_count = standards.count()
+    classes_count = classes.count()
+    subjects_count = subjects.count()
+
     context ={
+        'standards_count':standards_count,
+        'classes_count':classes_count,
+        'subjects_count':subjects_count,
+        'standards':standards,
+        'subjects':subjects,
+        'classes':classes,
         'is_teacher':is_teacher(request.user),
         'is_student':is_student(request.user),
         'is_schooladmin':is_schooladmin(request.user),
     }
     return render(request,'Dashboard/school_admin/standards_list.html',context)
-
 
 def createStandard(request):
     form = standardForm()
@@ -549,7 +575,7 @@ def add_new_subject(request):
 
 
 
-################################################## student marks subject wise views herer ############################################################
+################################################## student marks subject wise views here  ############################################################
 from django.db.models import Avg
 from student.models import Marks
 from student.ml_utils import predict_student_performance
@@ -601,5 +627,100 @@ def add_student_marks(request, student_id):
         'subjects': subjects
     })
 
+@login_required
+@student_only
+def subject_wise_marks(request, pk):
+    student_obj = student.objects.get(student_id=pk)
+    marks_set = Marks.objects.filter(student=student_obj)
+
+    subject_wise_suggestions = []  # Initialize an empty list to store suggestions
+
+    for mark in marks_set:
+        # Generate suggestion for each subject and append to the list
+        subject_wise_suggestion = generate_subject_wise_suggestions_for_student(
+            mark.subject.name, mark.sat_score, mark.pat_score)
+        subject_wise_suggestions.append(subject_wise_suggestion[0])  # Only taking the first suggestion from the list
+
+    context = {
+        'subject_wise_suggestions': subject_wise_suggestions,  # Pass the list of suggestions
+        'marks': marks_set,
+        'student': student_obj,  # Pass the student object to the template
+        'is_teacher': is_teacher(request.user),
+        'is_student': is_student(request.user),
+    }
+    return render(request, 'student/student_marks.html', context)
+
+from django.http import JsonResponse
+
+@login_required
+@student_only
+def get_subject_suggestion(request):
+    if request.method == 'GET':
+        mark_id = request.GET.get('mark_id')
+        subject = request.GET.get('subject')
+
+        
+        
+        mark = Marks.objects.get(id=mark_id)
+        # Assuming the suggestion generation function works as expected
+        subject_wise_suggestion = generate_subject_wise_suggestions_for_student(
+            subject, mark.sat_score, mark.pat_score
+        )
+        
+        # Return the first suggestion (you can customize this to handle more than one suggestion)
+        suggestion = subject_wise_suggestion if subject_wise_suggestion else "No suggestion available."
+
+        return JsonResponse({'suggestion': suggestion})
 
 
+
+# ####################################################################### chat platform ########################################################################
+
+def message_view(request,pk):
+
+    messages = Message.objects.all()
+    room = Room.objects.get(id=pk)
+    room_participants = room.participants.all()
+    role = get_user_role(request.user)
+ 
+    if request.method == 'POST':
+        message = Message.objects.create(
+            user = request.user,
+            room = room,
+            body =  request.POST.get('body')    )
+    
+        room.participants.add(request.user)
+        return redirect('chat',pk=room.id)
+    
+    
+    context = {
+   
+        'room_participants':room_participants,
+        'role':role,
+        'messages':messages,
+        'room':room,
+        'is_schooladmin':is_schooladmin(request.user),
+        'is_teacher':is_teacher(request.user),
+    }
+    return render(request,'chat/message.html',context)
+
+
+def room_create(request):
+    form = RoomForm()
+    rooms = Room.objects.all()
+    if request.method == 'POST':
+        form = RoomForm(request.POST)
+        if form.is_valid:
+            form.save(commit=False)
+            
+            form.user = request.user
+            form.save()
+
+        else: 
+            return HttpResponse('Error here!')
+    context = {
+        'rooms':rooms,
+        'form':form,
+    }
+
+    return render(request,'chat/chat.html',context)

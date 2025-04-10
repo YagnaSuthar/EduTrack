@@ -1,4 +1,5 @@
-media/
+
+studentPerformancePredictor/settings.py/
 myenv/
 templates/Edu/
 templates/dashboard -ignore/

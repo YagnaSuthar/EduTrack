@@ -19,3 +19,4 @@ def update_student_average_scores(sender, instance, **kwargs):
     student_obj.avg_sat_score = avg_sat
     student_obj.avg_pat_score = avg_pat
     student_obj.save()
+ 
