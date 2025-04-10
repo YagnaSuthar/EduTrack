@@ -93,18 +93,9 @@ body {
 
 .btn:hover {   
     color: #000a1f;    
-    background: linear-gradient(45deg,      rgba(208, 236, 248, 0.5), 
-    rgba(185, 228, 246, 0.5), 
-    rgba(188, 220, 233, 0.5), 
-    rgba(189, 223, 236, 0.5), 
-    rgba(183, 235, 243, 0.5), 
-    rgba(171, 241, 250, 0.5), 
-    rgba(144, 224, 248, 0.5), 
-    rgba(108, 218, 249, 0.5), 
-    rgba(73, 213, 240, 0.5), 
-    rgba(12, 204, 230, 0.5));
+    background: linear-gradient(45deg,#D0ECF880, #B9E4F680, #BCDCE980, #BDDFEC80, #B7EBF380, #ABF1FA80, #90E0F880, #6CDAF980, #49D5F080, #0CCCE680);
   /* <<< dark color text on hover */
-    transform: translateY(-3px);
+    transform: translateY(-2px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
     border-color: #000a1f00;
 }
