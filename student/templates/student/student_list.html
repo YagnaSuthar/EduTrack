@@ -109,8 +109,10 @@ Students-list-{{ block.super }}
     justify-content: start;
     align-items: center;
     flex-direction: column;
-    min-height: 100vh;
     padding: 20px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 1.5s ease forwards;
 }
 
 .student-table-container {
@@ -203,6 +205,13 @@ Students-list-{{ block.super }}
         width: 80%;
     }
 }
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 </style>
 {% endblock style %}
 
@@ -240,8 +249,8 @@ Students-list-{{ block.super }}
                     <th>Attendance</th>
                     <th>Standard</th>
                     <th>Performance</th>
-                    <th>Add_marks</th>
-                    <th>Delete-Student</th>
+                    <th>Add marks</th>
+                    <th>Delete Student</th>
                 </tr>
             </thead>
             <tbody>

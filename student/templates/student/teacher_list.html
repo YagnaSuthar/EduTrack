@@ -111,6 +111,9 @@ Students-list-{{ block.super }}
     flex-direction: column;
     height: auto;
     padding: 20px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 1.5s ease forwards;
 }
 
 .student-table-container {
@@ -203,6 +206,13 @@ Students-list-{{ block.super }}
         width: 80%;
     }
 }
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 </style>
 {% endblock style %}
 
@@ -219,10 +229,10 @@ Students-list-{{ block.super }}
         
     <div class="student-search">
         <i class="fas fa-search"></i>
-        <input type="text" id="search-bar" placeholder="Search students...">
+        <input type="text" id="search-bar" placeholder="Search Teacher...">
     </div>
     <div class="student-create-btn">
-        <a class="btn-student-data" href={% url 'create_student' %}><button>Add Student</button></a>
+        <a class="btn-student-data" href={% url 'create_teacher' %}><button>Add Teacher</button></a>
     </div> 
 </div>
 

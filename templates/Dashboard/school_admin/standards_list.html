@@ -27,6 +27,16 @@
     font-weight: bold;
     padding: 20px;
     background-color: #f8f8f8;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 1.5s ease forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .information_standard
@@ -199,17 +209,6 @@
 
                 <div class="overview-container">
                     <div class="overview-card total-standards">
-<<<<<<< Updated upstream
-                      <h4 class="total_number">12</h4>
-                      <p>Total Standards</p>
-                    </div>
-                    <div class="overview-card total-classes">
-                      <h4 class="total_number">48</h4>
-                      <p>Total Classes</p>
-                    </div>
-                    <div class="overview-card total-schools">
-                      <h4 class="total_number">3</h4>
-=======
                       <h4 class="total_number">{{standards_count}}</h4>
                       <p>Total Standards</p>
                     </div>
@@ -219,7 +218,6 @@
                     </div>
                     <div class="overview-card total-schools">
                       <h4 class="total_number">{{subjects_count}}</h4>
->>>>>>> Stashed changes
                       <p>Total Subjects</p>
                     </div>
                   </div>
@@ -243,26 +241,6 @@
             <table class="standard-class-table-main">
                 <thead style="background: linear-gradient(90deg,#0047B2,#286bcf,#5e8acc); font-weight: bold;">
                 <tr>
-<<<<<<< Updated upstream
-                    <th>Standard</th>
-                    <th>Class</th>
-                    <th>Subject</th>
-                </tr>
-                </thead>
-                <tbody style="font-weight: lighter;">
-                    <tr><td>1</td><td>A, B, C, D</td><td>English</td></tr>
-                    <tr><td>2</td><td>A, B, C, D</td><td>English</td></tr>
-                    <tr><td>3</td><td>A, B, C, D</td><td>English</td></tr>
-                    <tr><td>4</td><td>A, B, C, D</td><td>English</td></tr>
-                    <tr><td>5</td><td>A, B, C, D</td><td>English</td></tr>
-                    <tr><td>6</td><td>A, B, C, D</td><td>English</td></tr>
-                    <tr><td>7</td><td>A, B, C, D</td><td>English</td></tr>
-                    <tr><td>8</td><td>A, B, C, D</td><td>English</td></tr>
-                    <tr><td>9</td><td>A, B, C, D</td><td>English</td></tr>
-                    <tr><td>10</td><td>A, B, C, D</td><td>English</td></tr>
-                    <tr><td>11</td><td>A, B, C, D</td><td>English</td></tr>
-                    <tr><td>12</td><td>A, B, C, D</td><td>English</td></tr>
-=======
                     <th>Standards</th>
                     <th>Classes</th>
                     <th>Subjects</th>
@@ -297,11 +275,6 @@
                         
                 </tr>
                 {% endfor %}
-                    
-                    
-                    
-                    
->>>>>>> Stashed changes
                 </tbody>
             </table>
         </div>
