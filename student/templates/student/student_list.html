@@ -206,11 +206,38 @@ Students-list-{{ block.super }}
     }
 }
 
+<<<<<<< Updated upstream
 @keyframes fadeIn {
     to {
         opacity: 1;
         transform: translateY(0);
     }
+=======
+.search-student-form{
+    width:59%; 
+    /* #percentage for dhrumil and aniket - 69 */
+}
+
+.back-to-list-btn{
+    margin:0px 5px;
+    background-color:red;
+    cursor:pointer;
+    padding:10px;
+    color:white;
+    border-radius:5px;
+    font-weight:bolder;
+    box-shadow: 2px 2px 2px rgb(41, 41, 41);
+}
+
+.search-to-specific-student{
+    background-color:rgb(61, 219, 21);
+    cursor:pointer;
+    padding:10px;
+    color:white;
+    border-radius:5px;
+    font-weight:bolder;
+    box-shadow: 2px 2px 2px rgb(41, 41, 41);
+>>>>>>> Stashed changes
 }
 </style>
 {% endblock style %}
@@ -227,9 +254,14 @@ Students-list-{{ block.super }}
     <div class="nav-studentbar1">
         
     <div class="student-search">
+        <form class="search-student-form">
         <i class="fas fa-search"></i>
-        <input type="text" id="search-bar" placeholder="Search students...">
+        <input type="text" name="q" id="search-bar" placeholder="Search students...">
+        <button type='submit' class="search-to-specific-student" >Search</button>
+    </form>
+        <a href="{% url 'student_data'%}"><button class="back-to-list-btn">Back to all</button></a>
     </div>
+    
     <div class="student-create-btn">
         <a class="btn-student-data" href={% url 'create_student' %}><button>Add Student</button></a>
     </div> 
@@ -244,13 +276,20 @@ Students-list-{{ block.super }}
                 <tr>
                     <th>Student Name</th>
                     <th>Gender</th>
+                    <th>email</th>
                     <th>Avg PAT Score</th>
                     <th>Avg SAT Score</th>
                     <th>Attendance</th>
                     <th>Standard</th>
                     <th>Performance</th>
+<<<<<<< Updated upstream
                     <th>Add marks</th>
                     <th>Delete Student</th>
+=======
+                    <th>Add_marks</th>
+                    <th>Delete-Student</th>
+                    <th>Give Suggestion</th>
+>>>>>>> Stashed changes
                 </tr>
             </thead>
             <tbody>
@@ -258,6 +297,7 @@ Students-list-{{ block.super }}
                 <tr>
                     <td>{{ student.name }}</td>
                     <td>{{ student.gender }}</td>
+                    <td>{{ student.email}}</td>
                     <td>{{ student.avg_pat_score }}</td>
                     <td>{{ student.avg_sat_score }}</td>
                     <td>{{ student.attendance }}</td>
@@ -265,7 +305,9 @@ Students-list-{{ block.super }}
                 </td>
                     <td>{% if student.performance_summary %}{{ student.performance_summary }}{% else %}Not Predicted{% endif %}</td>
                     <td >{% if is_teacher %}
-                        <a href="{% url 'add_marks' student.student_id%}" style="color: #0047B2;"onmouseover="this.style.color='#001570';" onmouseout="this.style.color='#0047B2';">Add Marks</a>
+                        <a href="{% url 'add_marks' student.student_id%}" style="color: #0047B2;"onmouseover="this.style.color='#001570';" onmouseout="this.style.color='#0047B2';">Add Marks</a>/
+                        <a href="{% url 'edit_marks' student.pk%}" style="color: #0047B2;"onmouseover="this.style.color='#001570';" onmouseout="this.style.color='#0047B2';">Edit Marks</a>
+                        
                         {% else %} 
                         not editable
                         {% endif %}
@@ -273,13 +315,30 @@ Students-list-{{ block.super }}
                     <td >
                         <a href="{% url 'student_delete' student.student_id%}" style="color: #0047B2;" onmouseover="this.style.color='#001570';" onmouseout="this.style.color='#0047B2';">Delete</a>
                     </td>
+                    <td >
+                        <a href="{% url 'personalize_suggestion' student.student_id%}" style="color: #0047B2;" onmouseover="this.style.color='#001570';" onmouseout="this.style.color='#0047B2';">Give Suggestion</a>
+                    </td>
+                
+                
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
+
         <a class="btn-student-data" href={% url 'export_students_csv' %}><button style="margin-top: 23px">Download CSV</button></a>
+        <form method="post" enctype="multipart/form-data" action="{% url 'upload_file' %}">
+            {% csrf_token %}
+            <p>Note : follow the column pattern otherwise data will not be upload Required fields:[name,email,gender,attendance] or you can(optional) [name,email,gender,attendance,avg_pat,avg_sat] </p>
+            <p>otherwise you need to add marks manually for each student to get performance</p>
+            <input type="file" name="file" required>
+            <button type="submit">Upload</button>
+        </form>
+        
+        
     </div>
+  
+   
 </div>
 
 {% endblock content %}

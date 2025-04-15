@@ -36,7 +36,7 @@
             {% elif is_student %}  
             {% comment %} {% else %} {% endcomment %}
             <p>Student ID: {{ student.student_id }}</p>
-            <a href="{% url 'student_marks' pk=student.student_id %}">
+            <a href="{% url 'student_marks' student.student_id %}">
                 <i class="fas fa-user-graduate"></i>
                 <span>View Marks</span>
             </a>

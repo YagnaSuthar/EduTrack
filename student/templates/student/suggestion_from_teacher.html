@@ -1,12 +1,13 @@
 {% extends "Dashboard/index.html" %}
 
+
 {% block title %}
-Class Creation Form
+Standard Creation Form
 {% endblock title %}
 
 {% block style %}
 <style>
-    /* General Styles for Centering and Form Layout */
+
     body {
         display: flex;
         justify-content: center;
@@ -16,7 +17,8 @@ Class Creation Form
         background-color: #f4f4f4;
     }
 
-    .class_create_form {
+
+    .standard_create_form {
         background-color: #fff;
         padding: 30px;
         border-radius: 8px;
@@ -25,19 +27,20 @@ Class Creation Form
         max-width: 400px;
     }
 
-    .class_create_form form {
+    .standard_create_form form {
         display: flex;
         flex-direction: column;
     }
 
-    .class_create_form label {
+    .standard_create_form label {
         margin-top: 15px;
         font-weight: bold;
         color: #333;
     }
 
-    .class_create_form input,
-    .class_create_form select {
+    .standard_create_form input,
+    .standard_create_form select,
+    .standard_create_form textarea {
         padding: 10px;
         margin-top: 5px;
         border: 1px solid #ccc;
@@ -45,10 +48,10 @@ Class Creation Form
         font-size: 14px;
     }
 
-    .class_create_form button {
+    .standard_create_form button {
         margin-top: 20px;
         padding: 10px;
-        background-color: #007bff; /* Blue Button */
+        background-color:rgb(57, 115, 240);
         color: white;
         border: none;
         border-radius: 5px;
@@ -57,23 +60,17 @@ Class Creation Form
         transition: background-color 0.3s ease;
     }
 
-    .class_create_form button:hover {
-        background-color: #0056b3; /* Darker blue on hover */
+    .standard_create_form button:hover {
+        background-color:rgb(0, 0, 0);
     }
 </style>
 {% endblock style %}
 
 {% block content %}
-<div class="class_create_form">
+<div class="standard_create_form">
     <form method="POST" action="">
         {% csrf_token %}
-        
-        {{ form.standard.label_tag }}
-        {{ form.standard }}
-
-        {{ form.name.label_tag }}
-        {{ form.name }}
-
+        {{ form.as_p }}
         <button type="submit">Submit</button>
     </form>
 </div>
@@ -81,3 +78,5 @@ Class Creation Form
 
 {% block script %}
 {% endblock script %}
+
+

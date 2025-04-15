@@ -6,11 +6,60 @@ Subject Creation Form
 
 {% block style %}
 <style>
-
-    .subject_create_form{
-        margin-left:210px;
+    /* General Styles for Centering and Form Layout */
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f4f4f4;
     }
-        {% comment %} Work pending dhrumil kharadi {% endcomment %}
+
+    .subject_create_form {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .subject_create_form form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .subject_create_form label {
+        margin-top: 15px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .subject_create_form input,
+    .subject_create_form select {
+        padding: 10px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+    .subject_create_form button {
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #007bff; /* Blue Button */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .subject_create_form button:hover {
+        background-color: #0056b3; /* Darker blue on hover */
+    }
 </style>
 {% endblock style %}
 
@@ -18,8 +67,12 @@ Subject Creation Form
 <div class="subject_create_form">
     <form method="POST" action="">
         {% csrf_token %}
-       
-        {{form.as_p}}
+        
+        {{ form.name.label_tag }}
+        {{ form.name }}
+
+        {{ form.standard.label_tag }}
+        {{ form.standard }}
 
         <button type="submit">Submit</button>
     </form>

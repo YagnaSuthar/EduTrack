@@ -205,6 +205,25 @@ Student Marks - {{ student.first_name }}
         <!-- End of Subject Box -->
         {% endfor %}
     </div>
+<<<<<<< Updated upstream
+=======
+    <!-- End of Subject Box -->
+    {% endfor %}
+    {% if suggestions_from_teacher %}
+    <h2>Suggestions from Teachers:</h2>
+    <ul>
+        {% for suggestion in suggestions_from_teacher %}
+            <li>
+                <strong>{{ suggestion.teacher }}:</strong> {{ suggestion.description }}
+                <br>
+                <small>{{ suggestion.created | timesince }} ago</small>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No suggestions yet.</p>
+{% endif %}
+>>>>>>> Stashed changes
 </div>
 
 

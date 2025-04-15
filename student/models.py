@@ -107,9 +107,9 @@ class student(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     name = models.CharField(max_length=50)
-    email = models.EmailField(unique=True,max_length=30, default='abc@gmail.com')
+    email = models.EmailField(unique=True,max_length=80, default='abc@gmail.com')
     date_of_birth = models.DateField(default='2000-01-01')
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default='O')  # Use 'O' (Other) as default
+    gender = models.CharField(max_length=50, choices=GENDER_CHOICES, default='O')  # Use 'O' (Other) as default
     attendance = models.IntegerField()  # Remove max_length
     subject = models.ManyToManyField(Subject)
     standard = models.ManyToManyField(Standard)
@@ -178,6 +178,24 @@ class Message(models.Model):
 
     class Meta:
         ordering =['-updated','-created']
+
+
+
+class StudentSuggestion(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    description  = models.TextField(max_length=500,null=True,blank=True)
+    student = models.ForeignKey(student, on_delete=models.CASCADE)
+    teacher = models.ForeignKey(Teacher,on_delete=models.CASCADE)
+    subject = models.ForeignKey(Subject,on_delete=models.CASCADE)
+    updated  = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-updated','-created']
+
+    def __str__(self):
+        return self.description[:10]
+
 
 
 

@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import student,Teacher,School,Standard,Subject,ClassSection,Marks,Message,Room
+from .models import student,Teacher,School,Standard,Subject,ClassSection,Marks,Message,Room,StudentSuggestion
 from django import forms
 from django.contrib.auth.models import Group
 from django import forms
@@ -186,3 +186,13 @@ class RoomForm(ModelForm):
         model = Room
         fields = '__all__'
         exclude = ['participants']
+
+class FileUploadForm(forms.Form):
+    file = forms.FileField()
+
+
+class StudentSuggestionForm(ModelForm):
+    class Meta:
+        model = StudentSuggestion
+        fields = '__all__'
+        exclude = ['user','teacher','student']

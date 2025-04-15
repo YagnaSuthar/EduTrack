@@ -98,14 +98,7 @@ def studentCreate(request):
             # Link the User account to the student
             student_obj.user = user  
 
-            # Call Gemini API to predict performance
-            # student_obj.performance_summary = predict_student_performance(
-            #     student_obj.get_gender_display(), 
-            #     student_obj.sat_score, 
-            #     student_obj.pat_score, 
-            #     student_obj.attendance
-            # )[:20]  
-
+      
             student_obj.performance_summary = 'pending'
             student_obj.save()  # Save student with credentials
 
@@ -206,6 +199,7 @@ def edit_teacher(request, teacher_id):
             # Save the many-to-many relationships for class sections
             form.save_m2m()
 
+            return redirect('teacher_data')
            
 
     context = {
@@ -231,10 +225,13 @@ def studentDelete(request,pk):
         return redirect('student_list')
 
     context={
-        'Student':Student
+        'Student':Student,
+        'is_schooladmin':is_schooladmin(request.user),
+        'is_teacher':is_teacher(request.user),
+        'is_student':is_student(request.user)
     }
         
-    return render(request,'student/delete_student.html',{'obj':Student})
+    return render(request,'student/delete_student.html',context)
 
 def teacher_delete(request,pk):
 

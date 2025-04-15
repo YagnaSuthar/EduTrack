@@ -1,6 +1,8 @@
 import csv   
+import random
+import string
 from django.shortcuts import render,redirect,HttpResponse,get_object_or_404
-from student.models import student,Teacher,Marks,School,Standard,Subject,ClassSection,Message,Room
+from student.models import student,Teacher,Marks,School,Standard,Subject,ClassSection,Message,Room,StudentSuggestion
 from .teacher_chatbot import giveResponse_Teacher
 from django.http import JsonResponse
 from .get_suggesions import generate_suggestions_for_teacher,generate_suggestions_for_student,generate_subject_wise_suggestions_for_student
@@ -8,11 +10,21 @@ from django.contrib.auth.decorators import login_required
 from .decorators import allowed_users,teacher_only,student_only,school_admin_only
 from allauth.account.views import PasswordResetView,PasswordResetDoneView
 from django.core.exceptions import ObjectDoesNotExist
-from student.forms import standardForm ,classForm,SchoolForm,SubjectForm,MarkForm,MessageForm,RoomForm
+from student.forms import standardForm ,classForm,SchoolForm,SubjectForm,MarkForm,MessageForm,RoomForm,FileUploadForm,StudentSuggestionForm
 from django.views.decorators.cache import never_cache
+from django.http import JsonResponse
+from django.db.models import Avg
+from student.models import Marks
+from student.ml_utils import predict_student_performance
+from django.db.models import Q
+from django.contrib.auth.models import Group
 # Create your views here.
 
 from django.contrib.auth.decorators import user_passes_test
+
+def generate_password(length=8):
+    """Generate a random password."""
+    return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
 
 
 ######################################################################### Error Handling #################################################################################################
@@ -32,13 +44,9 @@ def role_based_redirect(request):
 
     if user.groups.filter(name="Student").exists():
         return redirect('student_dash')
-        
-        # return render(request,'Dashboard/student/student_dash.html')  # Change to your actual student dashboard URL
 
     elif user.groups.filter(name="Teacher").exists():
         return redirect('teacher_dash')
-       
-        # return render(request,'student/teacher_list.html')  # Change to your actual teacher dashboard URL
 
     elif user.is_superuser:  # Admin check
          return  HttpResponse('admin-Dashboard')  # Change to your actual admin dashboard URL
@@ -136,28 +144,24 @@ def student_home_dash(request):
 
 
 ################################################################################ SHOW DATA TO PARTICULAR PAGE ############################################################################ 
-# @login_required
-# @allowed_users(allowed_roles='Student')
-# def student_marks(request,pk):
-#     student_obj = student.objects.get(student_id = pk)
-#     user =request.user
-#     print(student_obj)
-#     context = {
-#             'student': student_obj,  # Pass the student object to the template
-#             'is_teacher':is_teacher(user),
-#             'is_student':is_student(user)
-#         }
-#     return render(request, 'student/student_marks.html', context)
 
 
 @login_required
 @allowed_users(allowed_roles=['Teacher'])
 @teacher_only
 def student_data(request):
+    q = request.GET.get('q') if request.GET.get('q') !=  None else ''
+    students = student.objects.filter(
+        Q(name__icontains=q)|
+        Q(email__icontains=q) |
+        Q(gender__icontains=q) | 
+        Q(performance_summary__icontains=q)
+        
+    )
 
     group = get_user_role(request.user)
     print(group)
-    students = student.objects.all()
+    # students = student.objects.all()
     context ={
         'students':students,
         'is_teacher':is_teacher(request.user)
@@ -186,39 +190,7 @@ def TeacherList(request):
 
 
 # ############################################################################### AI - DRIVEN - CHATBOT ######################################################################################### 
-@login_required
-# @user_passes_test(is_teacher)
-@teacher_only
-# def teacherchatbot(request):
-#     # form = teacher_response()
-#     chatbot_response = None
-#     teacher_response = None 
-#     if request.user.is_authenticated:
-#         if request.method == 'POST':
-#         # Get the user input from the form
-#             teacher_response = request.POST.get('teacher_response')
-        
-#         if teacher_response:
-#             # Use the teacher's response to get the chatbot response
-#             chatbot_response = giveResponse_Teacher(teacher_response)
-#             # return JsonResponse({'chatbot_response': chatbot_response})
-        
-#     print(teacher_response)
-#     print(chatbot_response)
 
-
-#     user = request.user
-
-#     context={
-#         'teacher_response':teacher_response,
-#         # 'form':form,
-#         'chatbot_response':chatbot_response,
-         
-#         'is_teacher':is_teacher(user),
-#         'is_student':is_student(user)
-     
-#     }
-#     return render(request,"Dashboard/teacher/chatbot.html",context)
     
 def teacherchatbot(request):
     if not request.user.is_authenticated:
@@ -305,29 +277,6 @@ def Teacher_suggesions(request):
     print(performance_level)
     return render(request,'Dashboard/teacher/teacher_suggesions.html',context)
 
-# older function for csv writer 
-# def export_students_csv(request):
-#     students = student.objects.all()
-
-#     response = HttpResponse(content_type='text/csv')
-#     response['Content-Disposition'] = 'attachment; filename="students_data.csv"'
-
-#     writer = csv.writer(response)
-#     writer.writerow(['Student Name', 'Email', 'Generated Password', 'Gender', 'PAT Score', 'SAT Score', 'Attendance', 'Performance'])
-
-#     for student_obj in students:
-#         writer.writerow([
-#             student_obj.name,
-#             student_obj.email,
-#             student_obj.user.password,  # The hashed password
-#             student_obj.gender,
-#             student_obj.pat_score,
-#             student_obj.sat_score,
-#             student_obj.attendance,
-#             student_obj.performance_summary
-#         ])
-
-#     return response
 
 @login_required
 @student_only
@@ -345,11 +294,37 @@ def student_suggessions(request,pk):
     }
     return render(request,'Dashboard/student/student_suggesions.html',context)
 
+################################################################################### Upload Csv Functionality #############################################################################
 
-# def get_subject_wise_suggestions(request):
-#     student_obj = student.objects.get()
-#     marks = Marks.objects.get(student =student_obj)
-#     subject_wise_suggesion = generate_suggestions_for_student()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -408,50 +383,145 @@ def export_teachers_csv_toschooladmin(request):
 
 
 
-######################################################################### Custom context view modification to allauth ####################################################################
+######################################################################## Uplod csv ##############################################################################################################
+import io 
+import PyPDF2
+from django.contrib.auth.models import User
 
+def upload_file_student_data(request):
+    if request.method == "POST":
+        form = FileUploadForm(request.POST,request.FILES)
+        if form.is_valid():
+            uploaded_file = request.FILES['file']  # ✅ CORRECT
+          
+            if uploaded_file.name.endswith('.csv'):
+                data_set = uploaded_file.read().decode('UTF-8')
+                io_string = io.StringIO(data_set)
+                next(io_string)
+                for row in csv.reader(io_string,delimiter=','):
+                    print(row)
+                    password = generate_password()
+                    username = row[0]
+                    email = row[1]
+                    gender = row[2]
+                    attendance = row[3]
+                    avg_pat_score = row[4]
+                    avg_sat_score = row[5]
+                    user = User.objects.create_user(username=username, email=email, password=password)
+                    
+                    student_group = Group.objects.get(name='Student')  
+                    user.groups.add(student_group)
+                    user.save()
+                
+                    student.objects.create(
+                        user= user,
+                        name = username,
+                        email = email,
+                        gender = gender,
+                        attendance = attendance,
+                        raw_password = password,
+                        avg_pat_score =avg_pat_score,
+                        avg_sat_score = avg_sat_score,
+                        performance_summary = predict_student_performance(
+                                    gender,
+                                    avg_sat_score,
+                                    avg_pat_score,
+                                    attendance
+                            )[:20]  # Optional truncate
+                    )
+
+            elif uploaded_file.name.endswith('.pdf'):
+                # pdf_data = uploaded_file.read()
+                # pdf_stream = io.BytesIO(pdf_data)
+                # reader = PyPDF2.PdfReader(pdf_stream)
+                reader = PyPDF2.PdfReader(uploaded_file)
+                print("Uploaded PDF: ", uploaded_file.name)
+                # print("Number of pages: ", len(reader.pages))
+                text = ""
+                print(reader)
+                
+                for page in reader.pages:
+                    text += page.extract_text()
+                    print(text)
+
+                for line in text.split("\n"):
+                    print(line)
+                    parts = line.split(",")
+
+                    if len(parts) == 3:
+                        try:
+                            student.objects.create(
+                                name = parts[0],
+                                email = parts[1],
+                                gender = parts[2]
+                            )
+                        except Exception as e:
+                            print('Skipping line due to error',e)
+
+        return redirect('student_data')
+
+    else:
+        form = FileUploadForm()
+    return render(request,'student/student_list.html',{'form':form})
+
+
+
+######################################################################### Custom context view modification to allauth ####################################################################
 
 
 class CustomPasswordResetView(PasswordResetView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)  # Get the default context
 
-        # Check if the user is a student
-        try:
-            student_obj = student.objects.get(user=self.request.user)
-            context['student'] = student_obj
-            context['is_student'] = True
-        except ObjectDoesNotExist:
-            context['is_student'] = False  # If no student exists, set to False
+        # Safely check if the user is authenticated before querying student model
+        user = self.request.user
+        if user.is_authenticated:
+            try:
+                student_obj = student.objects.get(user=user)
+                context['student'] = student_obj
+                context['is_student'] = True
+            except ObjectDoesNotExist:
+                context['student'] = None
+                context['is_student'] = False
+            context['is_teacher'] = is_teacher(user)
+            context['is_schooladmin'] = is_schooladmin(user)
+        else:
+            # For anonymous users (e.g., password reset)
             context['student'] = None
-
-        # Add your custom context variables here
-        context['is_teacher'] = is_teacher(self.request.user)
-        context['is_schooladmin'] = is_schooladmin(self.request.user)
+            context['is_student'] = False
+            context['is_teacher'] = False
+            context['is_schooladmin'] = False
 
         return context
+
     
 class CustomePasswordResetDoneView(PasswordResetDoneView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)  # Get the default context
-
+        user = self.request.user
+        if user.is_authenticated:
        # Check if the user is a student
-        try:
-            student_obj = student.objects.get(user=self.request.user)
-            context['student'] = student_obj
-            context['is_student'] = True
-        except ObjectDoesNotExist:
-            context['is_student'] = False  # If no student exists, set to False
-            context['student'] = None
+            try:
+                student_obj = student.objects.get(user=self.request.user)
+                context['student'] = student_obj
+                context['is_student'] = True
+            except ObjectDoesNotExist:
+                context['is_student'] = False  # If no student exists, set to False
+                context['student'] = None
 
-        # Add your custom context variables here
-        context['is_teacher'] = is_teacher(self.request.user)
+            # Add your custom context variables here
+            context['is_teacher'] = is_teacher(self.request.user)
+        else:
+            # For anonymous users (e.g., password reset)
+            context['student'] = None
+            context['is_student'] = False
+            context['is_teacher'] = False
+            context['is_schooladmin'] = False
 
         return context
     
 
-
-    ######################################################################### School -admin approvel Registration #############################################
+######################################################################### School -admin approvel Registration #############################################
 
 from student.models import SchoolAdminProfile
 from django.contrib import messages
@@ -576,9 +646,7 @@ def add_new_subject(request):
 
 
 ################################################## student marks subject wise views here  ############################################################
-from django.db.models import Avg
-from student.models import Marks
-from student.ml_utils import predict_student_performance
+
 def add_student_marks(request, student_id):
     student_obj = get_object_or_404(student, student_id=student_id)
     teacher = get_object_or_404(Teacher, user=request.user)
@@ -603,7 +671,6 @@ def add_student_marks(request, student_id):
             avg_pat = all_marks.aggregate(Avg('pat_score'))['pat_score__avg'] or 0
             avg_sat = all_marks.aggregate(Avg('sat_score'))['sat_score__avg'] or 0
 
-            # ✅ Update student model
             student_obj.avg_pat_score = round(avg_pat, 2)
             student_obj.avg_sat_score = round(avg_sat, 2)
 
@@ -617,7 +684,7 @@ def add_student_marks(request, student_id):
 
             student_obj.save()
 
-            return redirect('teacher_dash')
+            return redirect('student_list')
     else:
         form = MarkForm()
 
@@ -627,11 +694,68 @@ def add_student_marks(request, student_id):
         'subjects': subjects
     })
 
+
+
+def edit_student_marks(request, pk):
+    user = request.user
+    student_obj = get_object_or_404(student, student_id=pk)
+    teacher = get_object_or_404(Teacher, user=request.user)
+    subjects = teacher.subject.all()
+
+    # Get the Marks object you want to edit
+    try:
+        mark_obj = Marks.objects.get(student=student_obj)  # You might need subject here too
+    except Marks.DoesNotExist:
+        mark_obj = None
+
+    if request.method == "POST":
+        form = MarkForm(request.POST, instance=mark_obj)
+        if form.is_valid():
+            mark = form.save(commit=False)
+
+            if mark.subject not in subjects:
+                return render(request, 'unauthorized.html')
+
+            mark.student = student_obj
+            mark.added_by = request.user
+            mark.save()
+
+            # ✅ Recalculate averages
+            all_marks = Marks.objects.filter(student=student_obj)
+            avg_pat = all_marks.aggregate(Avg('pat_score'))['pat_score__avg'] or 0
+            avg_sat = all_marks.aggregate(Avg('sat_score'))['sat_score__avg'] or 0
+
+            student_obj.avg_pat_score = round(avg_pat, 2)
+            student_obj.avg_sat_score = round(avg_sat, 2)
+
+            student_obj.performance_summary = predict_student_performance(
+                student_obj.get_gender_display(),
+                avg_sat,
+                avg_pat,
+                student_obj.attendance
+            )[:20]
+
+            student_obj.save()
+
+            return redirect('student_list')
+    else:
+        form = MarkForm(instance=mark_obj)
+
+    return render(request, 'student/add_marks.html', {
+        'form': form,
+        'student': student_obj,
+        'subjects': subjects,
+        'is_teacher':is_teacher(user),
+        'is_student':is_student(user),
+        'is_schooladmin':is_schooladmin(user),
+    })
+
 @login_required
 @student_only
 def subject_wise_marks(request, pk):
     student_obj = student.objects.get(student_id=pk)
     marks_set = Marks.objects.filter(student=student_obj)
+    suggestions_from_teacher = StudentSuggestion.objects.filter(student=student_obj)
 
     subject_wise_suggestions = []  # Initialize an empty list to store suggestions
 
@@ -647,10 +771,10 @@ def subject_wise_marks(request, pk):
         'student': student_obj,  # Pass the student object to the template
         'is_teacher': is_teacher(request.user),
         'is_student': is_student(request.user),
+        'suggestions_from_teacher':suggestions_from_teacher
     }
     return render(request, 'student/student_marks.html', context)
 
-from django.http import JsonResponse
 
 @login_required
 @student_only
@@ -706,6 +830,7 @@ def message_view(request,pk):
 
 
 def room_create(request):
+    
     form = RoomForm()
     rooms = Room.objects.all()
     if request.method == 'POST':
@@ -721,6 +846,56 @@ def room_create(request):
     context = {
         'rooms':rooms,
         'form':form,
+        'is_schooladmin':is_schooladmin(request.user),
+        'is_teacher':is_teacher(request.user),
+        'is_student':is_student(request.user),
+        
     }
 
     return render(request,'chat/chat.html',context)
+
+
+
+
+def deleteStandard(request,pk):
+    user = request.user
+    standard_obj = Standard.objects.get(id=pk)
+    if request.method == "POST":
+        standard_obj.delete()
+        return redirect('standards_list')
+
+    context= {
+        'obj':standard_obj,
+        'is_schooladmin':is_schooladmin(user),
+        'is_teacher':is_teacher(user),
+        'is_student':is_student(user)
+    }
+    return render(request,'student/delete_standard.html',context)
+
+########################################################################## Personalize teacher's suject wise suggestion to the student ####################################################3
+
+
+def personalize_suggestion_from_teacher(request,pk):
+    form = StudentSuggestionForm()
+ 
+    # suggestion = None
+    print(request.method)
+    if request.method == "POST":
+        form = StudentSuggestionForm(request.POST)
+        if form.is_valid():
+            suggestion = form.save(commit=False)
+            suggestion.user = request.user
+            suggestion.teacher = Teacher.objects.get(user=request.user)
+            suggestion.student = student.objects.get(student_id=pk)
+            suggestion.save()
+            return redirect('student_data')
+        
+        else:
+            messages.error(request,'Error while giving a suggestion')
+
+    context={
+        'form':form,
+       
+    }
+    return render(request,'student/suggestion_from_teacher.html',context)
+    # return HttpResponse('This is a suggestion form here')
