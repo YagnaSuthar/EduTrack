@@ -793,7 +793,7 @@ def get_subject_suggestion(request):
         
         # Return the first suggestion (you can customize this to handle more than one suggestion)
         suggestion = subject_wise_suggestion if subject_wise_suggestion else "No suggestion available."
-
+        print(suggestion)
         return JsonResponse({'suggestion': suggestion})
 
 
@@ -895,7 +895,9 @@ def personalize_suggestion_from_teacher(request,pk):
 
     context={
         'form':form,
-       
+        'is_teacher':is_teacher(request.user),
+        'is_student':is_student(request.user),
+        'is_schooladmin':is_schooladmin(request.user),
     }
     return render(request,'student/suggestion_from_teacher.html',context)
     # return HttpResponse('This is a suggestion form here')

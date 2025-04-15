@@ -7,33 +7,13 @@ Student Marks - {{ student.first_name }}
 {% block style %}
 <style>
 /* Styles for the marks container */
-
-.main_page_of_marks
-{
-    margin-left: 200px;
-    background-color: #f8f9fa;
-    font-family: Arial, sans-serif;
-}
-
-.chat-header {
-    background: linear-gradient(90deg,#0047B2,#286bcf,#5e8acc);
-    color: white;
-    padding: 15px;
-    text-align: center;
-    /* box-shadow: 0 2px 5px rgba(0,0,0,0.1); */
-    font-weight: bold;
-    font-size: 1.2em;
-}
-
 .marks-container {
+    margin-left: 200px;
     padding: 20px;
     background-color: #f8f9fa;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     font-family: Arial, sans-serif;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeIn 1.5s ease forwards;
 }
 
 /* Title of the section */
@@ -116,99 +96,82 @@ Student Marks - {{ student.first_name }}
     border-radius: 8px;
     display: none;
 }
-
-@keyframes fadeIn {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
 </style>
 {% endblock style %}
 
 {% block content %}
-
-<div class="main_page_of_marks">
-    <div class="chat-header">
-        <h2>Suggestions</h2>
+<div class="marks-container">
+    <!-- Student Information Section -->
+    <div class="student-info-container">
+        <h4>Student Information</h4>
+        <div class="student-info">
+            <p class="label">Student ID:</p>
+            <p>{{ student.student_id }}</p>
+        </div>
+        <div class="student-info">
+            <p class="label">Name:</p>
+            <p class="student-name">{{ student.name }}</p>
+        </div>
+        <div class="student-info">
+            <p class="label">SAT Score:</p>
+            <p>{{ student.avg_sat_score }}</p>
+        </div>
+        <div class="student-info">
+            <p class="label">PAT Score:</p>
+            <p>{{ student.avg_pat_score }}</p>
+        </div>
+        <div class="student-info">
+            <p class="label">Attendance:</p>
+            <p>{{ student.attendance }}</p>
+        </div>
+        <div class="student-info">
+            <p class="label">Performance Summary:</p>
+            <p>{{ student.performance_summary }}</p>
+        </div>
+        <div class="student-info">
+            <p class="label">Email:</p>
+            <p>{{ student.email }}</p>
+        </div>
+        <div class="student-info">
+            <p class="label">Gender:</p>
+            <p>{{ student.gender }}</p>
+        </div>
     </div>
 
-    <div class="marks-container">
-        <!-- Student Information Section -->
-        <div class="student-info-container">
-            <h4>Student Information</h4>
-            <div class="student-info">
-                <p class="label">Student ID:</p>
-                <p>{{ student.student_id }}</p>
-            </div>
-            <div class="student-info">
-                <p class="label">Name:</p>
-                <p class="student-name">{{ student.name }}</p>
-            </div>
-            <div class="student-info">
-                <p class="label">SAT Score:</p>
-                <p>{{ student.avg_sat_score }}</p>
-            </div>
-            <div class="student-info">
-                <p class="label">PAT Score:</p>
-                <p>{{ student.avg_pat_score }}</p>
-            </div>
-            <div class="student-info">
-                <p class="label">Attendance:</p>
-                <p>{{ student.attendance }}</p>
-            </div>
-            <div class="student-info">
-                <p class="label">Performance Summary:</p>
-                <p>{{ student.performance_summary }}</p>
-            </div>
-            <div class="student-info">
-                <p class="label">Email:</p>
-                <p>{{ student.email }}</p>
-            </div>
-            <div class="student-info">
-                <p class="label">Gender:</p>
-                <p>{{ student.gender }}</p>
-            </div>
+    <h3>Marks and Suggestions</h3>
+
+    {% for mark in marks %}
+    <!-- Start of Subject Box -->
+    <div class="subject-box">
+        <div class="student-info">
+            <p class="label">Subject:</p>
+            <p>{{ mark.subject.name }}</p>
         </div>
 
-        <h3>Marks and Suggestions</h3>
-
-        {% for mark in marks %}
-        <!-- Start of Subject Box -->
-        <div class="subject-box">
-            <div class="student-info">
-                <p class="label">Subject:</p>
-                <p>{{ mark.subject.name }}</p>
-            </div>
-
-            <div class="student-info">
-                <p class="label">PAT Score:</p>
-                <p>{{ mark.pat_score }}</p>
-            </div>
-
-            <div class="student-info">
-                <p class="label">SAT Score:</p>
-                <p>{{ mark.sat_score }}</p>
-            </div>
-
-            <div class="student-info">
-                <p class="label">Added by Teacher:</p>
-                <p>{{ mark.added_by }}</p>
-            </div>
-
-            <!-- Get Suggestion Button -->
-            <button class="get-suggestion-btn" data-subject="{{ mark.subject.name }}" data-mark-id="{{ mark.id }}">Get Suggestion</button>
-            
-            <!-- Placeholder for suggestion -->
-            <div id="suggestion-{{ mark.id }}" class="suggestion-container"></div>
+        <div class="student-info">
+            <p class="label">PAT Score:</p>
+            <p>{{ mark.pat_score }}</p>
         </div>
-        <!-- End of Subject Box -->
-        {% endfor %}
+
+        <div class="student-info">
+            <p class="label">SAT Score:</p>
+            <p>{{ mark.sat_score }}</p>
+        </div>
+
+        <div class="student-info">
+            <p class="label">Added by Teacher:</p>
+            <p>{{ mark.added_by }}</p>
+        </div>
+
+        <!-- Get Suggestion Button -->
+        <button class="get-suggestion-btn" data-subject="{{ mark.subject.name }}" data-mark-id="{{ mark.id }}">Get Suggestion</button>
+        
+        <!-- Placeholder for suggestion -->
+        <div id="suggestion-{{ mark.id }}" class="suggestion-container"></div>
     </div>
-<<<<<<< Updated upstream
-=======
     <!-- End of Subject Box -->
     {% endfor %}
+    
     {% if suggestions_from_teacher %}
     <h2>Suggestions from Teachers:</h2>
     <ul>
@@ -220,13 +183,10 @@ Student Marks - {{ student.first_name }}
             </li>
         {% endfor %}
     </ul>
-{% else %}
-    <p>No suggestions yet.</p>
-{% endif %}
->>>>>>> Stashed changes
+    {% else %}
+        <p>No suggestions yet.</p>
+    {% endif %}
 </div>
-
-
 
 {% block scripts %}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

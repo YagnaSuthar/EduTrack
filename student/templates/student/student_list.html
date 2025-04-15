@@ -109,10 +109,8 @@ Students-list-{{ block.super }}
     justify-content: start;
     align-items: center;
     flex-direction: column;
+    min-height: 100vh;
     padding: 20px;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeIn 1.5s ease forwards;
 }
 
 .student-table-container {
@@ -303,7 +301,7 @@ Students-list-{{ block.super }}
                         <a href="{% url 'student_delete' student.student_id%}" style="color: #0047B2;" onmouseover="this.style.color='#001570';" onmouseout="this.style.color='#0047B2';">Delete</a>
                     </td>
                     <td >
-                        <a href="{% url 'personalize_suggestion' student.student_id%}" style="color: #0047B2;" onmouseover="this.style.color='#001570';" onmouseout="this.style.color='#0047B2';">Give Suggestion</a>
+                        <a href="{% url 'personalize_suggestion' student.student_id%}" style="color: #0047B2;" onmouseover="this.style.color='#001570';" onmouseout="this.style.color='#0047B2';">Give Suggestion  </a>
                     </td>
                 
                 
