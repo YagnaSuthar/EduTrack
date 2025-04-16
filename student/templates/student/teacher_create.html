@@ -6,19 +6,26 @@ Teacher Creation Form
 
 {% block style %}
 <style>
-.teacher_create_form {
-    {% comment %} margin: 25vh 43vw; {% endcomment %}
-    margin-left:210px;
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #eef2f5;
+    margin: 0;
+    padding: 0;
 }
 
 .teacher_create_form {
-    height: fit-content;
-    width: 50%;
-    {% comment %} margin: 20vh auto; {% endcomment %}
-    padding: 15px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 60px auto;
+    padding: 25px 30px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.teacher_create_form h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 25px;
 }
 
 .teacher_create_form form {
@@ -27,72 +34,144 @@ Teacher Creation Form
 }
 
 .teacher_create_form label {
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 3px;
-    color: #333;
+    font-size: 15px;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 5px;
+    margin-top: 10px;
 }
 
-.teacher_create_form input, 
-.teacher_create_form select, 
+.teacher_create_form input,
+.teacher_create_form select,
 .teacher_create_form textarea {
-    padding: 8px;
-    margin-bottom: 10px;
-    border-radius: 4px;
+    padding: 10px 12px;
+    border-radius: 6px;
     border: 1px solid #ccc;
     font-size: 14px;
+    transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-.teacher_create_form hr {
-    border: 0;
-    border-top: 1px solid #eee;
-    margin: 8px 0;
+.teacher_create_form input:focus,
+.teacher_create_form select:focus,
+.teacher_create_form textarea:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+    outline: none;
 }
 
 .teacher_create_form button {
-    padding: 10px 20px;
+    margin-top: 15px;
+    padding: 12px 20px;
     background-color: #4CAF50;
     color: white;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: bold;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .teacher_create_form button:hover {
-    background-color: #45a049;
+    background-color: #388e3c;
+}
+
+/* Overlay loader styles */
+#overlayLoader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.7);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+#overlayLoader .spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #ddd;
+    border-top: 5px solid #4CAF50;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 </style>
 {% endblock style %}
 
 {% block content %}
 <div class="teacher_create_form">
-    <form method="POST" action="">
+    <h2>Create New Teacher</h2>
+    <form id="teacherForm" method="POST">
         {% csrf_token %}
-        {% comment %} <label>Name</label>
-        {{form.name}}
-        <hr>
-       
-        
-        <label for="last_name">gender</label>
-        {{ form.gender}}
-        <hr>
 
-        <label for="email">Email</label>
+        <label for="{{ form.name.id_for_label }}">Name</label>
+        {{ form.name }}
+
+        <label for="{{ form.email.id_for_label }}">Email</label>
         {{ form.email }}
-        <hr>
 
-        <label for="subjects">Subjects</label>
+        <label for="{{ form.gender.id_for_label }}">Gender</label>
+        {{ form.gender }}
+
+        <label for="{{ form.subject.id_for_label }}">Subject</label>
         {{ form.subject }}
-        <hr> {% endcomment %}
-        {{form.as_p}}
 
-        <button type="submit">Submit</button>
+        <label for="{{ form.standard_class.id_for_label }}">Standard/Class</label>
+        {{ form.standard_class }}
+
+        <button type="submit" id="submitBtn">Submit</button>
     </form>
+</div>
+
+<!-- Fullscreen Overlay Spinner -->
+<div id="overlayLoader">
+    <div class="spinner"></div>
 </div>
 {% endblock content %}
 
 {% block script %}
+<script>
+    {% comment %} document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("teacherForm");
+        const overlay = document.getElementById("overlayLoader");
+
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();  // prevent full page reload
+            overlay.style.display = "flex";  // show loading overlay
+
+            const formData = new FormData(form);
+
+            fetch("", {
+                method: "POST",
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                },
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                overlay.style.display = "none";
+                if (data.success) {
+                    alert("Teacher created successfully!");
+                    form.reset();  // Optional: clear the form
+                } else {
+                    alert("There was an error: " + (data.error || "Check form inputs"));
+                }
+            })
+            .catch(error => {
+                overlay.style.display = "none";
+                alert("Something went wrong. Try again.");
+                console.error("Error:", error);
+            });
+        });
+    }); {% endcomment %}
+</script>
 {% endblock script %}

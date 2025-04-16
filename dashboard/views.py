@@ -1,6 +1,9 @@
 import csv   
 import random
 import string
+import io 
+import PyPDF2
+from django.contrib.auth.models import User
 from django.shortcuts import render,redirect,HttpResponse,get_object_or_404
 from student.models import student,Teacher,Marks,School,Standard,Subject,ClassSection,Message,Room,StudentSuggestion
 from .teacher_chatbot import giveResponse_Teacher
@@ -173,7 +176,15 @@ def student_data(request):
 @login_required
 @school_admin_only
 def TeacherList(request):
-    teachers = Teacher.objects.all()
+  
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    teachers = Teacher.objects.filter(
+        Q(name__icontains=q)|
+        Q(email__icontains=q)|
+        Q(gender__icontains=q)| 
+        Q(subject__name__icontains=q)
+    )
+        
     user = request.user
     context ={
         'teachers':teachers,
@@ -297,12 +308,163 @@ def student_suggessions(request,pk):
 ################################################################################### Upload Csv Functionality #############################################################################
 
 
+def upload_file_student_data(request):
+    if request.method == "POST":
+        form = FileUploadForm(request.POST,request.FILES)
+        if form.is_valid():
+            uploaded_file = request.FILES['file']  # ✅ CORRECT
+          
+            if uploaded_file.name.endswith('.csv'):
+                data_set = uploaded_file.read().decode('UTF-8')
+                io_string = io.StringIO(data_set)
+                next(io_string)
+                for row in csv.reader(io_string,delimiter=','):
+                    print(row)
+                    password = generate_password()
+                    username = row[0]
+                    email = row[1]
+                    gender = row[2]
+                    attendance = row[3]
+                    avg_pat_score = row[4]
+                    avg_sat_score = row[5]
+                    user = User.objects.create_user(username=username, email=email, password=password)
+                    
+                    student_group = Group.objects.get(name='Student')  
+                    user.groups.add(student_group)
+                    user.save()
+                
+                    student.objects.create(
+                        user= user,
+                        name = username,
+                        email = email,
+                        gender = gender,
+                        attendance = attendance,
+                        raw_password = password,
+                        avg_pat_score =avg_pat_score,
+                        avg_sat_score = avg_sat_score,
+                        performance_summary = predict_student_performance(
+                                    gender,
+                                    avg_sat_score,
+                                    avg_pat_score,
+                                    attendance
+                            )[:20]  # Optional truncate
+                    )
+
+        #     elif uploaded_file.name.endswith('.pdf'):
+        #         # pdf_data = uploaded_file.read()
+        #         # pdf_stream = io.BytesIO(pdf_data)
+        #         # reader = PyPDF2.PdfReader(pdf_stream)
+        #         reader = PyPDF2.PdfReader(uploaded_file)
+        #         print("Uploaded PDF: ", uploaded_file.name)
+        #         # print("Number of pages: ", len(reader.pages))
+        #         text = ""
+        #         print(reader)
+                
+        #         for page in reader.pages:
+        #             text += page.extract_text()
+        #             print(text)
+
+        #         for line in text.split("\n"):
+        #             print(line)
+        #             parts = line.split(",")
+
+        #             if len(parts) == 3:
+        #                 try:
+        #                     student.objects.create(
+        #                         name = parts[0],
+        #                         email = parts[1],
+        #                         gender = parts[2]
+        #                     )
+        #                 except Exception as e:
+        #                     print('Skipping line due to error',e)
+
+        # return redirect('student_data')
+
+    else:
+        form = FileUploadForm()
+    return render(request,'student/student_list.html',{'form':form})
 
 
 
 
 
 
+
+
+
+def upload_file_teacher_date(request):
+    user = request.user
+    if request.method == "POST":
+        form = FileUploadForm(request.POST,request.FILES)
+        if form.is_valid():
+            uploaded_file = request.FILES['file']
+            
+            if uploaded_file.name.endswith('.csv'):
+                data_set = uploaded_file.read().decode('UTf-8')
+                io_string = io.StringIO(data_set)
+                next(io_string)
+
+
+                for row in csv.reader(io_string,delimiter=','):
+                    print(row)
+                   
+                    password = generate_password()
+                    # 'name','email','gender','subject','standard',class_sectoin
+                    username = row[0]
+                    email = row[1]
+                    gender = row[2]
+                    subject = row[3]
+                    standard = row[4]
+                    class_section = row[5]
+                  
+                    user = User.objects.create_user(username=username, email=email, password=password)
+                    
+                    teacher_group = Group.objects.get(name='Teacher')  
+                    user.groups.add(teacher_group)
+                    user.save()
+
+                    school = School.objects.get(principal__user=request.user)
+
+                    # ✅ Fix: get or create actual Standard object
+                    standard_obj, _ = Standard.objects.get_or_create(
+                        name=standard,
+                        school=school
+                    )
+
+                    # ✅ Fix: get or create ClassSection object
+                    class_section_obj, _ = ClassSection.objects.get_or_create(
+                        name=class_section,
+                        standard=standard_obj
+                    )
+
+                    # ✅ Create Teacher with objects (not strings)
+                    teacher = Teacher.objects.create(
+                        user=user,
+                        name=username,
+                        email=email,
+                        gender=gender,
+                        raw_password=password
+                    )
+
+                    # If subject is M2M too:
+                    subject_obj, _ = Subject.objects.get_or_create(standard=standard_obj,name=subject)
+                    teacher.subject.set([subject_obj])
+
+                    # Handle standard (also M2M)
+                    teacher.standard.set([standard_obj])
+
+                    teacher.standard_class.set([class_section_obj])
+
+
+                return redirect('teacher_data')
+                   
+    else:
+        form = FileUploadForm()              
+
+    context = {
+        'form':form
+    }
+    return render(request,"student/teacher_list.html",context)
 
 
 
@@ -380,89 +542,6 @@ def export_teachers_csv_toschooladmin(request):
             subject_str
         ])
     return response
-
-
-
-######################################################################## Uplod csv ##############################################################################################################
-import io 
-import PyPDF2
-from django.contrib.auth.models import User
-
-def upload_file_student_data(request):
-    if request.method == "POST":
-        form = FileUploadForm(request.POST,request.FILES)
-        if form.is_valid():
-            uploaded_file = request.FILES['file']  # ✅ CORRECT
-          
-            if uploaded_file.name.endswith('.csv'):
-                data_set = uploaded_file.read().decode('UTF-8')
-                io_string = io.StringIO(data_set)
-                next(io_string)
-                for row in csv.reader(io_string,delimiter=','):
-                    print(row)
-                    password = generate_password()
-                    username = row[0]
-                    email = row[1]
-                    gender = row[2]
-                    attendance = row[3]
-                    avg_pat_score = row[4]
-                    avg_sat_score = row[5]
-                    user = User.objects.create_user(username=username, email=email, password=password)
-                    
-                    student_group = Group.objects.get(name='Student')  
-                    user.groups.add(student_group)
-                    user.save()
-                
-                    student.objects.create(
-                        user= user,
-                        name = username,
-                        email = email,
-                        gender = gender,
-                        attendance = attendance,
-                        raw_password = password,
-                        avg_pat_score =avg_pat_score,
-                        avg_sat_score = avg_sat_score,
-                        performance_summary = predict_student_performance(
-                                    gender,
-                                    avg_sat_score,
-                                    avg_pat_score,
-                                    attendance
-                            )[:20]  # Optional truncate
-                    )
-
-            elif uploaded_file.name.endswith('.pdf'):
-                # pdf_data = uploaded_file.read()
-                # pdf_stream = io.BytesIO(pdf_data)
-                # reader = PyPDF2.PdfReader(pdf_stream)
-                reader = PyPDF2.PdfReader(uploaded_file)
-                print("Uploaded PDF: ", uploaded_file.name)
-                # print("Number of pages: ", len(reader.pages))
-                text = ""
-                print(reader)
-                
-                for page in reader.pages:
-                    text += page.extract_text()
-                    print(text)
-
-                for line in text.split("\n"):
-                    print(line)
-                    parts = line.split(",")
-
-                    if len(parts) == 3:
-                        try:
-                            student.objects.create(
-                                name = parts[0],
-                                email = parts[1],
-                                gender = parts[2]
-                            )
-                        except Exception as e:
-                            print('Skipping line due to error',e)
-
-        return redirect('student_data')
-
-    else:
-        form = FileUploadForm()
-    return render(request,'student/student_list.html',{'form':form})
 
 
 

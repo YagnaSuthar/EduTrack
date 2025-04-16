@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from datetime import datetime
 
 User = get_user_model()
-# Create your models here.
+
 
 class SchoolAdminProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -79,7 +79,7 @@ class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     teacher_id= models.AutoField(primary_key=True)
     # subject = models.CharField(max_length=10,choices=SUBJECT_CHOICES,default='Unknown')
-    subject = models.ManyToManyField(Subject)
+    subject = models.ManyToManyField(Subject,null=True,blank=True)
     standard = models.ManyToManyField(Standard)
     standard_class = models.ManyToManyField(ClassSection)
     # school = models.ForeignKey(School,on_delete=models.CASCADE)

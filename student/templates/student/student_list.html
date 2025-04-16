@@ -312,7 +312,7 @@ Students-list-{{ block.super }}
     </div>
 
         <a class="btn-student-data" href={% url 'export_students_csv' %}><button style="margin-top: 23px">Download CSV</button></a>
-        <form method="post" enctype="multipart/form-data" action="{% url 'upload_file' %}">
+        <form method="post" enctype="multipart/form-data" action="{% url 'upload_file_student_data' %}">
             {% csrf_token %}
             <p>Note : follow the column pattern otherwise data will not be upload Required fields:[name,email,gender,attendance] or you can(optional) [name,email,gender,attendance,avg_pat,avg_sat] </p>
             <p>otherwise you need to add marks manually for each student to get performance</p>
@@ -321,7 +321,7 @@ Students-list-{{ block.super }}
         </form>
         
         
-    </div>
+  
   
    
 </div>

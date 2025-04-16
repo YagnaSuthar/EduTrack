@@ -213,6 +213,26 @@ Students-list-{{ block.super }}
         transform: translateY(0);
     }
 }
+
+.back-to-list-btn{
+    margin:0px 5px;
+    background-color:red;
+    cursor:pointer;
+    padding:10px;
+    color:white;
+    border-radius:5px;
+    font-weight:bolder;
+    box-shadow: 2px 2px 2px rgb(41, 41, 41);
+}
+
+.search-to-specific-student{
+    background-color:rgb(61, 219, 21);
+    cursor:pointer;
+    padding:10px;
+    color:white;
+    border-radius:5px;
+    font-weight:bolder;
+    box-shadow: 2px 2px 2px rgb(41, 41, 41);
 </style>
 {% endblock style %}
 
@@ -228,8 +248,13 @@ Students-list-{{ block.super }}
     <div class="nav-studentbar1">
         
     <div class="student-search">
-        <i class="fas fa-search"></i>
-        <input type="text" id="search-bar" placeholder="Search Teacher...">
+        
+        <form class="search-student-form">
+            <i class="fas fa-search"></i>
+            <input type="text" name='q' id="search-bar" placeholder="Search Teacher...">
+            <button type='submit' class="search-to-specific-student" >Search</button>
+        </form>
+        <a href="{% url 'teacher_data'%}"><button class="back-to-list-btn">Back to all</button></a>
     </div>
     <div class="student-create-btn">
         <a class="btn-student-data" href={% url 'create_teacher' %}><button>Add Teacher</button></a>
@@ -285,6 +310,16 @@ Students-list-{{ block.super }}
         </table>
     </div>
         <a class="btn-student-data" href={% url 'export_teacher_csv' %}><button style="margin-top: 23px;">Download CSV</button></a>
+
+        <form method="post" enctype="multipart/form-data" action="{% url 'upload_file_teacher_data' %}">
+            {% csrf_token %}
+            <p>Note : follow the column pattern otherwise data will not be upload Required fields:name	email	gender	subject	standard	class_section 
+               </p>
+            <p>otherwise you need to add marks manually for each student to get performance</p>
+            <input type="file" name="file" required>
+            <button type="submit">Upload</button>
+        </form>
+        
     </div>
 </div>
 

@@ -56,7 +56,7 @@ class TeacherForm(forms.ModelForm):
     subject = forms.ModelMultipleChoiceField(
         queryset=Subject.objects.all(), 
         widget=forms.CheckboxSelectMultiple,
-        required=True
+        required=False
     )
 
     # standard = forms.ModelMultipleChoiceField(

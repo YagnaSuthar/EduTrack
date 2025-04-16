@@ -240,7 +240,7 @@ def teacher_delete(request,pk):
         user = teacher_obj.user
         teacher_obj.delete()
         user.delete()
-        return HttpResponse("Teacher Object deleted sucessfully !!")
+        return redirect('teacher_data')
     
     context = {
         'teacher':teacher_obj,
