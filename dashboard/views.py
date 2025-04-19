@@ -201,8 +201,8 @@ def TeacherList(request):
 
 
 # ############################################################################### AI - DRIVEN - CHATBOT ######################################################################################### 
-
-    
+@login_required
+@teacher_only   
 def teacherchatbot(request):
     if not request.user.is_authenticated:
         return redirect('home')
@@ -307,6 +307,7 @@ def student_suggessions(request,pk):
 
 ################################################################################### Upload Csv Functionality #############################################################################
 
+@login_required
 
 def upload_file_student_data(request):
     if request.method == "POST":
@@ -391,6 +392,7 @@ def upload_file_student_data(request):
 
 
 
+@login_required
 
 def upload_file_teacher_date(request):
     user = request.user
@@ -604,12 +606,16 @@ class CustomePasswordResetDoneView(PasswordResetDoneView):
 
 from student.models import SchoolAdminProfile
 from django.contrib import messages
+@login_required
+
 def pendingRequest(request):
     pending_requests = SchoolAdminProfile.objects.filter(approved = False)
     context = {
         'pending_requests':pending_requests,
     }
     return render(request,'Dashboard/Admin/pending_requests.html',context)
+
+@login_required
 
 def approveScAdmin(request, user_id):
     school_admin = SchoolAdminProfile.objects.get(user_id=user_id)
@@ -622,6 +628,7 @@ def approveScAdmin(request, user_id):
 ################################################################# school-admin classes and standards #################################################
 
 # creation-forms -> student -> views.py 
+@login_required
 
 def standard_class_list(request):
     # school = School.objects.get(principal = request.user)
@@ -646,6 +653,8 @@ def standard_class_list(request):
     }
     return render(request,'Dashboard/school_admin/standards_list.html',context)
 
+@login_required
+
 def createStandard(request):
     form = standardForm()
     if request.method == 'POST':
@@ -661,6 +670,8 @@ def createStandard(request):
         'is_schooladmin':is_schooladmin(request.user)
     }
     return render(request,'student/standard_create.html',context)
+
+@login_required
 
 def createClassToParticularStandard(request):
     form = classForm()
@@ -682,6 +693,7 @@ def createClassToParticularStandard(request):
 
 
 
+@login_required
 
 def add_school(request):
     form = SchoolForm()
@@ -701,6 +713,7 @@ def add_school(request):
     }
     return render(request,'student/school_create.html',context)
 
+@login_required
 
 def add_new_subject(request):
     form = SubjectForm()
@@ -725,6 +738,8 @@ def add_new_subject(request):
 
 
 ################################################## student marks subject wise views here  ############################################################
+
+@login_required
 
 def add_student_marks(request, student_id):
     student_obj = get_object_or_404(student, student_id=student_id)
@@ -773,6 +788,8 @@ def add_student_marks(request, student_id):
         'subjects': subjects
     })
 
+
+@login_required
 
 
 def edit_student_marks(request, pk):
@@ -878,6 +895,7 @@ def get_subject_suggestion(request):
 
 
 # ####################################################################### chat platform ########################################################################
+@login_required
 
 def message_view(request,pk):
 
@@ -907,6 +925,7 @@ def message_view(request,pk):
     }
     return render(request,'chat/message.html',context)
 
+@login_required
 
 def room_create(request):
     
@@ -935,6 +954,7 @@ def room_create(request):
 
 
 
+@login_required
 
 def deleteStandard(request,pk):
     user = request.user
@@ -953,6 +973,7 @@ def deleteStandard(request,pk):
 
 ########################################################################## Personalize teacher's suject wise suggestion to the student ####################################################3
 
+@login_required
 
 def personalize_suggestion_from_teacher(request,pk):
     form = StudentSuggestionForm()
