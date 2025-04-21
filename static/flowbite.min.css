@@ -1,4 +1,4 @@
-/* ! tailwindcss v4.0.0-beta.10 | MIT License | https://tailwindcss.com */
+
 @layer theme {
     :root {
         --font-sans: "Inter", "ui-sans-serif", "system-ui", "-apple-system", "system-ui", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "Noto Sans", "sans-serif", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -395,7 +395,6 @@
     :host {
         -webkit-text-size-adjust: 100%;
         tab-size: 4;
-        line-height: 1.5;
         font-family: var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");
         font-feature-settings: var(--default-font-feature-settings, normal);
         font-variation-settings: var(--default-font-variation-settings, normal);

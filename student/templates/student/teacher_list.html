@@ -13,18 +13,55 @@ Students-list-{{ block.super }}
 }
 
 .chat-header {
-    background: linear-gradient(90deg,#0047B2,#286bcf,#5e8acc);
+    background: linear-gradient(90deg, #0047B2, #286bcf, #5e8acc);
     color: white;
     padding: 15px;
     text-align: center;
-    /* box-shadow: 0 2px 5px rgba(0,0,0,0.1); */
     font-weight: bold;
     font-size: 1.8em;
+    position: fixed;
+    width: 90%;
+    z-index: 1000;
+    box-shadow:0px 5px 15px 2px rgb(255, 255, 255),
+               0px 10px 30px 5px rgba(255, 255, 255, 0.815),
+               0px 15px 45px 10px rgba(255, 255, 255, 0.733),
+               0px 20px 60px 15px rgba(255, 255, 255, 0);
+    clip-path: inset(0 0 -60px 0);
 }
+
+.chat-header-fake {
+    color: white;
+    padding: 15px;
+    text-align: center;
+    /* box-shadow: 0 0 60px 5px rgba(0,0,0,0.1); */
+    font-weight: bold;
+    font-size: 1.8em;
+    width: 100%;
+    height: 74px;
+}
+
+.mainpart_teacher{
+    padding: 20px;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+}
+
+.animated-nav{
+    width: 100%;
+    overflow-x: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-color: #dddddd2d;
+}
+
 .nav-studentbar1{
     display: flex;
     justify-content: space-between;
     width: 100%;
+    animation: in-out 2s ease forwards;
 }
 
 
@@ -43,27 +80,64 @@ Students-list-{{ block.super }}
 }
 
 .student-search {
-    text-align: center;
     margin-bottom: 20px;
     display: flex;
     align-items: center;
     padding: 7px;
     padding-left: 10px;
-    width: 30%;
-    border:rgba(255, 255, 255, 0); /* Soft white border */
+    width: 500px;
+    border:rgba(255, 255, 255, 0);
     border-radius: 18px;
-    background: rgba(255, 255, 255, 0.2); /* Transparent glass effect */
-    backdrop-filter: blur(10px); /* Frosted glass effect */
+    background: rgba(255, 255, 255, 0);
     box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1) ;
     height: 40px;
     margin-top: 15px;
     margin-left: 10px;
 }
 
+.search-student-form-1
+{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.after_part_of_search
+{
+    padding: 8px 12px;
+}
+
+.after_part_of_search hr
+{
+    width: 24px;
+    transform: rotate(90deg);
+    transform-origin: left;
+    color: #0047B2;
+    position: relative;
+    z-index: 1;
+}
+
+.after_part_of_search button
+{
+    margin-left: 11px;
+    color: #0047b2a1;
+    cursor: pointer;
+}
+
+@keyframes in-out{
+    from{
+        opacity: 0;
+        transform:translateX(-500px);
+    }
+    to{
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
 .student-search input {
     padding: 7px;
     padding-left: 10px;
-    width: 50%;
     border:rgba(255, 255, 255, 0); 
     border-radius: 15px;
     background: rgba(255, 255, 255, 0.2); 
@@ -89,17 +163,18 @@ Students-list-{{ block.super }}
   padding: 8px 12px;
   border-radius: 4px;
   transition: none; 
+  margin-top: 10px;
 }
 
 #search-bar:focus {
   outline: none;
-  border-color: #ccc;    /* keeps the same border color */
-  box-shadow: none;      /* removes the blue glow in Chrome/Edge */
+  border-color: #ccc;
+  box-shadow: none;
 }
 
 .styled-line {
-    border: 1px solid #d8d8d8; /* Black border */
-    width: 100%;             /* 80% width of the container */
+    border: 1px solid #d8d8d8;
+    width: 100%;
     margin-bottom: 30px;
 }    
 
@@ -110,27 +185,36 @@ Students-list-{{ block.super }}
     align-items: center;
     flex-direction: column;
     height: auto;
-    padding: 20px;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeIn 1.5s ease forwards;
+    width: 100%;
 }
 
 .student-table-container {
     width: 100%;
-    overflow-x: auto;
+    overflow-x: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
     border-color: #dddddd2d;
 }
 
+@keyframes Right-left{
+    from{
+        opacity: 0;
+        transform: translateX(500px);
+    }
+    to{
+        opacity: 1;
+        transform: translateX(0px);
+    }
+}
+
 .student-main-table {
     width: 100%;
-    border-collapse: separate; /* Important for applying border-radius */
-    border-spacing: 0; /* Ensures borders are adjacent */
-    border-radius: 10px; /* Apply border-radius to the entire table */
-    overflow: hidden; /* Ensures the corners of the table are clipped */
+    border-collapse: separate; 
+    border-spacing: 0; 
+    border-radius: 10px;
+    overflow: hidden;
+    animation: Right-left 2s ease forwards;
 }
 
 .student-main-table th, .student-main-table td {
@@ -153,7 +237,7 @@ Students-list-{{ block.super }}
     color: #001570;
     background:#e9e9e9;
     font-weight:lighter;
-    padding: 11px 20px 11px 20px;/* Order: TOP RIGHT BOTTOM LEFT */
+    padding: 11px 20px 11px 20px;
     margin: 10px;
     box-shadow: 1px 2px 1px rgba(0, 0, 0, 0.15);
 }
@@ -161,31 +245,28 @@ Students-list-{{ block.super }}
 .btn-student-data button:hover {
     color: rgb(255, 255, 255);
     background: #0047B2;
-    transform: scale(1.05); /* Slight zoom effect */
+    transform: scale(1.05);
     transition: all 0.3s ease-in-out;
     cursor: pointer;
 }
 
 .btn-student-data button:not(:hover) {
-    transition: all ease-in-out 0.3s; /* Adds a delay before shrinking */
+    transition: all ease-in-out 0.3s;
 }
-
 .student-main-table th, .student-main-table td {
     padding: 10px 8px 10px 8px;
     text-align: left;
     white-space: nowrap;
-    border-left: none; /* Remove left vertical border */
-    border-right: none; /* Remove right vertical border */
-    border-top: 1px solid #ddd; /* Ensure top border exists for all rows */
+    border-left: none; 
+    border-right: none; 
+    border-top: 1px solid #ddd; 
 }
-
 .student-main-table tr {
-    border-bottom: 1px solid #ddd; /* Add horizontal borders between rows */
+    border-bottom: 1px solid #ddd; 
 }
 
-/* Add a bottom border for the last row to avoid any difference */
 .student-main-table tr:last-child td {
-    border-bottom: 2px solid #ddddddd8; /* Ensure the last row has a bottom border */
+    border-bottom: 2px solid #ddddddd8;
 }
 
 
@@ -233,7 +314,182 @@ Students-list-{{ block.super }}
     border-radius:5px;
     font-weight:bolder;
     box-shadow: 2px 2px 2px rgb(41, 41, 41);
+}
+
+.burrbutton {
+    opacity: 0;
+    transform: scale(0);
+    transition: all 1s ease-out;
+    margin-bottom: 20px;
+}
+
+.burrbutton.animate {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.burrbutton1 {
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 1s ease-in;
+    margin-bottom: 30px;
+}
+
+.burrbutton1.animate {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.burrbutton1 form {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    max-width: 600px;
+    margin: 30px auto;
+}
+
+.burrbutton1 form p {
+    font-size: 0.95rem;
+    color: #000000de;
+    margin-bottom: 10px;
+    line-height: 1.5;
+    font-weight: 400;
+    
+}
+
+.burrbutton1 form input[type="file"] {
+    display: block;
+    width: 100%;
+    margin: 15px 0;
+    padding: 10px;
+    background-color: #f0f4ff;
+    border: 1px solid #c0cbe0;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: border 0.3s ease;
+}
+
+
+.burrbutton1 form button[type="submit"] {
+    border:rgba(0, 0, 0, 0);
+    border-radius: 15px;
+    color: #001570;
+    background:#e9e9e9;
+    font-weight:lighter;
+    padding: 11px 20px 11px 20px;
+    margin: 10px;
+    box-shadow: 1px 2px 1px rgba(0, 0, 0, 0.15);
+}
+
+.burrbutton1 form button[type="submit"]:hover {
+    color: rgb(255, 255, 255);
+    background: #0047B2;
+    transform: scale(1.05);
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.burrbutton1 form button[type="submit"]:not(:hover)
+{
+    transition: all ease-in-out 0.3s;
+}
+
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    display: inline-block;
+    /* background-color: #0047b2;*/
+    color: #0047b2e5;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+    border: none;
+    width: 78%;
+}
+
+
+/* input[type="file"] {
+    display: none;
+} 
+#file-name {
+    margin-left: 15px;
+    font-size: 0.95rem;
+    color: #0047B2;
+} 
+
+input[type="button"], 
+input[type="submit"], 
+input[type="reset"] {
+    background-color: #0047B2;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+} */
+
+.custom-file-input::-webkit-file-upload-button {
+  visibility: hidden;
+}
+.custom-file-input::before {
+  content: 'Select some files';
+  display: inline-block;
+  background: linear-gradient(top, #ffffff, #ffffff);
+  border: 1px solid #99999900;
+  border-radius: 3px;
+  padding: 5px 8px;
+  outline: none;
+  white-space: nowrap;
+  user-select: none;
+  cursor: pointer;
+  text-shadow: 1px 1px #fff;
+  font-weight: 700;
+  font-size: 10pt;
+}
+.custom-file-input:hover::before {
+  border-color: rgba(255, 255, 255, 0);
+}
+.custom-file-input:active::before {
+  background: #0047b200;
+}
+
+
+
+.btn-student-data-1 button {
+    border:rgba(0, 0, 0, 0);
+    border-radius: 15px;
+    color: #001570;
+    background:#e9e9e9;
+    font-weight:lighter;
+    padding: 11px 20px 11px 20px;
+    margin: 10px;
+    box-shadow: 1px 2px 1px rgba(0, 0, 0, 0.15);
+}
+
+.btn-student-data-1 button:hover {
+    color: rgb(255, 255, 255);
+    background: #0047B2;
+    transform: scale(1.05);
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.btn-student-data-1 button:not(:hover) {
+    transition: all ease-in-out 0.3s;
+}
+
 </style>
+
+
+
 {% endblock style %}
 
 {% block content %}
@@ -243,85 +499,149 @@ Students-list-{{ block.super }}
     <div class="chat-header">
         <h2>Teacher List</h2>
     </div>
-    <div class="student-data">
-    
-    <div class="nav-studentbar1">
-        
-    <div class="student-search">
-        
-        <form class="search-student-form">
-            <i class="fas fa-search"></i>
-            <input type="text" name='q' id="search-bar" placeholder="Search Teacher...">
-            <button type='submit' class="search-to-specific-student" >Search</button>
-        </form>
-        <a href="{% url 'teacher_data'%}"><button class="back-to-list-btn">Back to all</button></a>
-    </div>
-    <div class="student-create-btn">
-        <a class="btn-student-data" href={% url 'create_teacher' %}><button>Add Teacher</button></a>
-    </div> 
-</div>
 
-<hr class="styled-line">
-    
-    <div class="student-table-container">
-        <table class="student-main-table">
-            <thead style="background: linear-gradient(90deg,#0047B2,#286bcf,#5e8acc); font-weight: bold;">
-                <tr>
-                    <th>Teacher Name</th>
-                    <th>Subject</th>
-                    <th>Gender</th>
+    <div class="chat-header-fake">
+    </div>
+    <div class="mainpart_teacher">    
+        <div class="student-data">
+        
+        <div class="animated-nav">
+            <div class="nav-studentbar1">
+                <div class="student-search">
+                    <form class="search-student-form-1">
+            
+                <div class="secondpart">
+                    <input type="text" name="q" id="search-bar" placeholder="Search students...">
+                </div>
+            
+                <div class="after_part_of_search">
+                <hr>
+
+                <button type='submit' >
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            
+        </form>
+                </div>
+
+                <div class="student-create-btn">
+                    <a class="btn-student-data" href="{% url 'teacher_data'%}"><button>Back to all</button></a>
+                    <a class="btn-student-data" href={% url 'create_teacher' %}><button>Add Teacher</button></a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <hr class="styled-line">
+        
+        <div class="student-table-container">
+            <table class="student-main-table">
+                <thead style="background: linear-gradient(90deg,#0047B2,#286bcf,#5e8acc); font-weight: bold;">
+                    <tr>
+                        <th>Teacher Name</th>
+                        <th>Subject</th>
+                        <th>Gender</th>
+                        
+                        <th>Email</th>
+                        <th>Edit</th>
+                        <th>delete</th>
+                        {% comment %} <th>Attendance</th> {% endcomment %}
+                        {% comment %} <th>Performance</th> {% endcomment %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for teacher in teachers %}
+                    <tr>
+                        <td>{{ teacher.name }}</td>
+                        {% comment %} <td>{{ teacher.subject }}</td> {% endcomment %}
+                        <td>
+                            {% if teacher.subject.all %}
+                                {% for subject in teacher.subject.all %}
+                                    {{ subject }} {% if not forloop.last %}, {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                No subjects assigned
+                            {% endif %}
+                        </td>
+
+                        <td>{{ teacher.gender }}</td>
+                        <td>{{ teacher.email }}</td>
+                        <td>
+                            {% if is_schooladmin %}
+                            <a href="{% url 'teacher_edit' teacher.teacher_id %}" style="color: #0047B2;"onmouseover="this.style.color='#001570';" onmouseout="this.style.color='#0047B2';">Edit</a>
+
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'teacher_delete' teacher.teacher_id%}" style="color: #0047B2;"onmouseover="this.style.color='#001570';" onmouseout="this.style.color='#0047B2';">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+            <div class="burrbutton">
+                <a class="btn-student-data-1" href={% url 'export_teacher_csv' %}><button style="margin-top: 23px">Download CSV</button></a>
+            </div>
+
+            <div class="burrbutton1">
+                <form method="post" enctype="multipart/form-data" action="{% url 'upload_file_teacher_data' %}">
+                    {% csrf_token %}
+                    <p>Note: follow the column pattern otherwise data will not be upload Required fields:[name,email,gender,attendance] or you can(optional) [name,email,gender,attendance,avg_pat,avg_sat]</p>
+                    <p>otherwise you need to add marks manually for each student to get performance</p>
                     
-                    <th>Email</th>
-                    <th>Edit</th>
-                    <th>delete</th>
-                    {% comment %} <th>Attendance</th> {% endcomment %}
-                    {% comment %} <th>Performance</th> {% endcomment %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for teacher in teachers %}
-                <tr>
-                    <td>{{ teacher.name }}</td>
-                    {% comment %} <td>{{ teacher.subject }}</td> {% endcomment %}
-                    <td>
-                        {% if teacher.subject.all %}
-                            {% for subject in teacher.subject.all %}
-                                {{ subject }} {% if not forloop.last %}, {% endif %}
-                            {% endfor %}
-                        {% else %}
-                            No subjects assigned
-                        {% endif %}
-                    </td>
-
-                    <td>{{ teacher.gender }}</td>
-                    <td>{{ teacher.email }}</td>
-                    <td>
-                        {% if is_schooladmin %}
-                        <a href="{% url 'teacher_edit' teacher.teacher_id %}" style="color: #0047B2;"onmouseover="this.style.color='#001570';" onmouseout="this.style.color='#0047B2';">Edit</a>
-
-                        {% endif %}
-                    </td>
-                    <td>
-                        <a href="{% url 'teacher_delete' teacher.teacher_id%}" style="color: #0047B2;"onmouseover="this.style.color='#001570';" onmouseout="this.style.color='#0047B2';">Delete</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                    <label class="custom-file-upload">
+                        <input class="custom-file-input" type="file">
+                    </label>
+                
+                    <button type="submit">Upload</button>
+                </form>
+                
+            </div>
     </div>
-        <a class="btn-student-data" href={% url 'export_teacher_csv' %}><button style="margin-top: 23px;">Download CSV</button></a>
 
-        <form method="post" enctype="multipart/form-data" action="{% url 'upload_file_teacher_data' %}">
-            {% csrf_token %}
-            <p>Note : follow the column pattern otherwise data will not be upload Required fields:name	email	gender	subject	standard	class_section 
-               </p>
-            <p>otherwise you need to add marks manually for each student to get performance</p>
-            <input type="file" name="file" required>
-            <button type="submit">Upload</button>
-        </form>
-        
-    </div>
 </div>
+
+<script>
+
+
+const burrButtons = document.querySelectorAll('.burrbutton');
+const burrButtons1 = document.querySelectorAll('.burrbutton1');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('animate');
+
+      setTimeout(() => {
+        burrButtons1.forEach((button, index) => {
+          setTimeout(() => {
+            button.classList.add('animate');
+          }, index * 300);
+        });
+      }, 500);
+
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+burrButtons.forEach(button => observer.observe(button));
+
+
+    const fileInput = document.querySelector('input[type="file"]');
+    const fileNameDisplay = document.getElementById('file-name');
+
+    fileInput.addEventListener('change', function () {
+        if (this.files.length > 0) {
+            fileNameDisplay.textContent = this.files[0].name;
+        } else {
+            fileNameDisplay.textContent = "No file Choose";
+        }
+    });
+</script>
 
 {% endblock content %}
 

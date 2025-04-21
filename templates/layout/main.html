@@ -5,16 +5,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}EduTrack{% endblock title %}</title>
+    <link rel="icon" type="image/png" href="{% static 'images/Logo.png' %}">
     {% include "base/css.html" %}
  
   </head>
 
   <body>
     {% include "nav/navbar.html" %}
-    {% comment %} {% include "base/messages.html" %} {% endcomment %}
-    {% comment %} {% include "layout/hero.html" %} {% endcomment %}
-    {% comment %} {% include "layout/features.html" %} {% endcomment %}
-    {% comment %} {% include "layout/social_proof.html" %} {% endcomment %}
+    {% comment %} {% include "base/messages.html" %}
+    {% include "layout/hero.html" %}
+    {% include "layout/features.html" %}
+    {% include "layout/social_proof.html" %} {% endcomment %}
     {% include "layout/homelandingpage.html" %}
 
 

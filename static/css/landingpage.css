@@ -4,17 +4,18 @@ nav {
     width: 100%;
     z-index: 1000;
     background-color: #001e498f;
+    overflow: hidden;
 }
 
 .background-nav {
-    font-weight: 500; /* Equivalent to font-medium */
-    display: flex; /* Equivalent to flex */
-    flex-direction: column; /* Equivalent to flex-col */
-    padding: 16px; /* Equivalent to p-4 */
-    margin-top: 16px; /* Equivalent to mt-4 */
-    border: 1px solid #001e4900; /* Equivalent to border border-gray-100 */
-    border-radius: 8px; /* Equivalent to rounded-lg */
-    background-color: #001e4900; /* Equivalent to bg-gray-50 */
+    font-weight: 500; 
+    display: flex;
+    flex-direction: column; 
+    padding: 16px; 
+    margin-top: 16px; 
+    border: 1px solid #001e4900; 
+    border-radius: 8px;
+    background-color: #001e4900;
 }
 
 body {
@@ -94,7 +95,6 @@ body {
 .btn:hover {   
     color: #000a1f;    
     background: linear-gradient(45deg,#D0ECF880, #B9E4F680, #BCDCE980, #BDDFEC80, #B7EBF380, #ABF1FA80, #90E0F880, #6CDAF980, #49D5F080, #0CCCE680);
-  /* <<< dark color text on hover */
     transform: translateY(-2px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
     border-color: #000a1f00;
@@ -131,6 +131,7 @@ body {
     margin-bottom: 50px;
 }
 .sub-cards {
+    color: #aee8fad7;
     background: linear-gradient(45deg,#1122a200,#0b2fd0dc);
     padding: 20px;
     text-align: center;
@@ -149,7 +150,35 @@ body {
     background: linear-gradient(210deg,#1a2a6c,#9c33d9);
     color: #ffffff89;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    transform: translateY(-3px) !important;
+    /* transform: translateY(-10px) !important; */
+    animation: card-6 1s ease forwards;
+}
+
+@keyframes card-6{
+    from{
+        opacity: 1;
+        transform: translateY(0px);
+        
+    }
+    to{
+        opacity: 1;
+        transform: translateY(-10px);
+    }
+}
+
+.sub-cards:not(:hover){
+    animation: card-2 1s ease forwards;
+}
+
+@keyframes card-2{
+    from{
+        opacity: 1;
+        transform: translateY(-10px);
+    }
+    to{
+        opacity: 1;
+        transform: translateY(0px);
+    }
 }
 
 .front
@@ -278,7 +307,6 @@ body {
     }
 }
 
-/* Footer styles */
 .footer {
     width: 100%;
     background: linear-gradient(135deg, #121e35, #1e3a5f, #2a305f);

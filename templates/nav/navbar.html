@@ -1,47 +1,231 @@
 {% load static %}
 
-<nav class="bg-white border-gray-200 dark:bg-gray-900 ">
-  <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-    <a href= "" class="flex items-center space-x-3 rtl:space-x-reverse">
-    
-      <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-        <i class="fas fa-graduation-cap"></i> EduTrack
-    </span>
-    
-    </a>
-    <button data-collapse-toggle="navbar-default" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-default" aria-expanded="false">
-        <span class="sr-only">Open main menu</span>
-        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
-        </svg>
-    </button>
-    <div class="hidden w-full md:block md:w-auto" id="navbar-default">
-      
+<style>
+  .nav-container {
+    background-color: white;
+    /*border-bottom: 1px solid #e5e7eb;*/
+  }
 
-    <ul class="background-nav">
-    <li>
-      <a href="#" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-white-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Home</a>
-    </li>
-    <li>
-      <a href="#" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-white-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Services</a>
-      </li>
-      <li>
-        <a href="#" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-white-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Pricing</a>
+  .dark-mode {
+    background-color: #0202026e;
+  }
+
+  .nav-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .nav-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    white-space: nowrap;
+    color: #111827;
+  }
+
+  .dark-mode .nav-title {
+    color: #ffffff;
+  }
+
+  .menu-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 0.875rem;
+    color: #6b7280;
+    border-radius: 0.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .menu-button:hover {
+    background-color: #f3f4f6;
+  }
+
+  .menu-button:focus {
+    outline: 2px solid #e5e7eb;
+  }
+
+  .dark-mode .menu-button {
+    color: #9ca3af;
+  }
+
+  .dark-mode .menu-button:hover {
+    background-color: #374151;
+  }
+
+  .nav-links {
+    display: none; /* hidden by default on mobile */
+    flex-direction: column;
+    gap: 1rem;
+    list-style: none;
+    margin: 1rem 0 0 0;
+    padding: 0;
+  }
+
+
+  
+  .nav-links hr
+  {
+    width: 0%;
+    color: #ffffffe5;
+  }
+
+  .nav-links hr:hover
+  {
+    width: 100%;
+    color: #ffffffe5;
+  }
+
+  .nav-link-item a {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    color: #111827;
+    border-radius: 0.375rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .nav-link-item a:hover {
+    background-color: #ffffff;
+    color: #1d4ed8;
+  }
+
+  .dark-mode .nav-link-item a {
+    color: #ffffff;
+  }
+
+  .dark-mode .nav-link-item a:hover {
+    background-color: #37415100;
+    color: #3b82f6;
+  }
+
+  .icon-small {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  /* Desktop view */
+  @media (min-width: 768px) {
+    .nav-links {
+      display: flex !important;
+      flex-direction: row;
+      margin: 0;
+    }
+    .menu-button {
+      display: none; /* hide hamburger on desktop */
+    }
+
+
+    .nav-link-item a {
+    position: relative;
+    display: inline-block;
+    padding: 0.5rem 0.75rem;
+    color: #ffffff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .nav-link-item a::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background-color: #ffffff;
+    transition: all 0.4s ease;
+    transform: translateX(-50%);
+    transform-origin: center;
+  }
+
+  .nav-link-item a:hover::after {
+    width: 70%;
+  }
+
+  .nav-link-item a:hover {
+    color: #ffffff;
+  }
+
+
+@media (min-width: 768px) {
+  .nav-link-item a {
+    position: relative;
+    display: inline-block;
+    padding: 0.5rem 0.75rem;
+    color: #ffffff !important; /* <== fixed */
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+}
+
+
+
+
+  }
+</style>
+
+<nav class="nav-container dark-mode">
+  <div class="nav-inner">
+    <a href="" class="nav-logo">
+      <span class="nav-title">
+        <i class="fas fa-graduation-cap"></i> EduTrack
+      </span>
+    </a>
+    <button id="menu-toggle" type="button" class="menu-button" aria-controls="navbar-default" aria-expanded="false">
+      <span class="sr-only">Open main menu</span>
+      <svg class="icon-small" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
+      </svg>
+    </button>
+    <div id="navbar-default" class="nav-links">
+      <ul class="nav-links">
+        <li class="nav-link-item">
+          <a href="#">Home</a>
+        </li>
+        <li class="nav-link-item">
+          <a href="#">Services</a>
+        </li>
+        <li class="nav-link-item">
+          <a href="#">Pricing</a>
         </li>
         {% if request.user.is_authenticated %}
-        <li>
-          <a href="{% url 'account_logout'%}" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Logout</a>
-          </li>
-          {% else %}
-        <li>
-          <a href="{% url 'account_login'%}" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-white-700 md:p-0 dark:text-white md:dark:hover:text-white-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Login</a>
-          </li>
-          <li>
-            <a href="{% url 'register_school_admin'%}" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-white-700 md:p-0 dark:text-white md:dark:hover:text-white-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Sign&nbsp;up</a>
-          </li>
-          {% endif %}
-  </ul>
-
+        <li class="nav-link-item">
+          <a href="{% url 'account_logout'%}">Logout</a>
+        </li>
+        {% else %}
+        <li class="nav-link-item">
+          <a href="{% url 'account_login'%}">Login</a>
+        </li>
+        <li class="nav-link-item">
+          <a href="{% url 'register_school_admin'%}">Sign&nbsp;up</a>
+        </li>
+        {% endif %}
+      </ul>
     </div>
   </div>
 </nav>
+
+<script>
+  const menuToggle = document.getElementById('menu-toggle');
+  const navbarDefault = document.getElementById('navbar-default');
+
+  menuToggle.addEventListener('click', () => {
+    navbarDefault.classList.toggle('block');
+    navbarDefault.classList.toggle('hidden');
+  });
+</script>

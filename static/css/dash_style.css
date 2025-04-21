@@ -41,7 +41,7 @@
     position: fixed;
     left:0;
     top:0;
-    height: 100vh;
+    height: 100%;
     transition: left 1s ease-in-out;
 }
 
@@ -78,9 +78,7 @@
 
 .nav-links li a:hover,
 .nav-links li.active a {
-    background: linear-gradient(90deg, #e6f0ff5c, #0047B2);
-
-    
+    background: linear-gradient(90deg, #e6f0ff5c, #0047B2);  
 }
 
 .nav-links li a i {
