@@ -6,9 +6,16 @@
     {% trans "Sign In" %}
 {% endblock head_title %}
 
+{% block extra_head %}
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap" rel="stylesheet">
+{% endblock extra_head %}
+
 {% block style %}
 <style>
-    @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+    /* @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
 
     * {
         box-sizing: border-box;
@@ -113,7 +120,7 @@
         max-width: 100%;
         min-height: 480px;
         margin: 0 16px;
-        z-index: 2; /* Increased z-index to ensure it's above particles */
+        z-index: 2; 
     }
     
     .form-container {
@@ -245,17 +252,17 @@
         width: 40px;
     }
     
-    /* Mobile toggle button - only visible on mobile */
+    /* Mobile toggle button - only visible on mobile 
     .mobile-toggle {
         display: none;
         margin: 10px auto;
         width: 80%;
         max-width: 280px;
         position: relative;
-        z-index: 2; /* Added z-index to appear above particles */
+        z-index: 2; 
     }
     
-    /* Mobile responsiveness */
+    /* Mobile responsiveness 
     @media (max-width: 768px) {
         .container {
             min-height: 580px;
@@ -277,7 +284,7 @@
             display: block;
         }
         
-        /* Show sign-up form in mobile when active */
+        /* Show sign-up form in mobile when active 
         .container.mobile-right-panel-active .sign-in-container {
             transform: translateX(-100%);
             opacity: 0;
@@ -528,6 +535,349 @@
             opacity: 0;
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      /* devanagari */
+      @font-face {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 200;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/poppins/v23/pxiByp8kv8JHgFVrLFj_Z11lFc-K.woff2) format('woff2');
+        unicode-range: U+0900-097F, U+1CD0-1CF9, U+200C-200D, U+20A8, U+20B9, U+20F0, U+25CC, U+A830-A839, U+A8E0-A8FF, U+11B00-11B09;
+      }
+      /* latin-ext */
+      @font-face {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 200;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/poppins/v23/pxiByp8kv8JHgFVrLFj_Z1JlFc-K.woff2) format('woff2');
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      /* latin */
+      @font-face {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 200;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/poppins/v23/pxiByp8kv8JHgFVrLFj_Z1xlFQ.woff2) format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      /* devanagari */
+      @font-face {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 300;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/poppins/v23/pxiByp8kv8JHgFVrLDz8Z11lFc-K.woff2) format('woff2');
+        unicode-range: U+0900-097F, U+1CD0-1CF9, U+200C-200D, U+20A8, U+20B9, U+20F0, U+25CC, U+A830-A839, U+A8E0-A8FF, U+11B00-11B09;
+      }
+      /* latin-ext */
+      @font-face {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 300;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/poppins/v23/pxiByp8kv8JHgFVrLDz8Z1JlFc-K.woff2) format('woff2');
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      /* latin */
+      @font-face {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 300;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/poppins/v23/pxiByp8kv8JHgFVrLDz8Z1xlFQ.woff2) format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      /* devanagari */
+      @font-face {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/poppins/v23/pxiEyp8kv8JHgFVrJJbecmNE.woff2) format('woff2');
+        unicode-range: U+0900-097F, U+1CD0-1CF9, U+200C-200D, U+20A8, U+20B9, U+20F0, U+25CC, U+A830-A839, U+A8E0-A8FF, U+11B00-11B09;
+      }
+      /* latin-ext */
+      @font-face {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/poppins/v23/pxiEyp8kv8JHgFVrJJnecmNE.woff2) format('woff2');
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      /* latin */
+      @font-face {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/poppins/v23/pxiEyp8kv8JHgFVrJJfecg.woff2) format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      /* devanagari */
+      @font-face {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 500;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/poppins/v23/pxiByp8kv8JHgFVrLGT9Z11lFc-K.woff2) format('woff2');
+        unicode-range: U+0900-097F, U+1CD0-1CF9, U+200C-200D, U+20A8, U+20B9, U+20F0, U+25CC, U+A830-A839, U+A8E0-A8FF, U+11B00-11B09;
+      }
+      /* latin-ext */
+      @font-face {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 500;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/poppins/v23/pxiByp8kv8JHgFVrLGT9Z1JlFc-K.woff2) format('woff2');
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      /* latin */
+      @font-face {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 500;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/poppins/v23/pxiByp8kv8JHgFVrLGT9Z1xlFQ.woff2) format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      /* devanagari */
+      @font-face {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 600;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/poppins/v23/pxiByp8kv8JHgFVrLEj6Z11lFc-K.woff2) format('woff2');
+        unicode-range: U+0900-097F, U+1CD0-1CF9, U+200C-200D, U+20A8, U+20B9, U+20F0, U+25CC, U+A830-A839, U+A8E0-A8FF, U+11B00-11B09;
+      }
+      /* latin-ext */
+      @font-face {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 600;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/poppins/v23/pxiByp8kv8JHgFVrLEj6Z1JlFc-K.woff2) format('woff2');
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      /* latin */
+      @font-face {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 600;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/poppins/v23/pxiByp8kv8JHgFVrLEj6Z1xlFQ.woff2) format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      /* devanagari */
+      @font-face {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 700;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/poppins/v23/pxiByp8kv8JHgFVrLCz7Z11lFc-K.woff2) format('woff2');
+        unicode-range: U+0900-097F, U+1CD0-1CF9, U+200C-200D, U+20A8, U+20B9, U+20F0, U+25CC, U+A830-A839, U+A8E0-A8FF, U+11B00-11B09;
+      }
+      /* latin-ext */
+      @font-face {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 700;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/poppins/v23/pxiByp8kv8JHgFVrLCz7Z1JlFc-K.woff2) format('woff2');
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      /* latin */
+      @font-face {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 700;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/poppins/v23/pxiByp8kv8JHgFVrLCz7Z1xlFQ.woff2) format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      /* devanagari */
+      @font-face {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 800;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/poppins/v23/pxiByp8kv8JHgFVrLDD4Z11lFc-K.woff2) format('woff2');
+        unicode-range: U+0900-097F, U+1CD0-1CF9, U+200C-200D, U+20A8, U+20B9, U+20F0, U+25CC, U+A830-A839, U+A8E0-A8FF, U+11B00-11B09;
+      }
+      /* latin-ext */
+      @font-face {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 800;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/poppins/v23/pxiByp8kv8JHgFVrLDD4Z1JlFc-K.woff2) format('woff2');
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      /* latin */
+      @font-face {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 800;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/poppins/v23/pxiByp8kv8JHgFVrLDD4Z1xlFQ.woff2) format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      /* devanagari */
+      @font-face {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 900;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/poppins/v23/pxiByp8kv8JHgFVrLBT5Z11lFc-K.woff2) format('woff2');
+        unicode-range: U+0900-097F, U+1CD0-1CF9, U+200C-200D, U+20A8, U+20B9, U+20F0, U+25CC, U+A830-A839, U+A8E0-A8FF, U+11B00-11B09;
+      }
+      /* latin-ext */
+      @font-face {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 900;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/poppins/v23/pxiByp8kv8JHgFVrLBT5Z1JlFc-K.woff2) format('woff2');
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      /* latin */
+      @font-face {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 900;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/poppins/v23/pxiByp8kv8JHgFVrLBT5Z1xlFQ.woff2) format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+
+      * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .neumorphic-card {
+            background-color: #e0e0e0ce;
+            width: 400px;
+            height: auto;
+            margin: 1rem;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow:
+                10px 10px 22px rgba(196, 196, 196, 0.295),
+                5px 5px 15px rgba(148, 148, 148, 0.288);
+        }
+
+        .neumorphic-card__header {
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            font-weight: 500;
+            text-align: center;
+            font-family: cursive;
+            color: #1a2a6e;
+        }
+
+        .neumorphic-card__header-1 {
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            font-weight: 500;
+            text-align: center;
+            font-family: 'Satisfy', cursive;
+            color: #0c0c88;
+        }
+
+        .neumorphic-form {
+            margin: 2rem 0;
+        }
+
+        .neumorphic-input-wrapper {
+            width: 100%;
+            margin-bottom: 0.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .neumorphic-input-wrapper label {
+            font-size: 0.9rem;
+            font-weight: 400;
+            margin-left: 0.8rem;
+        }
+
+        .neumorphic-input-wrapper input {
+            border: none;
+            outline: none;
+            background: none;
+            background-color: #e0e0e000;
+            padding: 0.8rem 1.1rem;
+            border-radius: 20px;
+            margin: 0.5rem 0 1rem 0;
+            font-size: 1.2rem;
+            color: #0dafeb;;
+            box-shadow:
+                inset 5px 5px 11px rgba(0, 0, 0, 0.2),
+                inset -5px -5px 11px rgba(255, 255, 255, 0.75);
+        }
+
+        .neumorphic-form button {
+            border: none;
+            outline: none;
+            background: none;
+            width: 100%;
+            margin: 0.6rem 0 1rem 0;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #0dafeb;
+            text-transform: capitalize;
+            padding: 0.9rem;
+            border-radius: 20px;
+            background-color: #e0e0e000;
+            box-shadow:
+                10px 10px 22px rgba(0, 0, 0, 0.2),
+                -10px -10px 22px rgba(255, 255, 255, 0.75);
+        }
+
+        .neumorphic-form button:active {
+            box-shadow:
+                inset 5px 5px 11px rgba(0, 0, 0, 0.2),
+                inset -5px -5px 11px rgba(255, 255, 255, 0.75);
+        }
+
+        .neumorphic-card__footer p {
+            text-align: center;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .neumorphic-card__footer a {
+            text-decoration: none;
+            color: rgb(33, 88, 192);
+        }
+
+        .neumorphic-card__footer a:hover {
+            text-decoration: underline;
+        }
+
+
 </style>
 {% endblock style %}
 
@@ -535,65 +885,30 @@
 <div class="body-landing">
     <div id="particles"></div>
     
-    <button class="mobile-toggle" id="mobileToggle">
-        {% trans "Switch to Sign Up" %}
-    </button>
-    
-    <div class="container" id="container">
-        <!-- Sign Up Container -->
-        <div class="form-container sign-up-container">
-            <form method="post" action="{% url 'account_signup' %}">
-                <h1>{% trans "Create Account" %}</h1>
-                <span>{% trans "or use your email for registration" %}</span>
-                <input type="text" name="username" placeholder="{% trans 'Name' %}" />
-                <input type="email" name="email" placeholder="{% trans 'Email' %}" />
-                <input type="password" name="password1" placeholder="{% trans 'Password' %}" />
-                <input type="password" name="password2" placeholder="{% trans 'Confirm Password' %}" />
-                {% csrf_token %}
-                <button type="submit">{% trans 'Sign Up' %}</button>
-            </form>
-        </div>
-
-        <!-- Sign In Container -->
-        <div class="form-container sign-in-container">
-            <div class="social-container">
-                <!-- Social media login buttons would go here if needed -->
+    <div class="neumorphic-card">
+        <div class="neumorphic-card__header-1">{% trans "Welcome to EduTrack" %}</div>
+        <div class="neumorphic-card__header">{% trans "Login" %}</div>
+        <form method="post" action="{% url 'account_login' %}" class="neumorphic-form">
+            {% csrf_token %}
+            
+            <div class="neumorphic-input-wrapper">
+                <label for="neumorphic-username">{% trans "Username" %}</label>
+                <input type="text" name="login" id="neumorphic-username" value="{{ request.POST.login }}" placeholder="{% trans 'Username' %}">
             </div>
             
-            <!-- Sign In Form -->
-            {% url 'account_login' as login_url %}
-            <form method="post" action="{% url 'account_login' %}">
-                {% csrf_token %}
-                
-                <h1 class="signin_h1">{% trans "Sign In" %}</h1>
-                <!-- Email Field -->
-                <input type="text" placeholder="Email" name="login" value="{{ request.POST.login }}" />
-        
-                <!-- Password Field -->
-                <input type="password" placeholder="Password" name="password" />
-        
-                <!-- Handle redirection after login -->
-                {{ redirect_field }}
-        
-                <button type="submit">{% trans "Sign In" %}</button>
-                <a href="{% url 'account_reset_password'%}">Forgot password ?</a>
-            </form>
-        </div>
-
-        <!-- Overlay Container -->
-        <div class="overlay-container">
-            <div class="overlay">
-                <div class="overlay-panel overlay-left">
-                    <h1>{% trans "Welcome Back!" %}</h1>
-                    <p>{% trans "To keep connected with us please login with your personal info" %}</p>
-                    <button class="ghost" id="signIn">{% trans "Sign In" %}</button>
-                </div>
-                <div class="overlay-panel overlay-right">
-                    <h1>{% trans "Hello, Friend!" %}</h1>
-                    <p>{% trans "Enter your personal details and start journey with us" %}</p>
-                    <button class="ghost" id="signUp">{% trans "Sign Up" %}</button>
-                </div>
+            <div class="neumorphic-input-wrapper">
+                <label for="neumorphic-password">{% trans "Password" %}</label>
+                <input type="password" name="password" id="neumorphic-password" placeholder="{% trans 'Password' %}">
             </div>
+            
+            <!-- Handle redirection after login -->
+            {{ redirect_field }}
+            
+            <button type="submit">{% trans "Sign in" %}</button>
+        </form>
+        
+        <div class="neumorphic-card__footer">
+            <p>{% trans "Forgot Password?" %} <a href="{% url 'account_reset_password' %}">{% trans "click here" %}</a></p>
         </div>
     </div>
 </div>

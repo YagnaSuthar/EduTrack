@@ -77,7 +77,7 @@ def generate_suggestions_for_student(sat_score,pat_score,attendance,performance_
 
 
     # Call Gemini API (assuming you have already configured it properly)
-    model = genai.GenerativeModel("gemini-2.0-flash")
+    model = genai.GenerativeModel("gemini-2.5-pro-exp-03-25")
     response = model.generate_content(prompt)
 
     # Extract the suggestions from the response
@@ -122,7 +122,7 @@ def generate_subject_wise_suggestions_for_student(subject, sat_score, pat_score)
     """
     
     # Call Gemini API (assuming you have already configured it properly)
-    model = genai.GenerativeModel("gemini-2.0-flash")
+    model = genai.GenerativeModel("gemini-2.5-pro-exp-03-25")
     response = model.generate_content(prompt)
 
     # Extract and clean up the suggestion from the model response
