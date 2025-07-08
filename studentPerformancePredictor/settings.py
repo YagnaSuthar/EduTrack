@@ -174,7 +174,7 @@ EMAIL_PORT = "587"
 EMAIL_USE_TLS=True
 EMAIL_USE_SSL = False#465
 EMAIL_HOST_USER = "notreal6655@gmail.com" 
-EMAIL_HOST_PASSWORD="wilr ffsz rudl ejjg"
+EMAIL_HOST_PASSWORD="zrmh znku sniv gejj"
 
 # API KEY INTEGRATION
 import os

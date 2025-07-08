@@ -306,94 +306,77 @@ def student_suggessions(request,pk):
     return render(request,'Dashboard/student/student_suggesions.html',context)
 
 ################################################################################### Upload Csv Functionality #############################################################################
-
 @login_required
-
 def upload_file_student_data(request):
     if request.method == "POST":
-        form = FileUploadForm(request.POST,request.FILES)
+        form = FileUploadForm(request.POST, request.FILES)
         if form.is_valid():
-            uploaded_file = request.FILES['file']  # ✅ CORRECT
-          
-            if uploaded_file.name.endswith('.csv'):
-                data_set = uploaded_file.read().decode('UTF-8')
-                io_string = io.StringIO(data_set)
-                next(io_string)
-                for row in csv.reader(io_string,delimiter=','):
-                    print(row)
-                    password = generate_password()
-                    username = row[0]
-                    email = row[1]
-                    gender = row[2]
-                    attendance = row[3]
-                    avg_pat_score = row[4]
-                    avg_sat_score = row[5]
-                    user = User.objects.create_user(username=username, email=email, password=password)
-                    
-                    student_group = Group.objects.get(name='Student')  
-                    user.groups.add(student_group)
-                    user.save()
-                
-                    student.objects.create(
-                        user= user,
-                        name = username,
-                        email = email,
-                        gender = gender,
-                        attendance = attendance,
-                        raw_password = password,
-                        avg_pat_score =avg_pat_score,
-                        avg_sat_score = avg_sat_score,
-                        performance_summary = predict_student_performance(
+            uploaded_file = request.FILES.get('file')
+            
+            if uploaded_file and uploaded_file.name.endswith('.csv'):
+                try:
+                    data_set = uploaded_file.read().decode('UTF-8')
+                    io_string = io.StringIO(data_set)
+                    next(io_string)  # Skip header row
+
+                    for row in csv.reader(io_string, delimiter=','):
+                        try:
+                            print("Processing row:", row)
+
+                            password = generate_password()
+                            username = row[0].strip()
+                            email = row[1].strip()
+                            gender = row[2].strip()
+                            attendance = float(row[3].strip())
+                            avg_pat_score = float(row[4].strip())
+                            avg_sat_score = float(row[5].strip())
+
+                            user = User.objects.create_user(username=username, email=email, password=password)
+                            student_group = Group.objects.get(name='Student')  
+                            user.groups.add(student_group)
+                            user.save()
+
+                            student.objects.create(
+                                user=user,
+                                name=username,
+                                email=email,
+                                gender=gender,
+                                attendance=attendance,
+                                raw_password=password,
+                                avg_pat_score=avg_pat_score,
+                                avg_sat_score=avg_sat_score,
+                                performance_summary=predict_student_performance(
                                     gender,
                                     avg_sat_score,
                                     avg_pat_score,
                                     attendance
-                            )[:20]  # Optional truncate
-                    )
+                                )[:20]
+                            )
+                            print(f"Student '{username}' created successfully.")
+                        except Exception as e:
+                            print("Error creating student:", e)
+                            continue  # Skip this row but continue
 
-        #     elif uploaded_file.name.endswith('.pdf'):
-        #         # pdf_data = uploaded_file.read()
-        #         # pdf_stream = io.BytesIO(pdf_data)
-        #         # reader = PyPDF2.PdfReader(pdf_stream)
-        #         reader = PyPDF2.PdfReader(uploaded_file)
-        #         print("Uploaded PDF: ", uploaded_file.name)
-        #         # print("Number of pages: ", len(reader.pages))
-        #         text = ""
-        #         print(reader)
-                
-        #         for page in reader.pages:
-        #             text += page.extract_text()
-        #             print(text)
-
-        #         for line in text.split("\n"):
-        #             print(line)
-        #             parts = line.split(",")
-
-        #             if len(parts) == 3:
-        #                 try:
-        #                     student.objects.create(
-        #                         name = parts[0],
-        #                         email = parts[1],
-        #                         gender = parts[2]
-        #                     )
-        #                 except Exception as e:
-        #                     print('Skipping line due to error',e)
-
-        # return redirect('student_data')
-
+                    messages.success(request, "CSV uploaded successfully.")
+                    return redirect('student_data')
+                except Exception as e:
+                    print("Error reading CSV file:", e)
+                    messages.error(request, "Failed to process the CSV file.")
+            else:
+                messages.error(request, "Invalid file format. Please upload a .csv file.")
+        else:
+            print("Form is not valid:", form.errors)
+            messages.error(request, "Form is not valid.")
     else:
         form = FileUploadForm()
-    return render(request,'student/student_list.html',{'form':form})
 
-
-
-
+    return render(request, 'student/student_list.html', {'form': form})
 
 
 
 
 @login_required
-
+@school_admin_only
 def upload_file_teacher_date(request):
     user = request.user
     if request.method == "POST":

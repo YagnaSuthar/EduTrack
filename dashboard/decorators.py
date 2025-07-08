@@ -76,7 +76,7 @@ def teacher_only(view_func):
             if group == 'Admin':
                 return redirect('pending_requests')
             
-            if request.user.is_superuser():
+            if request.user.is_superuser:
                 return HttpResponse('Even super user cant Access This Admin request page ')
 
             if group == 'Teacher':

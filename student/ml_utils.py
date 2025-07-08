@@ -1,32 +1,36 @@
+import joblib
+import os
 from django.conf import settings  # To access API Key
 import google.generativeai as genai
 from .models import student # Fix import (capitalize "Student")
+from keras.models import load_model
+from django.shortcuts import render
+import numpy as np
 
-# Set up Gemini API
-genai.configure(api_key=settings.GEMINI_API_KEY)
+# Load paths
+MODEL_DIR = os.path.join(settings.BASE_DIR, 'student', 'ML')
+model = load_model(os.path.join(MODEL_DIR, 'student_performance_ann_model.h5'))
+scaler = joblib.load(os.path.join(MODEL_DIR, 'scaler.pkl'))
+label_encoder = joblib.load(os.path.join(MODEL_DIR, 'label_encoder.pkl'))
+onehot_encoder = joblib.load(os.path.join(MODEL_DIR, 'encoder.pkl'))
 
-def predict_student_performance(gender, avg_sat_score, avg_pat_score, attendance):
-    # Prepare the input prompt
-    prompt = f"""
-    Predict the student's performance as one of the following:
-    - Low
-    - Medium
-    - High
 
-    Student details:
-    - Gender: {gender}
-    - SAT Score: {avg_sat_score}
-    - PAT Score: {avg_pat_score}
-    - Attendance: {attendance}%
 
-    Return **only one word** (Low, Medium, or High). Do not include any explanations.
-    """
+def predict_student_performance(gender, sat_score, pat_score, attendance):
+    try:
 
-    # Call Gemini API
-    model = genai.GenerativeModel("gemini-2.0-flash")
-    response = model.generate_content(prompt)
+        gender_encoded  = label_encoder.transform([gender])[0]
+        X_input = np.array([[gender_encoded, sat_score, pat_score, attendance]])
 
-    # Extract prediction from Gemini's response
-    predicted_performance = response.text.strip().split()[0]  # Take only the first word
+        X_scaled = scaler.transform(X_input)
 
-    return predicted_performance  # Return prediction as a string
+        y_pred= model.predict(X_scaled)
+
+        predicted_category = onehot_encoder.inverse_transform(y_pred)[0][0]
+
+        print(predicted_category)
+
+        return predicted_category
+    except Exception as e :
+        print(f"[Error] prediction Failed{e}")
+        return "Unknown"

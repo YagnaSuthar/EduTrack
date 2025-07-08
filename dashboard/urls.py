@@ -34,7 +34,7 @@ urlpatterns = [
     path('student_data/',views.student_data,name="student_data"),
     path('add-marks/<int:student_id>/', views.add_student_marks, name='add_marks'),
     path('Edit-marks/<int:pk>/', views.edit_student_marks, name='edit_marks'),
-    path('upload-file/',views.upload_file_student_data,name='upload_file_student_data'),
+    path('upload-student-file/',views.upload_file_student_data,name='upload_file_student_data'),
     path('personalize-suggestion/<int:pk>/',views.personalize_suggestion_from_teacher,name='personalize_suggestion'),
 
 
