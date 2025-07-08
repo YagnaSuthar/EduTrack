@@ -60,25 +60,32 @@ EduTrack/
 
 ### 💻 Steps
 
-```bash
 # 1. Clone the repository
+```bash
 git clone https://github.com/YagnaSuthar/EduTrack.git
 cd EduTrack
-
+```
 # 2. Create virtual environment & activate it
+```bash
 python -m venv venv
 source venv/bin/activate  # on Windows: venv\Scripts\activate
+```
 
 # 3. Install dependencies
+```bash
 pip install -r requirements.txt
+```
 
 # 4. Run migrations
+```bash
 python manage.py makemigrations
 python manage.py migrate
+```
 
 # 5. Run the server
+```bash
 python manage.py runserver
-
+```
 
 📈 How to Use
 Log in as admin or teacher.
