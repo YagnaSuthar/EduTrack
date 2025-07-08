@@ -33,7 +33,7 @@ The project uses an Artificial Neural Network (ANN) model to classify or predict
 ---
 
 ## 📁 Project Structure
-
+```
 EduTrack/
 │
 ├── dashboard/ # Admin/teacher dashboard logic
@@ -46,7 +46,7 @@ EduTrack/
 ├── manage.py # Django entry point
 ├── requirements.txt # Python dependencies
 └── README.md # You're reading it!
-
+```
 
 ---
 
