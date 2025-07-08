@@ -178,7 +178,7 @@ EMAIL_HOST_PASSWORD="zrmh znku sniv gejj"
 
 # API KEY INTEGRATION
 import os
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "AIzaSyAWXX5tNsiuM2Y9VHnAKNeV-sGnU6whpzI")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "AIzaSyANL8WXj4vN1oSHCshfB5pTLtxLHf2gBF4")
 
 ACCOUNT_ADAPTER = 'dashboard.account_adapter.CustomAccountAdapter'
 
@@ -186,4 +186,4 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
     
 
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True                  
